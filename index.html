@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   
+   <!-- Stylesheet/s -->
+   <link rel="stylesheet" href="assets/css/style.css">
+   <!-- Font Awesome 6.5.2 -->
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+   
+   <title>Yard Check Log</title>
+</head>
+
+<body>
+
+   <header>
+      <div class="page-title"><h1>Yard Check Log</h1></div>
+   </header>   
+<section>
+
+<!-- Side Menu Start -->
+   <nav id="side-nav-container">
+      <ul class="side-menu">
+         <li class="side-menu-item" onclick="">AM Yard Check <span class="side-menu-item-icon-wrapper"><i class="fa-regular fa-clock"></i></span></li>
+         <li class="side-menu-item" onclick="">PM Yard Check <span class="side-menu-item-icon-wrapper"><i class="fa-regular fa-clock"></i></span></li>
+         <li class="side-menu-item" onclick="">Large Equipment <span class="side-menu-item-icon-wrapper"><i class="fa-solid fa-gear"></i></span></li>
+      </ul>
+   </nav>
+   
+   <!-- Side Menu End --> 
+   <main id="main-container">
+      <!-- Entry Form -->
+      <form id="lg-equipment-yard-check-form">
+         <div class="form-title-wrapper">
+            <p class="form-title">Yard Check</p> 
+            <p class="date-time-title">Sun Aug 8th 2024</p>
+         </div>  
+         <div class="form-wrapper">
+            <div class="form-control">
+               <label for="equipment-status-selection">
+                  <p class="rental-id-label">Rental ID - 
+                     <span class="rental-id-num">12345</span>
+                  </p> 
+                  <p class="equipment-name">1 Ton Mini Excavator</p>
+               </label>
+               <select name="equipment-status-selection" id="equipment-status-selection" placeholder="Select equipment status" required>
+                  <option disabled selected>Select equipment status</option>
+                  <option value="in">Available</option>
+                  <option value="out">Rented</option>
+                  <option value="out of service">Out of Service</option>
+               </select>
+            </div>
+      </form>
+      <!-- End Form -->
+
+      <div id="content-output-wrapper"></div>
+   </main>
+
+</section>
+   
+
+   
+   <footer>
+      <div class="footer-wrapper">
+         <div class="footer-col">
+            <p class="site-version-text">Version 1.0.0</p>
+         </div>
+         <div class="footer-col">
+            <p class="site-author-text">Site designed and coded by : Rudy Mims</p>
+         </div>
+      </div>    
+   </footer>    
+
+
+   <script src="assets/js/app.js"></script>   
+</body>
+</html>
