@@ -43,7 +43,7 @@ header {
 }
 /* === HEADER STYLING END === */
 
-section {
+#side-nav-section {
    display: flex;
    justify-content: flex-start;
    align-items: center;
@@ -61,6 +61,10 @@ section {
    height: 100%;
    padding: 25px 0;
    background-color: var(--secondary-black-color);
+    position: relative;
+    left: -175px;
+    left: 0px;
+    transition: all 0.5s ease-in-out;
 }
 .side-menu {
    list-style: none;
@@ -68,13 +72,15 @@ section {
    width: 100%;
 }
 .side-menu-item {
+   padding: 0 30px;
+   justify-content: flex-end;
    position: relative;
    display: flex;
-   justify-content: space-evenly;
+   /* justify-content: space-evenly; */
    align-items: center;
    width: 100%;
    height: 65px;
-   padding: 18px;
+   /* padding: 18px; */
    line-height: 1.5;
    color: var(--main-white-color);
    transition: all 0.2s ease-in-out;
@@ -107,6 +113,9 @@ section {
 }
 .side-menu-item:nth-child(2) .side-menu-item-icon-wrapper {
    transform: scale(-1, 1);
+}
+.side-menu-item-icon-wrapper {
+   margin-left: 30px;
 }
 /* SIDE MENU STYLING END ===*/
 
@@ -147,7 +156,7 @@ section {
    background-color: var(--main-white-color);
    /* overflow-y: scroll; */
 }
-.form-control:nth-last-child(2) {
+.form-control:nth-last-child(1) {
    margin-bottom: 20px;
 }
 .form-header {
@@ -185,7 +194,8 @@ section {
    background-color: var(--main-white-color);
 }
 label {
-   width: 100%;
+   /* width: 100%; */
+   flex-grow: 1;
 }
 input, textarea, select {
    border: 1px solid var(--light-grey-color2);
@@ -207,7 +217,10 @@ input:focus, input[type=number]:focus, input[type=text]:focus,  input[type=email
    outline: none;
    box-shadow: 0 0 4px 1px rgba(74, 165, 235, 0.8);
 }
-#equipment-description-input {
+#equipment-status-selection {
+   width: 50%;
+}
+/* #equipment-description-input {
    width: 100%;
    text-transform: capitalize;
 }
@@ -217,7 +230,7 @@ input:focus, input[type=number]:focus, input[type=text]:focus,  input[type=email
 }
 #name-input {
    text-transform: capitalize;
-}
+} */
 #submit-button {
    padding: 15px 0;
    border-radius: 2px;
@@ -296,7 +309,7 @@ footer {
    bottom: 0px; */
    width: 100%;
    height: 50px;
-   margin-top: 20px;
+   /* margin-top: 20px; */
    background-color: var(--main-black-color);
 }
 .footer-wrapper {
