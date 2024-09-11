@@ -162,17 +162,17 @@ function eqList (equipmentArray) {
    const output = document.getElementsByClassName('form-wrapper')[0];
    output.innerHTML = '';
 
-   equipmentArray.forEach(item => {
+   equipmentArray.forEach((item, index) => {
       
       const listItem = `
       <div class="form-control">
-         <label for="equipment-status-selection">
+         <label for="equipment-status-selection-${index}">
             <p class="rental-id-label">Rental ID - 
                <span class="rental-id-num">${item.unit_id}</span>
             </p> 
             <p class="equipment-name">${item.equipment_name}</p>
          </label>
-         <select name="equipment-status-selection" id="equipment-status-selection" placeholder="Select equipment status" required>
+         <select name="equipment-status-selection" id="equipment-status-selection-${index}" placeholder="Select equipment status" required>
             <option disabled selected>Select equipment status</option>
             <option value="in">Available</option>
             <option value="out">Rented</option>
