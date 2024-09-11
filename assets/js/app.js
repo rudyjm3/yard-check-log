@@ -158,6 +158,7 @@ const largeEquipment = [
 
 ];
 
+// This function will be updated later to pull list from database
 function eqList (equipmentArray) {
    const output = document.getElementsByClassName('form-wrapper')[0];
    output.innerHTML = '';

@@ -147,7 +147,7 @@ header {
    width: 100%;
    max-width: 600px;
    padding: 15px;
-   background-color: red;
+   /* background-color: red; */
 }
 .form-title-wrapper {
    width: 100%;
@@ -179,19 +179,19 @@ header {
    justify-content: flex-start;
    align-items: center;
    flex-direction: column;
-   gap: 15px;
+   gap: 25px;
 }
 .form-control {
    display: flex;
    justify-content: flex-start;
    align-items: center;
-   padding: 15px;
    flex-wrap: wrap;
-   padding: 8px 10px;
+   padding: 25px 15px;
    width: 100%;
    border-radius: 4px;
    border: 1px solid var(--light-grey-color2);
    background-color: var(--main-white-color);
+   filter: drop-shadow(0px 4px 4px #767676);
 }
 label {
    /* width: 100%; */
