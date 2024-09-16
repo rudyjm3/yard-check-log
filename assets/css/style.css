@@ -148,14 +148,22 @@ header {
    width: 100%;
    max-width: 600px;
    padding: 15px;
-   /* background-color: red; */
+   background-color: var(--main-white-color);
+   border: 1px solid var(--light-grey-color2);
+   border-radius: 4px;
+   filter: drop-shadow(0px 4px 3px var(--light-grey-color2));
 }
 .form-title-wrapper {
    width: 100%;
    height: max-content;
    padding: 10px;
    background-color: var(--main-white-color);
+   margin-bottom: 10px;
    /* overflow-y: scroll; */
+}
+.form-title-underline {
+   margin: 10px 0px;
+   border-style: groove;
 }
 .form-control:nth-last-child(1) {
    margin-bottom: 20px;
@@ -190,9 +198,9 @@ header {
    padding: 25px 15px;
    width: 100%;
    border-radius: 4px;
-   border: 1px solid var(--light-grey-color2);
+   border: 1px solid var(--light-grey-color1);
    background-color: var(--main-white-color);
-   filter: drop-shadow(0px 4px 4px #767676);
+   filter: drop-shadow(0px 4px 3px var(--light-grey-color2));
 }
 label {
    /* width: 100%; */
