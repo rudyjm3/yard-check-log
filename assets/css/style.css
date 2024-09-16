@@ -88,6 +88,7 @@ header {
 }
 .side-menu-item:after {
    position: absolute;
+   right: 0;
    content: "";
    bottom: 0;
    width: 0%;
