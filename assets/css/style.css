@@ -45,7 +45,7 @@ header {
 }
 /* === HEADER STYLING END === */
 
-#side-nav-section {
+#main-content-section {
    display: flex;
    justify-content: flex-start;
    align-items: center;
@@ -123,7 +123,7 @@ header {
 /* SIDE MENU STYLING END ===*/
 
 /*=== MAIN CONTENT AREA STYLING ===*/
-#main-container {
+#main-content-container {
    display: flex;
    justify-content: flex-start;
    align-items: center;
