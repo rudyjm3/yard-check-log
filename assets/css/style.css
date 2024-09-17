@@ -10,6 +10,8 @@
    --light-grey-color2: #ababab;
    --orange-hover-color: #faa65d;
    --hover-blue-color: #4aa5eb;
+   --button-green-color: #08af16;
+   --button-green-hover-color: #0ce21d;
 }
 
 html {
@@ -247,11 +249,11 @@ input:focus, input[type=number]:focus, input[type=text]:focus,  input[type=email
    color: var(--main-white-color);
    font-weight: 600;
    font-size: 18px;
-   background-color: var(--main-orange-color);
+   background-color: var(--button-green-color);
    width: 100%;
 }
 #submit-button-ydchk:hover {
-   background-color: var(--orange-hover-color);
+   background-color: var(--button-green-hover-color);
    transition: all 0.3s ease-in-out;
 }
 /* FORM STYLING END */
