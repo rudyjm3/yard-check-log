@@ -190,10 +190,10 @@ eqList(largeEquipment);
 
 
 
-// Send form data to database function and create new table row
-const submitButton = document.getElementById('submit-button');
+// Send form data to database function
+const submitButtonYdChk = document.getElementById('submit-button-ydchk');
 
-submitButton.addEventListener('click', function(event) {
+submitButtonYdChk.addEventListener('click', function(event) {
   event.preventDefault();
 
   const formData = {
