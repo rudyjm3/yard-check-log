@@ -1,84 +1,200 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-   <meta charset="UTF-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   
-   <!-- Stylesheet/s -->
-   <link rel="stylesheet" href="assets/css/style.css">
-   <!-- Font Awesome 6.5.2 -->
-   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-   
-   <title>Yard Check Log</title>
-</head>
+  <meta charset="UTF-8">
+  <title>Large Equipment Yard Check App</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="assets/css/style.css">
+  <!-- Font Awesome 6.5.2 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+</head>
 <body>
 
-   <header>
-      <div class="page-title"><h1>Yard Check Log</h1></div>
-   </header>   
-<section id="main-content-section">
+  <header>
+    <div class="page-title">
+      <h1>Large Equipment Yard Check App</h1>
+    </div>
+  </header>
 
-<!-- Side Menu Start -->
-   <nav id="side-nav-container">
+  <section id="main-content-section">
+    <!-- Side Menu Start -->
+    <nav id="side-nav-container">
       <ul class="side-menu">
-         <li class="side-menu-item" onclick="">AM Yard Check <span class="side-menu-item-icon-wrapper"><i class="fa-regular fa-clock"></i></span></li>
-         <li class="side-menu-item" onclick="">PM Yard Check <span class="side-menu-item-icon-wrapper"><i class="fa-regular fa-clock"></i></span></li>
-         <li class="side-menu-item" onclick="">Large Equipment <span class="side-menu-item-icon-wrapper"><i class="fa-solid fa-gear"></i></span></li>
+        <li class="side-menu-item" onclick="showYardCheckForm()">Yard Check <span class="side-menu-item-icon-wrapper"><i class="fa-regular fa-clipboard"></i></span></li>
+        <li class="side-menu-item" onclick="showSubmittedYardChecks()">View Submitted Yard Checks <span class="side-menu-item-icon-wrapper"><i class="fa-regular fa-calendar-check"></i></span></li>
+        <li class="side-menu-item" onclick="showEquipmentStats()">Large Equipment Stats <span class="side-menu-item-icon-wrapper"><i class="fa-solid fa-chart-bar"></i></span></li>
+        <li class="side-menu-item" onclick="showEquipmentManagement()">Large Equipment <span class="side-menu-item-icon-wrapper"><i class="fa-solid fa-gear"></i></span></li>
       </ul>
-   </nav>
-   
-   <!-- Side Menu End --> 
-   <main id="main-content-container">
-      <!-- Entry Form -->
-      <form id="lg-equipment-yard-check-form">
-         <div class="form-title-wrapper">
-            <p class="form-title">Yard Check</p> 
-            <p class="date-time-title">Sun Aug 8th 2024</p>
-            
-         </div>  
-         <div class="form-wrapper">
-            <!-- <div class="form-control">
-               <label for="equipment-status-selection">
-                  <p class="rental-id-label">Rental ID - 
-                     <span class="rental-id-num">12345</span>
-                  </p> 
-                  <p class="equipment-name">1 Ton Mini Excavator</p>
-               </label>
-               <select name="equipment-status-selection" id="equipment-status-selection" placeholder="Select equipment status" required>
-                  <option disabled selected>Select equipment status</option>
-                  <option value="in">Available</option>
-                  <option value="out">Rented</option>
-                  <option value="out of service">Out of Service</option>
-               </select>
-            </div> -->
-         </div>
-         <div class="button-wrapper">
-            <button type="submit-button" id="submit-button-ydchk">Submit</button>
-         </div>
+    </nav>
+    <!-- Side Menu End -->
+
+    <main id="main-content-container">
+      <!-- Yard Check Form -->
+      <form id="lg-equipment-yard-check-form" style="display: none;">
+        <div class="form-title-wrapper">
+          <p class="form-title">Large Equipment Yard Check Form</p>
+          <p class="date-time-title" id="current-date"></p>
+        </div>
+        <div class="form-wrapper">
+          <!-- Date Input -->
+          <div class="form-control">
+            <label for="check-date">Date:</label>
+            <input type="date" id="check-date" name="check_date" required>
+          </div>
+          <!-- User Name Input -->
+          <div class="form-control">
+            <label for="user-name">Your Name:</label>
+            <input type="text" id="user-name" name="user_name" required>
+          </div>
+          <!-- AM/PM Selection -->
+          <div class="form-control">
+            <label for="check-time">Check Time:</label>
+            <select id="check-time" name="check_time" required>
+              <option value="" disabled selected>Select Time</option>
+              <option value="AM">AM (Morning)</option>
+              <option value="PM">PM (Evening)</option>
+            </select>
+          </div>
+          <!-- Equipment List -->
+          <div class="equipment-list" id="equipment-list">
+            <!-- Equipment items will be dynamically inserted here -->
+          </div>
+          <!-- Hidden Input for Submission DateTime -->
+          <input type="hidden" id="submission-date-time" name="submission_date_time">
+          <!-- Message Container -->
+          <div id="message-container"></div>
+        </div>
+        <div class="button-wrapper">
+          <button type="submit" id="submit-button-ydchk">Submit</button>
+        </div>
       </form>
-      <!-- End Form -->
+      <!-- End Yard Check Form -->
 
-      <div id="content-output-wrapper"></div>
-   </main>
+      <!-- Equipment Management Section -->
+      <div id="equipment-management" style="display: none; position: relative;">
+        <h2>Manage Equipment</h2>
+        <button id="add-equipment-button" onclick="showAddEquipmentForm()">Add New Equipment</button>
+        <div id="equipment-list-management">
+          <!-- Equipment items will be dynamically inserted here -->
+        </div>
+        <!-- Equipment Form for Adding/Editing -->
+        <form id="equipment-form" style="display: none;">
+          <div class="form-header">
+            <h3 id="form-title">Add Equipment</h3>
+          </div>
+          <input type="hidden" id="equipment-id" name="equipment_id">
+          <div class="form-control">
+            <label for="unit-id">Unit ID:</label>
+            <input type="text" id="unit-id" name="unit_id" required>
+          </div>
+          <div class="form-control">
+            <label for="equipment-name">Equipment Name:</label>
+            <input type="text" id="equipment-name" name="equipment_name" required>
+          </div>
+          <div class="form-control">
+            <label for="manufacturer">Manufacturer:</label>
+            <input type="text" id="manufacturer" name="manufacturer">
+          </div>
+          <div class="form-control">
+            <label for="model">Model:</label>
+            <input type="text" id="model" name="model">
+          </div>
+          <!-- Rental Rates Inputs -->
+          <div class="form-control">
+            <label for="rental-rate-4h">Rental Rate (4 Hours):</label>
+            <input type="number" step="0.01" id="rental-rate-4h" name="rental_rate_4h">
+          </div>
+          <div class="form-control">
+            <label for="rental-rate-daily">Rental Rate (Daily):</label>
+            <input type="number" step="0.01" id="rental-rate-daily" name="rental_rate_daily">
+          </div>
+          <div class="form-control">
+            <label for="rental-rate-weekly">Rental Rate (Weekly):</label>
+            <input type="number" step="0.01" id="rental-rate-weekly" name="rental_rate_weekly">
+          </div>
+          <div class="form-control">
+            <label for="rental-rate-monthly">Rental Rate (Monthly):</label>
+            <input type="number" step="0.01" id="rental-rate-monthly" name="rental_rate_monthly">
+          </div>
+          <!-- End Rental Rates Inputs -->
+          <div class="button-wrapper">
+            <button type="submit" id="save-equipment-button">Save</button>
+            <button type="button" onclick="cancelEquipmentForm()">Cancel</button>
+          </div>
+        </form>
+      </div>
+      <!-- End Equipment Management Section -->
 
-</section>
-   
+      <!-- Submitted Yard Checks Section -->
+      <div id="submitted-yard-checks" style="display: none;">
+        <h2>Submitted Yard Checks</h2>
+        <button onclick="showAddYardCheckForm()">Add Yard Check</button>
+        <div id="yard-checks-list">
+          <!-- Yard check cards will be dynamically inserted here -->
+        </div>
+      </div>
+      <!-- End Submitted Yard Checks Section -->
 
-   
-   <footer>
-      <div class="footer-wrapper">
-         <div class="footer-col">
-            <p class="site-version-text">Version 1.0.0</p>
-         </div>
-         <div class="footer-col">
-            <p class="site-author-text">Site designed and coded by : Rudy Mims</p>
-         </div>
-      </div>    
-   </footer>    
+      <!-- Equipment Stats Section -->
+      <div id="equipment-stats" style="display: none;">
+        <h2>Large Equipment Stats</h2>
+        <!-- Date Range Selection -->
+        <div class="form-control">
+          <label for="stats-date-range">Select Date Range:</label>
+          <select id="stats-date-range" onchange="loadEquipmentStats()">
+            <option value="weekly">This Week</option>
+            <option value="monthly">This Month</option>
+            <option value="custom">Custom Range</option>
+          </select>
+        </div>
+        <!-- Custom Date Range Inputs -->
+        <div id="custom-date-range" style="display: none;">
+          <div class="form-control">
+            <label for="start-date">Start Date:</label>
+            <input type="date" id="start-date">
+          </div>
+          <div class="form-control">
+            <label for="end-date">End Date:</label>
+            <input type="date" id="end-date">
+          </div>
+          <button onclick="loadEquipmentStats()">Load Stats</button>
+        </div>
+        <!-- Stats Display -->
+        <div id="stats-display">
+          <!-- Stats will be dynamically inserted here -->
+        </div>
+        <!-- Export Options -->
+        <div class="button-wrapper">
+          <button onclick="exportReport('pdf')">Export as PDF</button>
+          <button onclick="exportReport('csv')">Export as CSV</button>
+          <button onclick="window.print()">Print Report</button>
+        </div>
+      </div>
+      <!-- End Equipment Stats Section -->
 
+      <!-- Modal for Yard Check Details -->
+      <div id="modal-container" style="display: none;">
+        <!-- Modal content will be dynamically inserted here -->
+      </div>
 
-   <script src="assets/js/app.js"></script>   
+    </main>
+  </section>
+
+  <footer>
+    <div class="footer-wrapper">
+      <div class="footer-col">
+        <p class="site-version-text">Version 1.0.0</p>
+      </div>
+      <div class="footer-col">
+        <p class="site-author-text">Site designed and coded by: Rudy Mims</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/app.js"></script>
 </body>
 </html>
