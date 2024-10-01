@@ -286,10 +286,17 @@ function getOrdinalSuffix(day) {
          const equipmentDiv = document.createElement('div');
          equipmentDiv.classList.add('form-control');
  
+         // Create image element if image_url exists
+         let imageHTML = '';
+         if (equipment.image_url) {
+           imageHTML = `<img src="${equipment.image_url}" alt="${equipment.equipment_name}" class="equipment-image">`;
+         }
+ 
          // Equipment label
          const label = document.createElement('label');
          label.htmlFor = `equipment-status-${equipment.unit_id}`;
          label.innerHTML = `
+           ${imageHTML}
            <p class="rental-id-label">Unit ID - <span class="rental-id-num">${equipment.unit_id}</span></p>
            <p class="equipment-name">${equipment.equipment_name}</p>
            <a href="#" onclick="toggleEquipmentInfo(event, '${equipment.unit_id}')">View more info</a>
@@ -298,7 +305,8 @@ function getOrdinalSuffix(day) {
              <p><strong>Model:</strong> ${equipment.model}</p>
            </div>
          `;
- 
+         // ... rest of the code remains the same ...
+
          // Status select
          const select = document.createElement('select');
          select.name = `equipment_status_${equipment.unit_id}`;
@@ -337,7 +345,7 @@ function getOrdinalSuffix(day) {
          equipmentListDiv.appendChild(equipmentDiv);
        });
      })
-    //  .catch(error => console.error('Error:' , error));
+     .catch(error => console.error('Error:' , error));
  }
  
  // Toggle Equipment Info Display
@@ -399,7 +407,14 @@ function getOrdinalSuffix(day) {
          const equipmentItemDiv = document.createElement('div');
          equipmentItemDiv.classList.add('equipment-item');
  
+         // Create image element if image_url exists
+         let imageHTML = '';
+         if (equipment.image_url) {
+           imageHTML = `<img src="${equipment.image_url}" alt="${equipment.equipment_name}" class="equipment-image">`;
+         }
+ 
          equipmentItemDiv.innerHTML = `
+           ${imageHTML}
            <p><strong>Unit ID:</strong> ${equipment.unit_id}</p>
            <p><strong>Name:</strong> ${equipment.equipment_name}</p>
            <p><strong>Manufacturer:</strong> ${equipment.manufacturer}</p>
@@ -418,9 +433,8 @@ function getOrdinalSuffix(day) {
          equipmentListDiv.appendChild(equipmentItemDiv);
        });
      })
-     
-    //  .catch(error => console.error('Error:', error));
- }
+     .catch(error => console.error('Error:', error));
+ } 
  
  // Show Form to Add New Equipment
  function showAddEquipmentForm() {
@@ -431,6 +445,7 @@ function getOrdinalSuffix(day) {
    document.getElementById('equipment-name').value = '';
    document.getElementById('manufacturer').value = '';
    document.getElementById('model').value = '';
+   document.getElementById('image-url').value = ''; // Clear image URL field
    document.getElementById('rental-rate-4h').value = '';
    document.getElementById('rental-rate-daily').value = '';
    document.getElementById('rental-rate-weekly').value = '';
@@ -456,6 +471,7 @@ function getOrdinalSuffix(day) {
        document.getElementById('equipment-name').value = equipment.equipment_name;
        document.getElementById('manufacturer').value = equipment.manufacturer;
        document.getElementById('model').value = equipment.model;
+       document.getElementById('image-url').value = equipment.image_url; // Set image URL field
        document.getElementById('rental-rate-4h').value = equipment.rental_rate_4h;
        document.getElementById('rental-rate-daily').value = equipment.rental_rate_daily;
        document.getElementById('rental-rate-weekly').value = equipment.rental_rate_weekly;

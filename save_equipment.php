@@ -8,6 +8,7 @@ $unit_id = $_POST['unit_id'];
 $equipment_name = $_POST['equipment_name'];
 $manufacturer = $_POST['manufacturer'];
 $model = $_POST['model'];
+$image_url = $_POST['image_url']; // New line to collect image URL
 $rental_rate_4h = $_POST['rental_rate_4h'];
 $rental_rate_daily = $_POST['rental_rate_daily'];
 $rental_rate_weekly = $_POST['rental_rate_weekly'];
@@ -26,6 +27,7 @@ $stmt->bindParam(':unit_id', $unit_id);
 $stmt->bindParam(':equipment_name', $equipment_name);
 $stmt->bindParam(':manufacturer', $manufacturer);
 $stmt->bindParam(':model', $model);
+$stmt->bindParam(':image_url', $image_url); // Bind the image URL parameter
 $stmt->bindParam(':rental_rate_4h', $rental_rate_4h);
 $stmt->bindParam(':rental_rate_daily', $rental_rate_daily);
 $stmt->bindParam(':rental_rate_weekly', $rental_rate_weekly);

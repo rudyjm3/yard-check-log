@@ -144,6 +144,14 @@ header .page-title {
   font-size: 0.9em;
 }
 
+/* Equipment Image Styles */
+.equipment-image {
+   max-width: 100%;
+   height: auto;
+   display: block;
+   margin-bottom: 10px;
+ }
+
 /* Message Container */
 #message-container .message {
   background-color: #ffdddd;
@@ -170,6 +178,8 @@ header .page-title {
   border: 1px solid #ccc;
   padding: 10px;
   margin-bottom: 10px;
+  /* Adjust equipment-item to display images properly */
+  overflow: hidden; /* Ensure content doesn't overflow */
 }
 
 #equipment-form .form-control {
