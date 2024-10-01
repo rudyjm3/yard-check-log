@@ -1,326 +1,347 @@
 /* @import url("reset.css"); */
-@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
 
 :root {
-   --main-black-color: #333;
-   --secondary-black-color: #3d3d3d;
-   --main-orange-color: #F58220;
-   --main-white-color: #fff; 
-   --light-grey-color1: #f5f5f5;
-   --light-grey-color2: #ababab;
-   --orange-hover-color: #faa65d;
-   --hover-blue-color: #4aa5eb;
-   --button-green-color: #08af16;
-   --button-green-hover-color: #0ce21d;
+  --main-black-color: #333;
+  --secondary-black-color: #3d3d3d;
+  --main-orange-color: #f58220;
+  --main-white-color: #fff;
+  --light-grey-color1: #f5f5f5;
+  --light-grey-color2: #ababab;
+  --orange-hover-color: #faa65d;
+  --hover-blue-color: #4aa5eb;
+  --button-green-color: #08af16;
+  --button-green-hover-color: #0ce21d;
 }
-
 
 /* assets/css/style.css */
 
 /* General Styles */
 body {
-   font-family: Arial, sans-serif;
-   margin: 0;
-   padding: 0;
- }
- 
- header .page-title {
-   background-color: #333;
-   color: #fff;
-   padding: 20px;
-   text-align: center;
- }
- 
- #main-content-section {
-   display: flex;
- }
- 
- /* Side Menu Styles */
- #side-nav-container {
-   width: 200px;
-   background-color: #f4f4f4;
- }
- 
- .side-menu {
-   list-style-type: none;
-   padding: 0;
-   margin: 0;
- }
- 
- .side-menu-item {
-   padding: 15px;
-   cursor: pointer;
-   border-bottom: 1px solid #ddd;
- }
- 
- .side-menu-item:hover {
-   background-color: #ddd;
- }
- 
- .side-menu-item-icon-wrapper {
-   float: right;
- }
- 
- /* Main Content Styles */
- #main-content-container {
-   flex: 1;
-   padding: 20px;
- }
- 
- /* Form Styles */
- .form-title-wrapper {
-   text-align: center;
- }
- 
- .form-title {
-   font-size: 24px;
-   margin-bottom: 10px;
- }
- 
- .date-time-title {
-   font-size: 16px;
-   color: #666;
- }
- 
- .form-wrapper {
-   margin-top: 20px;
- }
- 
- .form-control {
-   margin-bottom: 15px;
-   padding: 10px 20px;
- }
- 
- .form-control label {
-   display: block;
-   margin-bottom: 5px;
- }
- 
- .form-control input,
- .form-control select {
-   width: 100%;
-   padding: 8px;
-   box-sizing: border-box;
- }
- 
- .button-wrapper {
-   text-align: center;
- }
- 
- .button-wrapper button {
-   padding: 10px 20px;
-   font-size: 16px;
-   margin: 5px;
- }
- 
- /* Equipment List Styles */
- .equipment-list .form-control {
-   border: 1px solid #ccc;
-   padding: 10px;
-   margin-bottom: 10px;
- }
- 
- .equipment-name {
-   font-weight: bold;
- }
- 
- .equipment-info {
-   margin-left: 20px;
-   font-size: 0.9em;
- }
- 
- /* Message Container */
- #message-container .message {
-   background-color: #ffdddd;
-   color: #a94442;
-   padding: 10px;
-   margin-bottom: 15px;
- }
- 
- #message-container .message button {
-   margin-top: 10px;
- }
- 
- /* Equipment Management Styles */
- #equipment-management h2 {
-   text-align: center;
- }
- 
- #add-equipment-button {
-   display: block;
-   margin: 0 auto 20px;
- }
- 
- #equipment-list-management .equipment-item {
-   border: 1px solid #ccc;
-   padding: 10px;
-   margin-bottom: 10px;
- }
- 
- #equipment-form .form-control {
-   margin-bottom: 15px;
- }
- 
- #equipment-form label {
-   display: block;
-   margin-bottom: 5px;
- }
- 
- #equipment-form input {
-   width: 100%;
-   padding: 8px;
-   box-sizing: border-box;
- }
- 
- /* Form Header Styles */
- .form-header {
-   background-color: #333; /* var(--main-black-color) */
-   padding: 20px;
-   width: 100%;
- }
- 
- .form-header h3 {
-   color: #fff; /* var(--main-white-color) */
-   margin: 0;
- }
- 
- /* Equipment Form Styles */
- #equipment-form {
-   position: absolute;
-   right: 0;
-   top: 0;
-   width: 450px;
-   background-color: #fff;
-   border: 1px solid #ccc;
-   opacity: 0;
-   transform: translateX(100%);
-   transition: all 0.5s ease;
-   z-index: 10;
- }
- 
- /* Show the form with animation */
- #equipment-form.show {
-   opacity: 1;
-   transform: translateX(0);
- }
- 
- /* Button Wrapper Styles */
- #equipment-form .button-wrapper {
-   padding: 10px 20px;
-   text-align: right;
- }
- 
- #equipment-form .button-wrapper button {
-   margin-left: 10px;
- }
- 
- /* Adjust Equipment Management Section */
- #equipment-management {
-   position: relative;
-   overflow: hidden;
- }
- 
- /* Submitted Yard Checks Styles */
- #submitted-yard-checks h2 {
-   text-align: center;
- }
- 
- #submitted-yard-checks button {
-   margin-bottom: 20px;
- }
- 
- .yard-check-card {
-   border: 1px solid #ccc;
-   padding: 15px;
-   margin-bottom: 20px;
- }
- 
- .yard-check-card h3 {
-   margin-top: 0;
- }
- 
- .yard-check-card .card-content {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+header {
+  width: 100%;
+}
+header .page-title {
+  background-color: #333;
+  color: #fff;
+  padding: 20px;
+  text-align: center;
+}
+
+#main-content-section {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+/* Side Menu Styles */
+#side-nav-container {
+  width: 200px;
+  background-color: #f4f4f4;
+}
+
+.side-menu {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.side-menu-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  cursor: pointer;
+  border-bottom: 1px solid #ddd;
+}
+
+.side-menu-item:hover {
+  background-color: #ddd;
+}
+
+.side-menu-item-icon-wrapper {
+  /* float: right; */
+  margin-left: 15px;
+}
+
+/* Main Content Styles */
+#main-content-container {
+  flex: 1;
+  padding: 20px;
+  overflow-y: scroll;
+}
+
+/* Form Styles */
+.form-title-wrapper {
+  text-align: center;
+}
+
+.form-title {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.date-time-title {
+  font-size: 16px;
+  color: #666;
+}
+
+.form-wrapper {
+  margin-top: 20px;
+}
+
+.form-control {
+  margin-bottom: 15px;
+  padding: 10px 20px;
+}
+
+.form-control label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.form-control input,
+.form-control select {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+.button-wrapper {
+  text-align: center;
+}
+
+.button-wrapper button {
+  padding: 10px 20px;
+  font-size: 16px;
+  margin: 5px;
+}
+
+/* Equipment List Styles */
+.equipment-list .form-control {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.equipment-name {
+  font-weight: bold;
+}
+
+.equipment-info {
+  margin-left: 20px;
+  font-size: 0.9em;
+}
+
+/* Message Container */
+#message-container .message {
+  background-color: #ffdddd;
+  color: #a94442;
+  padding: 10px;
+  margin-bottom: 15px;
+}
+
+#message-container .message button {
+  margin-top: 10px;
+}
+
+/* Equipment Management Styles */
+#equipment-management h2 {
+  text-align: center;
+}
+
+#add-equipment-button {
+  display: block;
+  margin: 0 auto 20px;
+}
+
+#equipment-list-management .equipment-item {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+#equipment-form .form-control {
+  margin-bottom: 15px;
+}
+
+#equipment-form label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+#equipment-form input {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+/* Form Header Styles */
+.form-header {
    display: flex;
    justify-content: space-between;
- }
- 
- .yard-check-card .card-column {
-   width: 48%;
- }
- 
- .yard-check-card .card-column h4 {
-   margin-bottom: 10px;
- }
- 
- .yard-check-card .card-column p {
-   margin: 5px 0;
- }
- 
- .yard-check-card .button-wrapper {
-   text-align: center;
- }
- 
- .yard-check-card .button-wrapper button {
-   margin: 5px;
- }
- 
- /* Equipment Stats Styles */
- #equipment-stats h2 {
-   text-align: center;
- }
- 
- #stats-display {
-   margin-top: 20px;
- }
- 
- /* Modal Styles */
- #modal-container .modal {
-   position: fixed;
-   top: 0;
-   left: 0;
-   width: 100%;
-   height: 100%;
-   background-color: rgba(0,0,0,0.5);
- }
- 
- #modal-container .modal-content {
-   background-color: #fff;
-   margin: 5% auto;
+   align-items: center;
+   background-color: #535353; /* var(--main-black-color) */
    padding: 20px;
-   width: 80%;
-   position: relative;
- }
- 
- #modal-container .close-button {
-   position: absolute;
-   right: 15px;
-   top: 10px;
-   font-size: 24px;
-   cursor: pointer;
- }
- 
- /* Profit and Loss Colors */
- .profit-amount {
-   color: lightgreen;
- }
- 
- .loss-amount {
-   color: red;
- }
- 
- /* Footer Styles */
- footer {
-   background-color: #333;
-   color: #fff;
-   padding: 10px;
- }
- 
- .footer-wrapper {
-   display: flex;
-   justify-content: space-between;
- }
- 
- .footer-col {
-   margin: 0 10px;
- }
- 
+   /* width: 100%; */
+}
+
+.form-header h3 {
+  color: #fff; /* var(--main-white-color) */
+  margin: 0;
+}
+
+/* Equipment Form Styles */
+#equipment-form {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  width: 450px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  overflow: auto;
+  opacity: 0;
+  transform: translateX(100%);
+  transition: all 0.5s ease;
+  z-index: 10;
+}
+
+/* Show the form with animation */
+#equipment-form.show {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Button Wrapper Styles */
+#equipment-form .button-wrapper {
+  padding: 10px 20px;
+  text-align: right;
+}
+
+#equipment-form .button-wrapper button {
+  margin-left: 10px;
+}
+
+/* Adjust Equipment Management Section */
+#equipment-management {
+  position: relative;
+  height: 100%;
+  /* overflow: hidden; */
+}
+
+/* Submitted Yard Checks Styles */
+#submitted-yard-checks h2 {
+  text-align: center;
+}
+
+#submitted-yard-checks button {
+  margin-bottom: 20px;
+}
+
+.yard-check-card {
+  border: 1px solid #ccc;
+  padding: 15px;
+  margin-bottom: 20px;
+}
+
+.yard-check-card h3 {
+  margin-top: 0;
+}
+
+.yard-check-card .card-content {
+  display: flex;
+  justify-content: space-between;
+}
+
+.yard-check-card .card-column {
+  width: 48%;
+}
+
+.yard-check-card .card-column h4 {
+  margin-bottom: 10px;
+}
+
+.yard-check-card .card-column p {
+  margin: 5px 0;
+}
+
+.yard-check-card .button-wrapper {
+  text-align: center;
+}
+
+.yard-check-card .button-wrapper button {
+  margin: 5px;
+}
+
+/* Equipment Stats Styles */
+#equipment-stats h2 {
+  text-align: center;
+}
+
+#stats-display {
+  margin-top: 20px;
+}
+
+/* Modal Styles */
+#modal-container .modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+#modal-container .modal-content {
+  background-color: #fff;
+  margin: 5% auto;
+  padding: 20px;
+  width: 80%;
+  position: relative;
+}
+
+#modal-container .close-button {
+  position: absolute;
+  right: 15px;
+  top: 10px;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+/* Profit and Loss Colors */
+.profit-amount {
+  color: lightgreen;
+}
+
+.loss-amount {
+  color: red;
+}
+
+/* Footer Styles */
+footer {
+  background-color: #333;
+  color: #fff;
+  padding: 10px;
+  width: 100%;
+}
+
+.footer-wrapper {
+  display: flex;
+  justify-content: space-between;
+}
+
+.footer-col {
+  margin: 0 10px;
+}
