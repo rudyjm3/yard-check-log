@@ -506,16 +506,20 @@ function getOrdinalSuffix(day) {
      method: 'POST',
      body: formData
    })
-   .then(response => response.text())
+   .then(response => response.json())
    .then(result => {
-     alert('Equipment saved successfully!');
-     this.reset();
-     const equipmentForm = document.getElementById('equipment-form');
-     equipmentForm.classList.remove('show');
-     setTimeout(() => {
-       equipmentForm.style.display = 'none';
-     }, 500);
-     loadEquipmentListManagement();
+     if (result.status === 'success') {
+       alert(result.message);
+       this.reset();
+       const equipmentForm = document.getElementById('equipment-form');
+       equipmentForm.classList.remove('show');
+       setTimeout(() => {
+         equipmentForm.style.display = 'none';
+       }, 500);
+       loadEquipmentListManagement();
+     } else {
+       alert('Error: ' + result.message);
+     }
    })
    .catch(error => console.error('Error:', error));
  });

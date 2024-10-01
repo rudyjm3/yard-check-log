@@ -1,7 +1,12 @@
 <?php
+// Enable error reporting
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 // update_yard_check.php
 
-include 'db_connection.php';
+include 'db_connection_info.php';
 
 $yard_check_id = $_POST['yard_check_id'];
 $user_name = $_POST['user_name'];

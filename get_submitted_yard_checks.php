@@ -1,7 +1,12 @@
 <?php
+// Enable error reporting
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 // get_submitted_yard_checks.php
 
-include 'db_connection.php';
+include 'db_connection_info.php';
 
 try {
     // Fetch all submitted yard checks
