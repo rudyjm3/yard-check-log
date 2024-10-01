@@ -337,7 +337,7 @@ function getOrdinalSuffix(day) {
          equipmentListDiv.appendChild(equipmentDiv);
        });
      })
-     .catch(error => console.error('Error:', error));
+    //  .catch(error => console.error('Error:' , error));
  }
  
  // Toggle Equipment Info Display
@@ -418,7 +418,8 @@ function getOrdinalSuffix(day) {
          equipmentListDiv.appendChild(equipmentItemDiv);
        });
      })
-     .catch(error => console.error('Error:', error));
+     
+    //  .catch(error => console.error('Error:', error));
  }
  
  // Show Form to Add New Equipment
