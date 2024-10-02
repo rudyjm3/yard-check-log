@@ -274,79 +274,75 @@ function getOrdinalSuffix(day) {
  }
  
  // Function to populate equipment list in the Yard Check Form
- function populateEquipmentList() {
-   fetch('get_equipment.php')
-     .then(response => response.json())
-     .then(data => {
-       equipmentData = data; // Store the equipment data globally
-       const equipmentListDiv = document.getElementById('equipment-list');
-       equipmentListDiv.innerHTML = '';
-       data.forEach(equipment => {
-         // Create a container for each equipment
-         const equipmentDiv = document.createElement('div');
-         equipmentDiv.classList.add('form-control');
- 
-         // Create image element if image_url exists
-         let imageHTML = '';
-         if (equipment.image_url) {
-           imageHTML = `<img src="${equipment.image_url}" alt="${equipment.equipment_name}" class="equipment-image">`;
-         }
- 
-         // Equipment label
-         const label = document.createElement('label');
-         label.htmlFor = `equipment-status-${equipment.unit_id}`;
-         label.innerHTML = `
-           ${imageHTML}
-           <p class="rental-id-label">Unit ID - <span class="rental-id-num">${equipment.unit_id}</span></p>
-           <p class="equipment-name">${equipment.equipment_name}</p>
-           <a href="#" onclick="toggleEquipmentInfo(event, '${equipment.unit_id}')">View more info</a>
-           <div id="equipment-info-${equipment.unit_id}" class="equipment-info" style="display: none;">
-             <p><strong>Manufacturer:</strong> ${equipment.manufacturer}</p>
-             <p><strong>Model:</strong> ${equipment.model}</p>
-           </div>
-         `;
-         // ... rest of the code remains the same ...
+// app.js
 
-         // Status select
-         const select = document.createElement('select');
-         select.name = `equipment_status_${equipment.unit_id}`;
-         select.id = `equipment-status-${equipment.unit_id}`;
-         select.required = true;
+async function populateEquipmentList() {
+   try {
+     const response = await fetch('get_equipment.php');
+     const data = await response.json();
+     equipmentData = data; // Store the equipment data globally
+     const equipmentListDiv = document.getElementById('equipment-list');
+     equipmentListDiv.innerHTML = '';
+     data.forEach(equipment => {
+       // Create a container for each equipment
+       const equipmentDiv = document.createElement('div');
+       equipmentDiv.classList.add('form-control');
  
-         // Options
-         const defaultOption = document.createElement('option');
-         defaultOption.disabled = true;
-         defaultOption.selected = true;
-         defaultOption.textContent = 'Select equipment status';
+       // Equipment label
+       const label = document.createElement('label');
+       label.htmlFor = `equipment-status-${equipment.unit_id}`;
+       label.innerHTML = `
+         <p class="rental-id-label">Unit ID - <span class="rental-id-num">${equipment.unit_id}</span></p>
+         <p class="equipment-name">${equipment.equipment_name}</p>
+         <a href="#" onclick="toggleEquipmentInfo(event, '${equipment.unit_id}')">View more info</a>
+         <div id="equipment-info-${equipment.unit_id}" class="equipment-info" style="display: none;">
+           <p><strong>Manufacturer:</strong> ${equipment.manufacturer}</p>
+           <p><strong>Model:</strong> ${equipment.model}</p>
+         </div>
+       `;
  
-         const availableOption = document.createElement('option');
-         availableOption.value = 'Available';
-         availableOption.textContent = 'Available';
+       // Status select
+       const select = document.createElement('select');
+       select.name = `equipment_status_${equipment.unit_id}`;
+       select.id = `equipment-status-${equipment.unit_id}`;
+       select.required = true;
  
-         const rentedOption = document.createElement('option');
-         rentedOption.value = 'Rented';
-         rentedOption.textContent = 'Rented';
+       // Options
+       const defaultOption = document.createElement('option');
+       defaultOption.disabled = true;
+       defaultOption.selected = true;
+       defaultOption.textContent = 'Select equipment status';
  
-         const outOfServiceOption = document.createElement('option');
-         outOfServiceOption.value = 'Out of Service';
-         outOfServiceOption.textContent = 'Out of Service';
+       const availableOption = document.createElement('option');
+       availableOption.value = 'Available';
+       availableOption.textContent = 'Available';
  
-         // Append options to select
-         select.appendChild(defaultOption);
-         select.appendChild(availableOption);
-         select.appendChild(rentedOption);
-         select.appendChild(outOfServiceOption);
+       const rentedOption = document.createElement('option');
+       rentedOption.value = 'Rented';
+       rentedOption.textContent = 'Rented';
  
-         // Append label and select to equipmentDiv
-         equipmentDiv.appendChild(label);
-         equipmentDiv.appendChild(select);
+       const outOfServiceOption = document.createElement('option');
+       outOfServiceOption.value = 'Out of Service';
+       outOfServiceOption.textContent = 'Out of Service';
  
-         // Append equipmentDiv to equipmentListDiv
-         equipmentListDiv.appendChild(equipmentDiv);
-       });
-     })
-     .catch(error => console.error('Error:' , error));
+       // Append options to select
+       select.appendChild(defaultOption);
+       select.appendChild(availableOption);
+       select.appendChild(rentedOption);
+       select.appendChild(outOfServiceOption);
+ 
+       // Append label and select to equipmentDiv
+       equipmentDiv.appendChild(label);
+       equipmentDiv.appendChild(select);
+ 
+       // Append equipmentDiv to equipmentListDiv
+       equipmentListDiv.appendChild(equipmentDiv);
+     });
+   } catch (error) {
+     console.error('Error:', error);
+   }
  }
+ 
  
  // Toggle Equipment Info Display
  function toggleEquipmentInfo(event, unitId) {
@@ -684,23 +680,28 @@ function getOrdinalSuffix(day) {
  }
  
  // Edit Yard Check
- function editYardCheck(id) {
-   // Load the yard check data and populate the form
-   fetch(`get_yard_check_details.php?id=${id}`)
-     .then(response => response.json())
-     .then(data => {
-       // Close the modal
-       closeModal();
-       // Show the yard check form
-       showYardCheckForm();
-       // Populate the form with data
-       populateYardCheckForm(data);
-     })
-     .catch(error => console.error('Error:', error));
+// app.js
+
+async function editYardCheck(id) {
+   try {
+     // Load the yard check data
+     const response = await fetch(`get_yard_check_details.php?id=${id}`);
+     const data = await response.json();
+     // Close the modal
+     closeModal();
+     // Show the yard check form
+     showYardCheckForm();
+     // Populate the form with data
+     await populateYardCheckForm(data);
+   } catch (error) {
+     console.error('Error:', error);
+   }
  }
  
  // Populate Yard Check Form with Existing Data
- function populateYardCheckForm(yardCheck) {
+ // app.js
+
+async function populateYardCheckForm(yardCheck) {
    document.getElementById('user-name').value = yardCheck.user_name;
    document.getElementById('check-time').value = yardCheck.check_time;
    document.getElementById('check-date').value = yardCheck.date;
@@ -715,7 +716,10 @@ function getOrdinalSuffix(day) {
    }
    document.getElementById('yard-check-id').value = yardCheck.id;
  
-   // Populate equipment statuses
+   // First, populate the equipment list
+   await populateEquipmentList();
+ 
+   // Now that the equipment list is populated, set the statuses
    yardCheck.equipment_statuses.forEach(status => {
      const select = document.getElementById(`equipment-status-${status.unit_id}`);
      if (select) {
@@ -723,6 +727,7 @@ function getOrdinalSuffix(day) {
      }
    });
  }
+ 
  
  // Load Equipment Stats
  function loadEquipmentStats() {
