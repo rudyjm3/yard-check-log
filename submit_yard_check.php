@@ -1,6 +1,9 @@
 <?php
 // submit_yard_check.php
 
+// Set the default time zone to your local time zone
+date_default_timezone_set('America/New_York'); // Replace with your actual time zone
+
 include 'db_connection_info.php';
 
 // Enable error reporting
@@ -12,8 +15,10 @@ error_reporting(E_ALL);
 $user_name = $_POST['user_name'];
 $date = $_POST['check_date'];
 $check_time = $_POST['check_time'];
-$submission_time = date('H:i:s');
-$submission_date_time = date('Y-m-d H:i:s');
+$submission_date_time = $_POST['submission_date_time']; // Use the submitted local date and time
+
+// Extract submission_time from submission_date_time
+$submission_time = date('H:i:s', strtotime($submission_date_time));
 
 // Check if this is an update or a new submission
 $yard_check_id = isset($_POST['yard_check_id']) ? $_POST['yard_check_id'] : null;
@@ -95,6 +100,7 @@ try {
         $stmt->execute();
 
         $yard_check_id = $conn->lastInsertId();
+
 
         // Insert equipment statuses
         foreach ($_POST as $key => $value) {

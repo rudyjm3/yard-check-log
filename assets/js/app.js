@@ -215,12 +215,6 @@ function getOrdinalSuffix(day) {
      currentDateElement.textContent = formattedDateTime;
    }
  
-   // Set the value of the hidden input field
-   const submissionDateTimeInput = document.getElementById('submission-date-time');
-   if (submissionDateTimeInput) {
-     submissionDateTimeInput.value = formattedDateTime;
-   }
- 
    // Set the value of the date input field
    const checkDateInput = document.getElementById('check-date');
    if (checkDateInput) {
@@ -245,7 +239,10 @@ function getOrdinalSuffix(day) {
    document.getElementById('equipment-stats').style.display = 'none';
    populateEquipmentList();
  }
- 
+ // Show Yard Check From from submitted yard check page
+ function showAddYardCheckForm() {
+   showYardCheckForm();
+ }
  // Show Equipment Management Section
  function showEquipmentManagement() {
    document.getElementById('lg-equipment-yard-check-form').style.display = 'none';
@@ -274,9 +271,7 @@ function getOrdinalSuffix(day) {
  }
  
  // Function to populate equipment list in the Yard Check Form
-// app.js
-
-async function populateEquipmentList() {
+ async function populateEquipmentList() {
    try {
      const response = await fetch('get_equipment.php');
      const data = await response.json();
@@ -287,7 +282,7 @@ async function populateEquipmentList() {
        // Create a container for each equipment
        const equipmentDiv = document.createElement('div');
        equipmentDiv.classList.add('form-control');
-
+ 
        // Create image element if image_url exists
        let imageHTML = '';
        if (equipment.image_url) {
@@ -350,7 +345,6 @@ async function populateEquipmentList() {
    }
  }
  
- 
  // Toggle Equipment Info Display
  function toggleEquipmentInfo(event, unitId) {
    event.preventDefault();
@@ -366,18 +360,13 @@ async function populateEquipmentList() {
  document.getElementById('lg-equipment-yard-check-form').addEventListener('submit', function(e) {
    e.preventDefault(); // Prevent the default form submission
  
-   // Capture the user's local time
+   // Capture the user's current local date and time in ISO format without 'Z'
    const now = new Date();
-   const hours = now.getHours();
-   const minutes = now.getMinutes();
-   const seconds = now.getSeconds();
+   const submissionDateTimeLocal = now.toISOString().slice(0, -1); // Remove the 'Z' at the end
  
-   // Format time as HH:MM:SS
-   const submissionTime = `${hours}:${minutes}:${seconds}`;
- 
-   // Add submission_time to the form data
+   // Add submission_date_time to the form data
    const formData = new FormData(this);
-   formData.append('submission_time', submissionTime);
+   formData.append('submission_date_time', submissionDateTimeLocal);
  
    fetch('submit_yard_check.php', {
      method: 'POST',
@@ -392,14 +381,15 @@ async function populateEquipmentList() {
        this.reset();
        displayCurrentDateTime();
        // Clear the yard_check_id
-       document.getElementById('yard-check-id').value = '';
+       const yardCheckIdInput = document.getElementById('yard-check-id');
+       if (yardCheckIdInput) {
+         yardCheckIdInput.value = '';
+       }
        // Hide the form if needed
      }
    })
    .catch(error => console.error('Error:', error));
  });
- 
- 
  
  // Show Duplicate Submission Message
  function showDuplicateSubmissionMessage(existingYardCheck) {
@@ -421,11 +411,11 @@ async function populateEquipmentList() {
    // Display the message in the UI
    document.getElementById('message-container').innerHTML = messageContent;
  }
+ 
  // Close Duplicate Submission Message
  function closeMessage() {
    document.getElementById('message-container').innerHTML = '';
  }
- 
  
  // Load Equipment List for Management
  function loadEquipmentListManagement() {
@@ -465,7 +455,7 @@ async function populateEquipmentList() {
        });
      })
      .catch(error => console.error('Error:', error));
- } 
+ }
  
  // Show Form to Add New Equipment
  function showAddEquipmentForm() {
@@ -615,18 +605,16 @@ async function populateEquipmentList() {
            columnDiv.classList.add('card-column');
  
            if (yardCheck) {
-             // **New Code Starts Here**
+             // Parse the submission_date_time as local time
+             const submissionDateTime = new Date(yardCheck.submission_date_time);
  
              // Format submission_time to HH:MM am/pm
-             const submissionTimeObj = new Date(`1970-01-01T${yardCheck.submission_time}`);
-             let hours = submissionTimeObj.getHours();
-             const minutes = submissionTimeObj.getMinutes();
+             let hours = submissionDateTime.getHours();
+             const minutes = submissionDateTime.getMinutes();
              const ampm = hours >= 12 ? 'pm' : 'am';
              hours = hours % 12 || 12; // Convert to 12-hour format
              const minutesStr = minutes < 10 ? `0${minutes}` : minutes;
              const formattedSubmissionTime = `${hours}:${minutesStr} ${ampm}`;
- 
-             // **New Code Ends Here**
  
              columnDiv.innerHTML = `
                <h4>${checkTime} Submission</h4>
@@ -637,7 +625,7 @@ async function populateEquipmentList() {
                <p><strong>Equipment currently out of service:</strong> ${yardCheck.equipment_out_of_service}</p>
                <p><strong>Profit loss:</strong> $<span class="loss-amount">${yardCheck.profit_loss.toFixed(2)}</span></p>
                <p><strong>Submitted by:</strong> ${yardCheck.user_name}</p>
-               <p><strong>Time submitted:</strong> ${formattedSubmissionTime}</p> <!-- Updated line -->
+               <p class="time-submitted"><strong>Time submitted:</strong> ${formattedSubmissionTime}</p>
                <div class="button-wrapper">
                  <button onclick="viewYardCheckDetails(${yardCheck.id})">View Yard Check</button>
                  <button onclick="editYardCheck(${yardCheck.id})">Edit Yard Check</button>
@@ -658,12 +646,6 @@ async function populateEquipmentList() {
        }
      })
      .catch(error => console.error('Error:', error));
- }
- 
- 
- // Show Add Yard Check Form
- function showAddYardCheckForm() {
-   showYardCheckForm();
  }
  
  // View Yard Check Details
@@ -714,9 +696,7 @@ async function populateEquipmentList() {
  }
  
  // Edit Yard Check
-// app.js
-
-async function editYardCheck(id) {
+ async function editYardCheck(id) {
    try {
      // Load the yard check data
      const response = await fetch(`get_yard_check_details.php?id=${id}`);
@@ -733,9 +713,7 @@ async function editYardCheck(id) {
  }
  
  // Populate Yard Check Form with Existing Data
- // app.js
-
-async function populateYardCheckForm(yardCheck) {
+ async function populateYardCheckForm(yardCheck) {
    document.getElementById('user-name').value = yardCheck.user_name;
    document.getElementById('check-time').value = yardCheck.check_time;
    document.getElementById('check-date').value = yardCheck.date;
@@ -761,7 +739,6 @@ async function populateYardCheckForm(yardCheck) {
      }
    });
  }
- 
  
  // Load Equipment Stats
  function loadEquipmentStats() {
@@ -889,4 +866,3 @@ async function populateYardCheckForm(yardCheck) {
      document.getElementById('custom-date-range').style.display = 'none';
    }
  });
- 

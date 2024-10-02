@@ -321,6 +321,11 @@ header .page-title {
   margin: 5px 0;
 }
 
+/*Hidding Time submitted for now */
+.time-submitted {
+   display: none;
+}
+
 .yard-check-card .button-wrapper {
   text-align: center;
 }
