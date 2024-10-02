@@ -281,7 +281,32 @@ header .page-title {
   display: flex;
   justify-content: space-between;
 }
-
+/* Update card-column styles */
+.card-column {
+   padding: 15px;
+   border-radius: 4px;
+   border: 1.5px solid var(--light-grey-color1);
+   filter: drop-shadow(0px 4px 3px var(--light-grey-color2));
+   margin-bottom: 20px; /* Add margin to separate cards */
+ }
+ 
+ /* Ensure that the card-content displays columns properly */
+ .card-content {
+   display: flex;
+   flex-direction: column; /* Change to column layout */
+   gap: 20px; /* Add gap between columns */
+ }
+ 
+ /* If you want to keep them side by side on larger screens */
+ @media (min-width: 768px) {
+   .card-content {
+     flex-direction: row;
+   }
+   .card-column {
+     width: 48%;
+   }
+ }
+ 
 .yard-check-card .card-column {
   width: 48%;
 }

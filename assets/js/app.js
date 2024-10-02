@@ -373,28 +373,43 @@ function getOrdinalSuffix(day) {
      if (result.status === 'error') {
        showDuplicateSubmissionMessage(result.existingYardCheck);
      } else {
-       alert('Yard check submitted successfully!');
+       alert(result.message);
        this.reset();
        displayCurrentDateTime();
+       // Clear the yard_check_id
+       document.getElementById('yard-check-id').value = '';
+       // Hide the form if needed
      }
    })
    .catch(error => console.error('Error:', error));
  });
  
+ 
  // Show Duplicate Submission Message
  function showDuplicateSubmissionMessage(existingYardCheck) {
+   const dateObj = new Date(existingYardCheck.date);
+   const formattedDate = ('0' + (dateObj.getMonth() + 1)).slice(-2) + '/' +
+                         ('0' + dateObj.getDate()).slice(-2) + '/' +
+                         dateObj.getFullYear();
+ 
    const messageContent = `
      <div class="message">
        <p>A yard check for this date and time has already been submitted.</p>
-       <p><strong>Date:</strong> ${existingYardCheck.date}</p>
+       <p><strong>Date:</strong> ${formattedDate}</p>
        <p><strong>Time:</strong> ${existingYardCheck.check_time}</p>
        <p><strong>Submitted by:</strong> ${existingYardCheck.user_name}</p>
        <button onclick="viewYardCheckDetails(${existingYardCheck.id})">View Submitted Yard Check</button>
+       <button onclick="closeMessage()">Close</button>
      </div>
    `;
    // Display the message in the UI
    document.getElementById('message-container').innerHTML = messageContent;
  }
+ // Close Duplicate Submission Message
+ function closeMessage() {
+   document.getElementById('message-container').innerHTML = '';
+ }
+ 
  
  // Load Equipment List for Management
  function loadEquipmentListManagement() {
