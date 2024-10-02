@@ -44,15 +44,15 @@ try {
     }
 
     if ($yard_check_id) {
-        // Update existing yard check
-        $stmt = $conn->prepare("UPDATE yard_checks SET user_name = :user_name, date = :date, check_time = :check_time, submission_time = :submission_time, submission_date_time = :submission_date_time WHERE id = :id");
-        $stmt->bindParam(':user_name', $user_name);
-        $stmt->bindParam(':date', $date);
-        $stmt->bindParam(':check_time', $check_time);
-        $stmt->bindParam(':submission_time', $submission_time);
-        $stmt->bindParam(':submission_date_time', $submission_date_time);
-        $stmt->bindParam(':id', $yard_check_id);
-        $stmt->execute();
+      // Update existing yard check
+      $stmt = $conn->prepare("UPDATE yard_checks SET user_name = :user_name, date = :date, check_time = :check_time, submission_time = :submission_time, submission_date_time = :submission_date_time WHERE id = :id");
+      $stmt->bindParam(':user_name', $user_name);
+      $stmt->bindParam(':date', $date);
+      $stmt->bindParam(':check_time', $check_time);
+      $stmt->bindParam(':submission_time', $submission_time);
+      $stmt->bindParam(':submission_date_time', $submission_date_time);
+      $stmt->bindParam(':id', $yard_check_id);
+      $stmt->execute();
 
         // Delete existing equipment statuses
         $stmt = $conn->prepare("DELETE FROM yard_check_equipment_status WHERE yard_check_id = :yard_check_id");

@@ -287,11 +287,18 @@ async function populateEquipmentList() {
        // Create a container for each equipment
        const equipmentDiv = document.createElement('div');
        equipmentDiv.classList.add('form-control');
+
+       // Create image element if image_url exists
+       let imageHTML = '';
+       if (equipment.image_url) {
+         imageHTML = `<img src="${equipment.image_url}" alt="${equipment.equipment_name}" class="equipment-image">`;
+       }
  
        // Equipment label
        const label = document.createElement('label');
        label.htmlFor = `equipment-status-${equipment.unit_id}`;
        label.innerHTML = `
+         ${imageHTML}
          <p class="rental-id-label">Unit ID - <span class="rental-id-num">${equipment.unit_id}</span></p>
          <p class="equipment-name">${equipment.equipment_name}</p>
          <a href="#" onclick="toggleEquipmentInfo(event, '${equipment.unit_id}')">View more info</a>
@@ -358,7 +365,19 @@ async function populateEquipmentList() {
  // Handle Yard Check Form Submission
  document.getElementById('lg-equipment-yard-check-form').addEventListener('submit', function(e) {
    e.preventDefault(); // Prevent the default form submission
+ 
+   // Capture the user's local time
+   const now = new Date();
+   const hours = now.getHours();
+   const minutes = now.getMinutes();
+   const seconds = now.getSeconds();
+ 
+   // Format time as HH:MM:SS
+   const submissionTime = `${hours}:${minutes}:${seconds}`;
+ 
+   // Add submission_time to the form data
    const formData = new FormData(this);
+   formData.append('submission_time', submissionTime);
  
    fetch('submit_yard_check.php', {
      method: 'POST',
@@ -379,6 +398,7 @@ async function populateEquipmentList() {
    })
    .catch(error => console.error('Error:', error));
  });
+ 
  
  
  // Show Duplicate Submission Message
@@ -595,6 +615,19 @@ async function populateEquipmentList() {
            columnDiv.classList.add('card-column');
  
            if (yardCheck) {
+             // **New Code Starts Here**
+ 
+             // Format submission_time to HH:MM am/pm
+             const submissionTimeObj = new Date(`1970-01-01T${yardCheck.submission_time}`);
+             let hours = submissionTimeObj.getHours();
+             const minutes = submissionTimeObj.getMinutes();
+             const ampm = hours >= 12 ? 'pm' : 'am';
+             hours = hours % 12 || 12; // Convert to 12-hour format
+             const minutesStr = minutes < 10 ? `0${minutes}` : minutes;
+             const formattedSubmissionTime = `${hours}:${minutesStr} ${ampm}`;
+ 
+             // **New Code Ends Here**
+ 
              columnDiv.innerHTML = `
                <h4>${checkTime} Submission</h4>
                <p><strong>Total number of equipment:</strong> ${yardCheck.total_equipment}</p>
@@ -604,7 +637,7 @@ async function populateEquipmentList() {
                <p><strong>Equipment currently out of service:</strong> ${yardCheck.equipment_out_of_service}</p>
                <p><strong>Profit loss:</strong> $<span class="loss-amount">${yardCheck.profit_loss.toFixed(2)}</span></p>
                <p><strong>Submitted by:</strong> ${yardCheck.user_name}</p>
-               <p><strong>Time submitted:</strong> ${yardCheck.submission_time}</p>
+               <p><strong>Time submitted:</strong> ${formattedSubmissionTime}</p> <!-- Updated line -->
                <div class="button-wrapper">
                  <button onclick="viewYardCheckDetails(${yardCheck.id})">View Yard Check</button>
                  <button onclick="editYardCheck(${yardCheck.id})">Edit Yard Check</button>
@@ -626,6 +659,7 @@ async function populateEquipmentList() {
      })
      .catch(error => console.error('Error:', error));
  }
+ 
  
  // Show Add Yard Check Form
  function showAddYardCheckForm() {
