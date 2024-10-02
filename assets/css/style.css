@@ -268,7 +268,8 @@ header .page-title {
 }
 
 .yard-check-card {
-  border: 1px solid #ccc;
+  border-bottom: 3px solid var(--hover-blue-color);
+  border-bottom-style: double;
   padding: 15px;
   margin-bottom: 20px;
 }
