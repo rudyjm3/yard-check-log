@@ -1,7 +1,7 @@
 <?php
 // submit_yard_check.php
 
-include 'db_connection.php';
+include 'db_connection_info.php';
 
 // Enable error reporting
 ini_set('display_errors', 1);
