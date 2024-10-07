@@ -359,7 +359,7 @@ function getOrdinalSuffix(day) {
  // Handle Yard Check Form Submission
  document.getElementById('lg-equipment-yard-check-form').addEventListener('submit', function(e) {
    e.preventDefault(); // Prevent the default form submission
- 
+   debugger;
    // Capture the user's current local date and time in ISO format without 'Z'
    const now = new Date();
    const submissionDateTimeLocal = now.toISOString().slice(0, -1); // Remove the 'Z' at the end
@@ -562,6 +562,7 @@ function getOrdinalSuffix(day) {
  
  // Load Submitted Yard Checks
  function loadSubmittedYardChecks() {
+   debugger;
    fetch('get_submitted_yard_checks.php')
      .then(response => response.json())
      .then(data => {

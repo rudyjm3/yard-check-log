@@ -7,16 +7,16 @@ error_reporting(E_ALL);
 //Database connection details
 
 // Local Development database
-// $servername = "localhost";
-// $username = "root";
-// $password = "";
-// $dbname = "u207292155_yard_check_db";
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "u207292155_yard_check_db";
 
 // Live server database
-$servername = "localhost";
-$username = "rudyjm33";
-$password = "Matrix_1645";
-$dbname = "u207292155_yard_check_db";
+// $servername = "localhost";
+// $username = "u207292155_rudyjm33";
+// $password = "Matrix_1645";
+// $dbname = "u207292155_yard_check_db";
 
 try {
     $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
