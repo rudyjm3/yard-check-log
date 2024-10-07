@@ -5,9 +5,19 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-// Set the default time zone to your local time zone
-// date_default_timezone_set('America/New_York'); // Replace with your actual time zone
 include 'db_connection_info.php';
+
+// **At the top of the script, after including dependencies
+error_log('Received data in submit_yard_check.php:');
+error_log('user_name: ' . $_POST['user_name']);
+error_log('check_date: ' . $_POST['check_date']);
+error_log('check_time: ' . $_POST['check_time']);
+error_log('submission_date_time: ' . $_POST['submission_date_time']);
+//** */
+
+// **Add this line temporarily to log the default time zone:
+//error_log('PHP Default Time Zone: ' . date_default_timezone_get());
+// **
 
 // Collect form data
 $user_name = $_POST['user_name'];
@@ -15,8 +25,19 @@ $date = $_POST['check_date'];
 $check_time = $_POST['check_time']; // AM/PM value
 $submission_date_time = $_POST['submission_date_time']; // Use the submitted local date and time
 
+// **Log the received data
+error_log('Received submission_date_time: ' . $submission_date_time);
+//**  */
+
 // Extract submission_time from submission_date_time
 $submission_time = date('H:i:s', strtotime($submission_date_time));
+
+// ***Use DateTime object with the server's time zone to parse the local time
+$submissionDateTime = DateTime::createFromFormat('Y-m-d H:i:s', $submission_date_time);
+
+// ***Extract submission_time from submission_date_time
+$submission_time = $submissionDateTime->format('H:i:s');
+
 
 // Check if this is an update or a new submission
 $yard_check_id = isset($_POST['yard_check_id']) ? $_POST['yard_check_id'] : null;
@@ -88,6 +109,15 @@ try {
 
         echo json_encode(['status' => 'success', 'message' => 'Yard check updated successfully.']);
     } else {
+// **Before executing the INSERT statement
+error_log('Inserting into database:');
+error_log('user_name: ' . $user_name);
+error_log('date: ' . $date);
+error_log('check_time: ' . $check_time);
+error_log('submission_time: ' . $submission_time);
+error_log('submission_date_time: ' . $submission_date_time);
+//
+
         // Insert new yard check
         $stmt = $conn->prepare("INSERT INTO yard_checks (user_name, date, check_time, submission_time, submission_date_time) VALUES (:user_name, :date, :check_time, :submission_time, :submission_date_time)");
         $stmt->bindParam(':user_name', $user_name);
@@ -99,6 +129,15 @@ try {
 
         $yard_check_id = $conn->lastInsertId();
 
+      // Log Processed Time Values:
+        $submission_date_time = $_POST['submission_date_time'];
+        $submission_time = date('H:i:s', strtotime($submission_date_time));
+
+
+// **Log the processed times
+error_log('Processed submission_date_time: ' . $submission_date_time);
+error_log('Extracted submission_time: ' . $submission_time);
+// **
 
         // Insert equipment statuses
         foreach ($_POST as $key => $value) {

@@ -4,6 +4,10 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+// **Check if the Database Connection Sets a Time Zone:
+//$conn->exec("SET time_zone = 'America/New_York';"); // Replace with your time zone
+// **
+
 //Database connection details
 
 // Local Development database

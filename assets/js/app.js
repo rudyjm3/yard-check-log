@@ -359,10 +359,22 @@ function getOrdinalSuffix(day) {
  // Handle Yard Check Form Submission
  document.getElementById('lg-equipment-yard-check-form').addEventListener('submit', function(e) {
    e.preventDefault(); // Prevent the default form submission
-   debugger;
-   // Capture the user's current local date and time in ISO format without 'Z'
+   // Function to format date and time to 'YYYY-MM-DD HH:mm:ss' in local time
+   function formatDateToLocalString(date) {
+      const year = date.getFullYear();
+      const month = ('0' + (date.getMonth() + 1)).slice(-2); // Months are zero-based
+      const day = ('0' + date.getDate()).slice(-2);
+      const hours = ('0' + date.getHours()).slice(-2);
+      const minutes = ('0' + date.getMinutes()).slice(-2);
+      const seconds = ('0' + date.getSeconds()).slice(-2);
+      return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+   }
+   // Capture the user's current local date and time
    const now = new Date();
-   const submissionDateTimeLocal = now.toISOString().slice(0, -1); // Remove the 'Z' at the end
+   const submissionDateTimeLocal = formatDateToLocalString(now);
+
+   // Add this line to log the time being sent
+console.log('Captured submissionDateTimeLocal:', submissionDateTimeLocal);
  
    // Add submission_date_time to the form data
    const formData = new FormData(this);
@@ -562,10 +574,12 @@ function getOrdinalSuffix(day) {
  
  // Load Submitted Yard Checks
  function loadSubmittedYardChecks() {
-   debugger;
    fetch('get_submitted_yard_checks.php')
      .then(response => response.json())
      .then(data => {
+      // ** This allows you to inspect the entire data object received from the server.
+      console.log('Received yard check data:', data);
+      //** */
        const yardChecksListDiv = document.getElementById('yard-checks-list');
        yardChecksListDiv.innerHTML = '';
        // Group yard checks by date
@@ -575,8 +589,10 @@ function getOrdinalSuffix(day) {
            yardChecksByDate[yardCheck.date] = {};
          }
          yardChecksByDate[yardCheck.date][yardCheck.check_time] = yardCheck;
+         console.log(yardCheck);
        });
- 
+ // 
+ console.log( "Yard Checks by date title: " + yardChecksByDate);
        // Create cards for each date
        for (const date in yardChecksByDate) {
          const yardCheckDay = yardChecksByDate[date];
@@ -584,18 +600,38 @@ function getOrdinalSuffix(day) {
          cardDiv.classList.add('yard-check-card');
  
          // Format date for title
-         const dateObj = new Date(date);
+         // Assume date is in 'YYYY-MM-DD' format
+         // Parse the date string manually to create a Date object in local time
+         const [yearStr, monthStr, dayStr] = date.split('-');
+         const dateObj = new Date(Number(yearStr), Number(monthStr) - 1, Number(dayStr));
+
          const dayName = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][dateObj.getDay()];
          const monthName = ['January', 'February', 'March', 'April', 'May', 'June',
-           'July', 'August', 'September', 'October', 'November', 'December'][dateObj.getMonth()];
+         'July', 'August', 'September', 'October', 'November', 'December'][dateObj.getMonth()];
          const dayNumber = dateObj.getDate();
          const ordinalSuffix = getOrdinalSuffix(dayNumber);
          const dayNumberWithSuffix = `${dayNumber}${ordinalSuffix}`;
          const year = dateObj.getFullYear();
- 
-         const cardTitle = `${dayName}, ${dayNumberWithSuffix}, ${monthName}, ${year} - Yard Check`;
- 
+
+         const cardTitle = `${dayName}, ${monthName} ${dayNumberWithSuffix}, ${year} - Yard Check`;
+
          cardDiv.innerHTML = `<h3>${cardTitle}</h3>`;
+         console.log('Parsed dateObj:', dateObj.toString());
+
+         // OLD
+         // const dateObj = new Date(date);
+         // const dayName = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][dateObj.getDay()];
+         // const monthName = ['January', 'February', 'March', 'April', 'May', 'June',
+         //   'July', 'August', 'September', 'October', 'November', 'December'][dateObj.getMonth()];
+         // const dayNumber = dateObj.getDate();
+         // const ordinalSuffix = getOrdinalSuffix(dayNumber);
+         // const dayNumberWithSuffix = `${dayNumber}${ordinalSuffix}`;
+         // const year = dateObj.getFullYear();
+ 
+         // const cardTitle = `${dayName}, ${dayNumberWithSuffix}, ${monthName}, ${year} - Yard Check`;
+ 
+         // cardDiv.innerHTML = `<h3>${cardTitle}</h3>`;
+         // END OLD
  
          const cardContentDiv = document.createElement('div');
          cardContentDiv.classList.add('card-content');
@@ -608,6 +644,12 @@ function getOrdinalSuffix(day) {
            if (yardCheck) {
              // Parse the submission_date_time as local time
              const submissionDateTime = new Date(yardCheck.submission_date_time);
+
+             // ***Log the raw data and the parsed date
+console.log('Raw submission_date_time from server:', yardCheck.submission_date_time);
+console.log('Parsed submissionDateTime:', submissionDateTime);
+console.log(dateObj);
+
  
              // Format submission_time to HH:MM am/pm
              let hours = submissionDateTime.getHours();
@@ -616,7 +658,9 @@ function getOrdinalSuffix(day) {
              hours = hours % 12 || 12; // Convert to 12-hour format
              const minutesStr = minutes < 10 ? `0${minutes}` : minutes;
              const formattedSubmissionTime = `${hours}:${minutesStr} ${ampm}`;
- 
+
+console.log('Parsed formattedsubmissionTime:', formattedSubmissionTime);
+
              columnDiv.innerHTML = `
                <h4>${checkTime} Submission</h4>
                <p><strong>Total number of equipment:</strong> ${yardCheck.total_equipment}</p>
@@ -662,6 +706,11 @@ function getOrdinalSuffix(day) {
  // Show Yard Check Details in Modal
  function showYardCheckDetails(yardCheck) {
    const modalContainer = document.getElementById('modal-container');
+ 
+   // Extract date components and format the date
+   const [year, month, day] = yardCheck.date.split('-');
+   const formattedDate = `${month}/${day}/${year}`;
+ 
    const equipmentStatuses = yardCheck.equipment_statuses.map(status => `
      <div>
        <p><strong>Unit ID:</strong> ${status.unit_id}</p>
@@ -676,7 +725,7 @@ function getOrdinalSuffix(day) {
        <div class="modal-content">
          <span class="close-button" onclick="closeModal()">&times;</span>
          <h2>Yard Check Details</h2>
-         <p><strong>Date:</strong> ${yardCheck.date}</p>
+         <p><strong>Date:</strong> ${formattedDate}</p>
          <p><strong>Time:</strong> ${yardCheck.check_time}</p>
          <p><strong>Submitted by:</strong> ${yardCheck.user_name}</p>
          <div>
@@ -690,6 +739,7 @@ function getOrdinalSuffix(day) {
    modalContainer.innerHTML = modalContent;
    modalContainer.style.display = 'block';
  }
+ 
  
  // Close Modal
  function closeModal() {

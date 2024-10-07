@@ -54,6 +54,15 @@ try {
         $yardCheck['submission_time'] = $yardCheck['submission_time'];
 
         $result[] = $yardCheck;
+
+        // **After fetching data from the database
+error_log('Fetched yard check data:');
+foreach ($yardChecks as $yardCheck) {
+    error_log('Yard Check ID: ' . $yardCheck['id']);
+    error_log('submission_date_time: ' . $yardCheck['submission_date_time']);
+}
+//** */
+
     }
 
     echo json_encode($result);

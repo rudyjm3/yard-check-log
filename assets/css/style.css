@@ -357,7 +357,8 @@ header .page-title {
   background-color: #fff;
   margin: 5% auto;
   padding: 20px;
-  width: 80%;
+  width: 50%;
+  height: 80%;
   position: relative;
   overflow-y: scroll;
 }
