@@ -262,7 +262,7 @@ function setActiveMenuItem(clickedItem) {
    let clickedItem = document.getElementsByClassName('side-menu-item')[0];
    showYardCheckForm(clickedItem);
  }
- 
+
  // Show Equipment Management Section
  function showEquipmentManagement(clickedItem) {
    document.getElementById('lg-equipment-yard-check-form').style.display = 'none';
@@ -665,9 +665,9 @@ function setActiveMenuItem(clickedItem) {
                <p><strong>Equipment currently rented out:</strong> ${yardCheck.equipment_rented_out}</p>
                ${checkTime === 'PM' ? `<p><strong>Estimated profit:</strong> $<span class="profit-amount">${yardCheck.estimated_profit.toFixed(2)}</span></p>` : ''}
                <p><strong>Equipment currently out of service:</strong> ${yardCheck.equipment_out_of_service}</p>
-               <p><strong>Profit loss:</strong> $<span class="loss-amount">${yardCheck.profit_loss.toFixed(2)}</span></p>
+               <p class="profit-loss-txt"><strong>Profit loss:</strong> $<span class="loss-amount">${yardCheck.profit_loss.toFixed(2)}</span></p>
                <p><strong>Submitted by:</strong> ${yardCheck.user_name}</p>
-               <p class="time-submitted"><strong>Time submitted:</strong> ${formattedSubmissionTime}</p>
+               <p class="time-submitted-txt"><strong>Time submitted:</strong> ${formattedSubmissionTime}</p>
                <div class="button-wrapper">
                  <button onclick="viewYardCheckDetails(${yardCheck.id})">View Yard Check</button>
                  <button onclick="editYardCheck(${yardCheck.id})">Edit Yard Check</button>
