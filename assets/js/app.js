@@ -1,162 +1,162 @@
 // Large equipment array temporary storage
-const largeEquipment = [
-   { unit_id: "3417389", 
-      equipment_name: "35' Towable Boom Lift",
-      manufacturer: "JLG Lift",
-      model:"T350",
-      imageUrl: "http://google.com",
-      rental_rates: {
-         four_hours: 269.00,
-         daily: 359.00,
-         weekly: 1077.00,
-         monthly: 2693.00
-      },
-   },
+// const largeEquipment = [
+//    { unit_id: "3417389", 
+//       equipment_name: "35' Towable Boom Lift",
+//       manufacturer: "JLG Lift",
+//       model:"T350",
+//       imageUrl: "http://google.com",
+//       rental_rates: {
+//          four_hours: 269.00,
+//          daily: 359.00,
+//          weekly: 1077.00,
+//          monthly: 2693.00
+//       },
+//    },
 
-   { unit_id: "3574941", 
-      equipment_name: "24\" Trencher",
-      manufacturer: "Barreto",
-      model: "912",
-      rental_rates: {
-         four_hours: 179.00,
-         daily: 239.00,
-         weekly: 717.00,
-         monthly: 1793.00
-      }
-   },
-   { unit_id: "3417390", 
-      equipment_name: "36\" Trencher",
-      manufacturer: "Barreto",
-      model: "E2036",
-      rental_rates: {
-         four_hours: 209.00,
-         daily: 279.00,
-         weekly: 837.00,
-         monthly: 1835.00
-      }
-   },
-   { unit_id: "3438645", 
-      equipment_name: "Stump Grinder",
-      manufacturer: "Barreto",
-      model: "30-SG",
-      imageUrl: "http://google.com",
-      rental_rates: {
-         four_hours: 232.00,
-         daily: 309.00,
-         weekly: 989.00,
-         monthly: 2473.00
-      }
-   },
-   { unit_id: "3543208", 
-      equipment_name: "Mini Skid Steer",
-      manufacturer: "Toro",
-      model: "Dingo TX427",
-      imageUrl: "https://images.thdstatic.com/productImages/72c5af06-d142-421e-ab7d-e4094e048036/svn/kubota-k008-64_600.jpg",
-      rental_rates: {
-         four_hours: 232.00,
-         daily: 309.00,
-         weekly: 989.00,
-         monthly: 2473.00
-      }
-   },
-   { unit_id: "09169", 
-      equipment_name: "Log Spliter",
-      manufacturer: "",
-      model: "",
-      imageUrl: "http://google.com",
-      rental_rates: {
-         four_hours: 81.00,
-         daily: 116.00,
-         weekly: 464.00,
-         monthly: 1392.00
-      }
-   },
-   { unit_id: "3590741", 
-      equipment_name: "19' Scissor Lift on Trailer",
-      manufacturer: "",
-      model: "",
-      imageUrl: "http://google.com",
-      rental_rates: {
-         four_hours: 229.00,
-         daily: 229.00,
-         weekly: 687.00,
-         monthly: 0
-      }
-   },
-   { unit_id: "", 
-      equipment_name: "5' x 8' Dump Trailer",
-      manufacturer: "",
-      model: "",
-      imageUrl: "http://google.com",
-      rental_rates: {
-         four_hours: 0,
-         daily: 0,
-         weekly: 0,
-         monthly: 0
-      }
-   },
-   { unit_id: "3408242", 
-      equipment_name: "6' x 10' Dump Trailer",
-      manufacturer: "",
-      model: "",
-      imageUrl: "http://google.com",
-      rental_rates: {
-         four_hours: 149.00,
-         daily: 199.00,
-         weekly: 597.00,
-         monthly: 0
-      }
-   },
-   { unit_id: "04832", 
-      equipment_name: "Channel Frame Trailer 5' x 8'",
-      manufacturer: "",
-      model: "",
-      imageUrl: "http://google.com",
-      rental_rates: {
-         four_hours: 39.00,
-         daily: 55.00,
-         weekly: 220.00,
-         monthly: 0
-      }
-   },
-   { unit_id: "05979", 
-      equipment_name: "Channel Frame Trailer 5' x 8'",
-      manufacturer: "",
-      model: "",
-      imageUrl: "http://google.com",
-      rental_rates: {
-         four_hours: 39.00,
-         daily: 55.00,
-         weekly: 220.00,
-         monthly: 0
-      }
-   },
-   { unit_id: "02932", 
-      equipment_name: "Lawn & Garden Trailer 3'x 5'",
-      manufacturer: "",
-      model: "",
-      imageUrl: "http://google.com",
-      rental_rates: {
-         four_hours: 21.00,
-         daily: 30.00,
-         weekly: 120.00,
-         monthly: 0
-      }
-   },
-   { unit_id: "07644", 
-      equipment_name: "Solid Wall Trailer 5'x 8'",
-      manufacturer: "",
-      model: "",
-      imageUrl: "http://google.com",
-      rental_rates: {
-         four_hours: 42.00,
-         daily: 60.00,
-         weekly: 240.00,
-         monthly: 0
-      }
-   },
+//    { unit_id: "3574941", 
+//       equipment_name: "24\" Trencher",
+//       manufacturer: "Barreto",
+//       model: "912",
+//       rental_rates: {
+//          four_hours: 179.00,
+//          daily: 239.00,
+//          weekly: 717.00,
+//          monthly: 1793.00
+//       }
+//    },
+//    { unit_id: "3417390", 
+//       equipment_name: "36\" Trencher",
+//       manufacturer: "Barreto",
+//       model: "E2036",
+//       rental_rates: {
+//          four_hours: 209.00,
+//          daily: 279.00,
+//          weekly: 837.00,
+//          monthly: 1835.00
+//       }
+//    },
+//    { unit_id: "3438645", 
+//       equipment_name: "Stump Grinder",
+//       manufacturer: "Barreto",
+//       model: "30-SG",
+//       imageUrl: "http://google.com",
+//       rental_rates: {
+//          four_hours: 232.00,
+//          daily: 309.00,
+//          weekly: 989.00,
+//          monthly: 2473.00
+//       }
+//    },
+//    { unit_id: "3543208", 
+//       equipment_name: "Mini Skid Steer",
+//       manufacturer: "Toro",
+//       model: "Dingo TX427",
+//       imageUrl: "https://images.thdstatic.com/productImages/72c5af06-d142-421e-ab7d-e4094e048036/svn/kubota-k008-64_600.jpg",
+//       rental_rates: {
+//          four_hours: 232.00,
+//          daily: 309.00,
+//          weekly: 989.00,
+//          monthly: 2473.00
+//       }
+//    },
+//    { unit_id: "09169", 
+//       equipment_name: "Log Spliter",
+//       manufacturer: "",
+//       model: "",
+//       imageUrl: "http://google.com",
+//       rental_rates: {
+//          four_hours: 81.00,
+//          daily: 116.00,
+//          weekly: 464.00,
+//          monthly: 1392.00
+//       }
+//    },
+//    { unit_id: "3590741", 
+//       equipment_name: "19' Scissor Lift on Trailer",
+//       manufacturer: "",
+//       model: "",
+//       imageUrl: "http://google.com",
+//       rental_rates: {
+//          four_hours: 229.00,
+//          daily: 229.00,
+//          weekly: 687.00,
+//          monthly: 0
+//       }
+//    },
+//    { unit_id: "", 
+//       equipment_name: "5' x 8' Dump Trailer",
+//       manufacturer: "",
+//       model: "",
+//       imageUrl: "http://google.com",
+//       rental_rates: {
+//          four_hours: 0,
+//          daily: 0,
+//          weekly: 0,
+//          monthly: 0
+//       }
+//    },
+//    { unit_id: "3408242", 
+//       equipment_name: "6' x 10' Dump Trailer",
+//       manufacturer: "",
+//       model: "",
+//       imageUrl: "http://google.com",
+//       rental_rates: {
+//          four_hours: 149.00,
+//          daily: 199.00,
+//          weekly: 597.00,
+//          monthly: 0
+//       }
+//    },
+//    { unit_id: "04832", 
+//       equipment_name: "Channel Frame Trailer 5' x 8'",
+//       manufacturer: "",
+//       model: "",
+//       imageUrl: "http://google.com",
+//       rental_rates: {
+//          four_hours: 39.00,
+//          daily: 55.00,
+//          weekly: 220.00,
+//          monthly: 0
+//       }
+//    },
+//    { unit_id: "05979", 
+//       equipment_name: "Channel Frame Trailer 5' x 8'",
+//       manufacturer: "",
+//       model: "",
+//       imageUrl: "http://google.com",
+//       rental_rates: {
+//          four_hours: 39.00,
+//          daily: 55.00,
+//          weekly: 220.00,
+//          monthly: 0
+//       }
+//    },
+//    { unit_id: "02932", 
+//       equipment_name: "Lawn & Garden Trailer 3'x 5'",
+//       manufacturer: "",
+//       model: "",
+//       imageUrl: "http://google.com",
+//       rental_rates: {
+//          four_hours: 21.00,
+//          daily: 30.00,
+//          weekly: 120.00,
+//          monthly: 0
+//       }
+//    },
+//    { unit_id: "07644", 
+//       equipment_name: "Solid Wall Trailer 5'x 8'",
+//       manufacturer: "",
+//       model: "",
+//       imageUrl: "http://google.com",
+//       rental_rates: {
+//          four_hours: 42.00,
+//          daily: 60.00,
+//          weekly: 240.00,
+//          monthly: 0
+//       }
+//    },
 
-];
+// ];
 
 
 /* assets/js/app.js */
@@ -231,8 +231,14 @@ function getOrdinalSuffix(day) {
  // Global variables
  let equipmentData = []; // Will be populated from the server
  
+ // Clear Yard Check Form
+ function clearYardCheckForm() {
+   document.getElementById('lg-equipment-yard-check-form').reset();
+ }
+ 
  // Show Yard Check Form
  function showYardCheckForm() {
+   // clearYardCheckForm();
    document.getElementById('lg-equipment-yard-check-form').style.display = 'block';
    document.getElementById('equipment-management').style.display = 'none';
    document.getElementById('submitted-yard-checks').style.display = 'none';
@@ -372,9 +378,6 @@ function getOrdinalSuffix(day) {
    // Capture the user's current local date and time
    const now = new Date();
    const submissionDateTimeLocal = formatDateToLocalString(now);
-
-   // Add this line to log the time being sent
-console.log('Captured submissionDateTimeLocal:', submissionDateTimeLocal);
  
    // Add submission_date_time to the form data
    const formData = new FormData(this);
@@ -577,9 +580,6 @@ console.log('Captured submissionDateTimeLocal:', submissionDateTimeLocal);
    fetch('get_submitted_yard_checks.php')
      .then(response => response.json())
      .then(data => {
-      // ** This allows you to inspect the entire data object received from the server.
-      console.log('Received yard check data:', data);
-      //** */
        const yardChecksListDiv = document.getElementById('yard-checks-list');
        yardChecksListDiv.innerHTML = '';
        // Group yard checks by date
@@ -591,8 +591,7 @@ console.log('Captured submissionDateTimeLocal:', submissionDateTimeLocal);
          yardChecksByDate[yardCheck.date][yardCheck.check_time] = yardCheck;
          console.log(yardCheck);
        });
- // 
- console.log( "Yard Checks by date title: " + yardChecksByDate);
+
        // Create cards for each date
        for (const date in yardChecksByDate) {
          const yardCheckDay = yardChecksByDate[date];
@@ -616,22 +615,6 @@ console.log('Captured submissionDateTimeLocal:', submissionDateTimeLocal);
          const cardTitle = `${dayName}, ${monthName} ${dayNumberWithSuffix}, ${year} - Yard Check`;
 
          cardDiv.innerHTML = `<h3>${cardTitle}</h3>`;
-         console.log('Parsed dateObj:', dateObj.toString());
-
-         // OLD
-         // const dateObj = new Date(date);
-         // const dayName = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][dateObj.getDay()];
-         // const monthName = ['January', 'February', 'March', 'April', 'May', 'June',
-         //   'July', 'August', 'September', 'October', 'November', 'December'][dateObj.getMonth()];
-         // const dayNumber = dateObj.getDate();
-         // const ordinalSuffix = getOrdinalSuffix(dayNumber);
-         // const dayNumberWithSuffix = `${dayNumber}${ordinalSuffix}`;
-         // const year = dateObj.getFullYear();
- 
-         // const cardTitle = `${dayName}, ${dayNumberWithSuffix}, ${monthName}, ${year} - Yard Check`;
- 
-         // cardDiv.innerHTML = `<h3>${cardTitle}</h3>`;
-         // END OLD
  
          const cardContentDiv = document.createElement('div');
          cardContentDiv.classList.add('card-content');
@@ -644,12 +627,6 @@ console.log('Captured submissionDateTimeLocal:', submissionDateTimeLocal);
            if (yardCheck) {
              // Parse the submission_date_time as local time
              const submissionDateTime = new Date(yardCheck.submission_date_time);
-
-             // ***Log the raw data and the parsed date
-console.log('Raw submission_date_time from server:', yardCheck.submission_date_time);
-console.log('Parsed submissionDateTime:', submissionDateTime);
-console.log(dateObj);
-
  
              // Format submission_time to HH:MM am/pm
              let hours = submissionDateTime.getHours();
@@ -659,7 +636,6 @@ console.log(dateObj);
              const minutesStr = minutes < 10 ? `0${minutes}` : minutes;
              const formattedSubmissionTime = `${hours}:${minutesStr} ${ampm}`;
 
-console.log('Parsed formattedsubmissionTime:', formattedSubmissionTime);
 
              columnDiv.innerHTML = `
                <h4>${checkTime} Submission</h4>
