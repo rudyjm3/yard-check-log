@@ -232,22 +232,23 @@ function getOrdinalSuffix(day) {
  let equipmentData = []; // Will be populated from the server
  
  // Function to set the active menu item
-function setActiveMenuItem(clickedItem) {
-   // Get all side menu items
-   const sideMenuItems = document.querySelectorAll('.side-menu-item');
-   // Remove 'side-menu-item-active' class from all items
-   sideMenuItems.forEach(item => item.classList.remove('side-menu-item-active'));
-   // Add 'side-menu-item-active' class to the clicked item
-   clickedItem.classList.add('side-menu-item-active');
- }
+ // THIS IS CAUSING A BUG WHEN LOADING YARD CHECK FORM TO EDIT
+// function setActiveMenuItem(clickedItem) {
+//    // Get all side menu items
+//    const sideMenuItems = document.querySelectorAll('.side-menu-item');
+//    // Remove 'side-menu-item-active' class from all items
+//    sideMenuItems.forEach(item => item.classList.remove('side-menu-item-active'));
+//    // Add 'side-menu-item-active' class to the clicked item
+//    clickedItem.classList.add('side-menu-item-active');
+//  }
 
  // Clear Yard Check Form
- function clearYardCheckForm() {
-   document.getElementById('lg-equipment-yard-check-form').reset();
- }
+//  function clearYardCheckForm() {
+//    document.getElementById('lg-equipment-yard-check-form').reset();
+//  }
  
  // Show Yard Check Form
- function showYardCheckForm(clickedItem) {
+ function showYardCheckForm() {
    // clearYardCheckForm();
    document.getElementById('lg-equipment-yard-check-form').style.display = 'block';
    document.getElementById('equipment-management').style.display = 'none';
@@ -255,45 +256,49 @@ function setActiveMenuItem(clickedItem) {
    document.getElementById('equipment-stats').style.display = 'none';
    populateEquipmentList();
    // Set the active class
-   setActiveMenuItem(clickedItem);
+   // setActiveMenuItem(clickedItem);
  }
+ // BUG BECAUSE OF CLICKEDITEM VARIABLE
  // Show Yard Check From from submitted yard check page
- function showAddYardCheckForm() {
-   let clickedItem = document.getElementsByClassName('side-menu-item')[0];
-   showYardCheckForm(clickedItem);
+//  function showAddYardCheckForm() {
+//    let clickedItem = document.getElementsByClassName('side-menu-item')[0];
+//    showYardCheckForm(clickedItem);
+//  }
+function showAddYardCheckForm() {
+   showYardCheckForm();
  }
 
  // Show Equipment Management Section
- function showEquipmentManagement(clickedItem) {
+ function showEquipmentManagement() {
    document.getElementById('lg-equipment-yard-check-form').style.display = 'none';
    document.getElementById('equipment-management').style.display = 'block';
    document.getElementById('submitted-yard-checks').style.display = 'none';
    document.getElementById('equipment-stats').style.display = 'none';
    loadEquipmentListManagement();
    // Set the active class
-   setActiveMenuItem(clickedItem);
+   // setActiveMenuItem(clickedItem);
  }
  
  // Show Submitted Yard Checks
- function showSubmittedYardChecks(clickedItem) {
+ function showSubmittedYardChecks() {
    document.getElementById('lg-equipment-yard-check-form').style.display = 'none';
    document.getElementById('equipment-management').style.display = 'none';
    document.getElementById('submitted-yard-checks').style.display = 'block';
    document.getElementById('equipment-stats').style.display = 'none';
    loadSubmittedYardChecks();
    // Set the active class
-   setActiveMenuItem(clickedItem);
+   // setActiveMenuItem(clickedItem);
  }
  
  // Show Equipment Stats
- function showEquipmentStats(clickedItem) {
+ function showEquipmentStats() {
    document.getElementById('lg-equipment-yard-check-form').style.display = 'none';
    document.getElementById('equipment-management').style.display = 'none';
    document.getElementById('submitted-yard-checks').style.display = 'none';
    document.getElementById('equipment-stats').style.display = 'block';
    loadEquipmentStats();
    // Set the active class
-   setActiveMenuItem(clickedItem);
+   // setActiveMenuItem(clickedItem);
  }
  
 
@@ -610,7 +615,7 @@ function setActiveMenuItem(clickedItem) {
            yardChecksByDate[yardCheck.date] = {};
          }
          yardChecksByDate[yardCheck.date][yardCheck.check_time] = yardCheck;
-         console.log(yardCheck);
+         // console.log(yardCheck);
        });
 
        // Create cards for each date
