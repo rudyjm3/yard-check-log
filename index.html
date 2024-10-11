@@ -34,7 +34,7 @@
 
     <main id="main-content-container">
       <!-- Yard Check Form -->
-      <form id="lg-equipment-yard-check-form" style="display: none;">
+      <form id="lg-equipment-yard-check-form" class="content-section-container" style="display: none;">
         <div class="form-title-wrapper">
           <p class="form-title">Large Equipment Yard Check Form</p>
           <p class="date-time-title" id="current-date"></p>
@@ -76,8 +76,57 @@
       </form>
       <!-- End Yard Check Form -->
 
+      
+
+      <!-- Submitted Yard Checks Section -->
+      <div id="submitted-yard-checks" class="content-section-container" style="display: none;">
+        <h2>Submitted Yard Checks</h2>
+        <button onclick="showAddYardCheckForm()">Add Yard Check</button>
+        <div id="yard-checks-list">
+          <!-- Yard check cards will be dynamically inserted here -->
+        </div>
+      </div>
+      <!-- End Submitted Yard Checks Section -->
+
+      <!-- Equipment Stats Section -->
+      <div id="equipment-stats" class="content-section-container" style="display: none;">
+        <h2>Large Equipment Stats</h2>
+        <!-- Date Range Selection -->
+        <div class="form-control">
+          <label for="stats-date-range">Select Date Range:</label>
+          <select id="stats-date-range" onchange="loadEquipmentStats()">
+            <option value="weekly">This Week</option>
+            <option value="monthly">This Month</option>
+            <option value="custom">Custom Range</option>
+          </select>
+        </div>
+        <!-- Custom Date Range Inputs -->
+        <div id="custom-date-range" style="display: none;">
+          <div class="form-control">
+            <label for="start-date">Start Date:</label>
+            <input type="date" id="start-date">
+          </div>
+          <div class="form-control">
+            <label for="end-date">End Date:</label>
+            <input type="date" id="end-date">
+          </div>
+          <button onclick="loadEquipmentStats()">Load Stats</button>
+        </div>
+        <!-- Stats Display -->
+        <div id="stats-display">
+          <!-- Stats will be dynamically inserted here -->
+        </div>
+        <!-- Export Options -->
+        <div class="button-wrapper">
+          <button onclick="exportReport('pdf')">Export as PDF</button>
+          <button onclick="exportReport('csv')">Export as CSV</button>
+          <button onclick="window.print()">Print Report</button>
+        </div>
+      </div>
+      <!-- End Equipment Stats Section -->
+       
       <!-- Equipment Management Section -->
-      <div id="equipment-management" style="display: none; position: relative;">
+      <div id="equipment-management" class="content-section-container" style="display: none; position: relative;">
         <h2>Manage Equipment</h2>
         <button id="add-equipment-button" onclick="showAddEquipmentForm()">Add New Equipment</button>
         <div id="equipment-list-management">
@@ -135,53 +184,6 @@
         </form>
       </div>
       <!-- End Equipment Management Section -->
-
-      <!-- Submitted Yard Checks Section -->
-      <div id="submitted-yard-checks" style="display: none;">
-        <h2>Submitted Yard Checks</h2>
-        <button onclick="showAddYardCheckForm()">Add Yard Check</button>
-        <div id="yard-checks-list">
-          <!-- Yard check cards will be dynamically inserted here -->
-        </div>
-      </div>
-      <!-- End Submitted Yard Checks Section -->
-
-      <!-- Equipment Stats Section -->
-      <div id="equipment-stats" style="display: none;">
-        <h2>Large Equipment Stats</h2>
-        <!-- Date Range Selection -->
-        <div class="form-control">
-          <label for="stats-date-range">Select Date Range:</label>
-          <select id="stats-date-range" onchange="loadEquipmentStats()">
-            <option value="weekly">This Week</option>
-            <option value="monthly">This Month</option>
-            <option value="custom">Custom Range</option>
-          </select>
-        </div>
-        <!-- Custom Date Range Inputs -->
-        <div id="custom-date-range" style="display: none;">
-          <div class="form-control">
-            <label for="start-date">Start Date:</label>
-            <input type="date" id="start-date">
-          </div>
-          <div class="form-control">
-            <label for="end-date">End Date:</label>
-            <input type="date" id="end-date">
-          </div>
-          <button onclick="loadEquipmentStats()">Load Stats</button>
-        </div>
-        <!-- Stats Display -->
-        <div id="stats-display">
-          <!-- Stats will be dynamically inserted here -->
-        </div>
-        <!-- Export Options -->
-        <div class="button-wrapper">
-          <button onclick="exportReport('pdf')">Export as PDF</button>
-          <button onclick="exportReport('csv')">Export as CSV</button>
-          <button onclick="window.print()">Print Report</button>
-        </div>
-      </div>
-      <!-- End Equipment Stats Section -->
 
       <!-- Modal for Yard Check Details -->
       <div id="modal-container" style="display: none;">

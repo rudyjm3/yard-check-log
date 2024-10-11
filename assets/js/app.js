@@ -232,15 +232,23 @@ function getOrdinalSuffix(day) {
  let equipmentData = []; // Will be populated from the server
  
  // Function to set the active menu item
- // THIS IS CAUSING A BUG WHEN LOADING YARD CHECK FORM TO EDIT
-// function setActiveMenuItem(clickedItem) {
-//    // Get all side menu items
-//    const sideMenuItems = document.querySelectorAll('.side-menu-item');
-//    // Remove 'side-menu-item-active' class from all items
-//    sideMenuItems.forEach(item => item.classList.remove('side-menu-item-active'));
-//    // Add 'side-menu-item-active' class to the clicked item
-//    clickedItem.classList.add('side-menu-item-active');
-//  }
+function setActiveMenuItem() {
+   // Get all content containers
+   const contentContainers = document.querySelectorAll('.content-section-container');
+   // Get all side menu items
+   const sideMenuItems = document.querySelectorAll('.side-menu-item');
+   // Remove 'side-menu-item-active' class from all items
+   sideMenuItems.forEach(item => item.classList.remove('side-menu-item-active'));
+
+   // Iterate through each elemnt and log their display style
+   contentContainers.forEach((element, index) => {
+      const displayStyle = window.getComputedStyle(element).display;
+      // If the element's display style is 'block', add a class to the corresponding side menu item
+      if (displayStyle === 'block' && sideMenuItems[index]){
+         sideMenuItems[index].classList.add('side-menu-item-active');
+      }
+   });
+ }
 
  // Clear Yard Check Form
 //  function clearYardCheckForm() {
@@ -256,7 +264,7 @@ function getOrdinalSuffix(day) {
    document.getElementById('equipment-stats').style.display = 'none';
    populateEquipmentList();
    // Set the active class
-   // setActiveMenuItem(clickedItem);
+   setActiveMenuItem();
  }
  // BUG BECAUSE OF CLICKEDITEM VARIABLE
  // Show Yard Check From from submitted yard check page
@@ -276,7 +284,7 @@ function showAddYardCheckForm() {
    document.getElementById('equipment-stats').style.display = 'none';
    loadEquipmentListManagement();
    // Set the active class
-   // setActiveMenuItem(clickedItem);
+   setActiveMenuItem();
  }
  
  // Show Submitted Yard Checks
@@ -287,7 +295,7 @@ function showAddYardCheckForm() {
    document.getElementById('equipment-stats').style.display = 'none';
    loadSubmittedYardChecks();
    // Set the active class
-   // setActiveMenuItem(clickedItem);
+   setActiveMenuItem();
  }
  
  // Show Equipment Stats
@@ -298,7 +306,7 @@ function showAddYardCheckForm() {
    document.getElementById('equipment-stats').style.display = 'block';
    loadEquipmentStats();
    // Set the active class
-   // setActiveMenuItem(clickedItem);
+   setActiveMenuItem();
  }
  
 
