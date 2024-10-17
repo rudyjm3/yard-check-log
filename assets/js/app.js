@@ -266,12 +266,8 @@ function setActiveMenuItem() {
    // Set the active class
    setActiveMenuItem();
  }
- // BUG BECAUSE OF CLICKEDITEM VARIABLE
- // Show Yard Check From from submitted yard check page
-//  function showAddYardCheckForm() {
-//    let clickedItem = document.getElementsByClassName('side-menu-item')[0];
-//    showYardCheckForm(clickedItem);
-//  }
+ 
+ // Show Yard Check Form from submitted yard check page
 function showAddYardCheckForm() {
    showYardCheckForm();
  }
@@ -484,20 +480,33 @@ function showAddYardCheckForm() {
          }
  
          equipmentItemDiv.innerHTML = `
-           ${imageHTML}
-           <p><strong>Unit ID:</strong> ${equipment.unit_id}</p>
-           <p><strong>Name:</strong> ${equipment.equipment_name}</p>
-           <p><strong>Manufacturer:</strong> ${equipment.manufacturer}</p>
-           <p><strong>Model:</strong> ${equipment.model}</p>
-           <p><strong>Rental Rates:</strong></p>
-           <ul>
-             <li>4 Hours: $${parseFloat(equipment.rental_rate_4h || 0).toFixed(2)}</li>
-             <li>Daily: $${parseFloat(equipment.rental_rate_daily || 0).toFixed(2)}</li>
-             <li>Weekly: $${parseFloat(equipment.rental_rate_weekly || 0).toFixed(2)}</li>
-             <li>Monthly: $${parseFloat(equipment.rental_rate_monthly || 0).toFixed(2)}</li>
-           </ul>
-           <button onclick="showEditEquipmentForm(${equipment.id})">Edit</button>
-           <button onclick="deleteEquipment(${equipment.id})">Delete</button>
+            <div class="equipment-image-wrapper">
+               ${imageHTML}
+            </div>
+            <div class="equipment-info-container">
+               <div class="equipment-txt-wrapper">
+                  <p>Unit ID: <span class="eq-list-id-num-txt">${equipment.unit_id}</span></p>
+                  <p>Name: <span class="eq-list-name-txt">${equipment.equipment_name}</span></p>
+                  <p>Manufacturer: <span class="eq-list-manufacturer-txt">${equipment.manufacturer}</span></p>
+                  <p>Model: <span class="eq-list-model-txt">${equipment.model}</span></p>
+               </div>
+
+               <div class="equipment-rates-wrapper">
+                  <p><strong>Rental Rates:</strong></p>
+                  <ul class="rental-rates-list">
+                     <li>4 Hours: $${parseFloat(equipment.rental_rate_4h || 0).toFixed(2)}</li>
+                     <li>Daily: $${parseFloat(equipment.rental_rate_daily || 0).toFixed(2)}</li>
+                     <li>Weekly: $${parseFloat(equipment.rental_rate_weekly || 0).toFixed(2)}</li>
+                     <li>Monthly: $${parseFloat(equipment.rental_rate_monthly || 0).toFixed(2)}</li>
+                  </ul>
+               </div>
+            </div>
+            <div class="equipment-button-wrapper">
+               <button class="equipment-edit-button" onclick="showEditEquipmentForm(${equipment.id})"> <span class="eq-list-btn-icon"><i class="fa-solid fa-pen-to-square"></i></span></button>
+               <button class="equipment-delete-button" onclick="deleteEquipment(${equipment.id})">Delete <span class="eq-list-btn-icon"><i class="fa-solid fa-trash"></i></span></button>
+            </div>
+           
+           
          `;
  
          equipmentListDiv.appendChild(equipmentItemDiv);

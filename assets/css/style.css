@@ -4,14 +4,15 @@
 :root {
   --main-black-color: #333;
   --secondary-black-color: #3d3d3d;
-  --main-orange-color: #f58220;
+  --info-txt-color: #8a8a8a;
   --main-white-color: #fff;
   --light-grey-color1: #f5f5f5;
   --light-grey-color2: #ababab;
-  --orange-hover-color: #faa65d;
+  --button-default-color: #c8c8c8;
   --hover-blue-color: #4aa5eb;
   --button-green-color: #08af16;
   --button-green-hover-color: #0ce21d;
+  --button-red-color: #c11616;
 }
 
 /* assets/css/style.css */
@@ -166,11 +167,19 @@ header .page-title {
   padding: 10px;
   margin-bottom: 10px;
 }
+/* Equipment Image Styles */
+.equipment-image-wrapper {
+   width: 20%;
+   height: auto;
+   border: solid 1px transparent;
+   flex-grow: 2;
+   overflow: hidden;
+}
 .equipment-image {
-   width: 100px;
-   height: 100px;
+   width: 100%;
+   height: 100%;
    border: 1.5px solid var(--light-grey-color2);
-   border-radius: 50px;
+   border-radius: 8px;
 }
 .equipment-name {
   font-weight: bold;
@@ -181,13 +190,7 @@ header .page-title {
   font-size: 0.9em;
 }
 
-/* Equipment Image Styles */
-.equipment-image {
-   max-width: 100%;
-   height: auto;
-   display: block;
-   margin-bottom: 10px;
- }
+
 
 /* Message Container */
 #message-container .message {
@@ -212,17 +215,79 @@ header .page-title {
 }
 
 #equipment-list-management .equipment-item {
-  border: 1px solid #ccc;
-  padding: 10px;
-  margin-bottom: 10px;
-  /* Adjust equipment-item to display images properly */
-  overflow: hidden; /* Ensure content doesn't overflow */
+   display: flex;
+   justify-content: flex-start;
+   align-items: center;
+   flex-wrap: wrap;
+   gap: 25px;
+   width: 600px;
+   border: 1px solid #ccc;
+   border-radius: 4px;
+   padding: 15px;
+   margin-bottom: 10px;
+   /* Adjust equipment-item to display images properly */
+   overflow: hidden; /* Ensure content doesn't overflow */
 }
-
+.equipment-item {
+   box-shadow: 0px 5px 10px -1px rgba(167,167,167,0.75);
+   -webkit-box-shadow: 0px 5px 10px -1px rgba(167,167,167,0.75);
+   -moz-box-shadow: 0px 5px 10px -1px rgba(167,167,167,0.75);
+}
+.equipment-info-container {
+   display: flex;
+   justify-content: space-between;
+   align-items: flex-start;
+   flex-grow: 2;
+}
+.rental-rates-list {
+   padding-left: 20px;
+}
+.equipment-txt-wrapper > p {
+   font-weight: 600;
+   color: var(--info-txt-color);
+}
+.eq-list-id-num-txt,
+.eq-list-name-txt,
+.eq-list-manufacturer-txt,
+.eq-list-model-txt {
+   color: var(--secondary-black-color)
+}
 #equipment-form .form-control {
   margin-bottom: 15px;
 }
 
+
+.equipment-button-wrapper {
+   display: flex;
+   justify-content: flex-end;
+   align-items: center;
+   flex-wrap: nowrap;
+   gap: 30px;
+   width: 100%;
+   border-top: solid 1px var(--light-grey-color1);
+   padding: 15px 0px;
+}
+
+.equipment-edit-button, .equipment-delete-button {
+   padding: 10px 20px;
+   color: #f6f6f6;
+   font-size: 1.2rem;
+   font-weight: 500;
+   width: 100%;
+   border: solid 1px var(--light-grey-color2);
+   border-radius: 4px;
+   background-color: var(--button-default-color);
+   transition: all 0.3s ease-in-out;
+}
+.eq-list-btn-icon {
+   margin-left: 5px;
+}
+.equipment-edit-button:hover {
+   background-color: var(--hover-blue-color);
+}
+.equipment-delete-button:hover {
+   background-color: var(--button-red-color);
+}
 #equipment-form label {
   display: block;
   margin-bottom: 5px;
