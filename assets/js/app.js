@@ -329,16 +329,32 @@ function showAddYardCheckForm() {
        const label = document.createElement('label');
        label.htmlFor = `equipment-status-${equipment.unit_id}`;
        label.innerHTML = `
-         ${imageHTML}
-         <p class="rental-id-label">Unit ID - <span class="rental-id-num">${equipment.unit_id}</span></p>
-         <p class="equipment-name">${equipment.equipment_name}</p>
+       <div class="img-eq-info_wrapper">
+         <div class="image-wrapper">
+            ${imageHTML}
+         </div>
+         <div class="eq-info-wrapper">
+            <p class="rental-id-label">Unit ID - <span class="rental-id-num">${equipment.unit_id}</span></p>
+            <p class="equipment-name">${equipment.equipment_name}</p>
+         </div>
+       </div>
+         
+      <div class="view-more-wrapper">
          <a href="#" onclick="toggleEquipmentInfo(event, '${equipment.unit_id}')">View more info</a>
          <div id="equipment-info-${equipment.unit_id}" class="equipment-info" style="display: none;">
-           <p><strong>Manufacturer:</strong> ${equipment.manufacturer}</p>
-           <p><strong>Model:</strong> ${equipment.model}</p>
+            <p><strong>Manufacturer:</strong> ${equipment.manufacturer}</p>
+            <p><strong>Model:</strong> ${equipment.model}</p>
          </div>
+      </div>
+      <!-- Selection wrapper appended here -->
        `;
- 
+       // Wrapper for select element
+       const statusOptionWrapper = document.createElement('div');
+       statusOptionWrapper.classList.add('option-wrapper');
+       const statusLabel = document.createElement('label');
+       statusLabel.classList.add('status-label');
+       statusLabel.textContent = 'Equipment Status';
+
        // Status select
        const select = document.createElement('select');
        select.name = `equipment_status_${equipment.unit_id}`;
@@ -371,8 +387,10 @@ function showAddYardCheckForm() {
  
        // Append label and select to equipmentDiv
        equipmentDiv.appendChild(label);
-       equipmentDiv.appendChild(select);
- 
+       statusOptionWrapper.appendChild(statusLabel);
+       statusOptionWrapper.appendChild(select);
+       equipmentDiv.appendChild(statusOptionWrapper);
+
        // Append equipmentDiv to equipmentListDiv
        equipmentListDiv.appendChild(equipmentDiv);
      });
