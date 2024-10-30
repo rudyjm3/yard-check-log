@@ -26,7 +26,7 @@ error_log('submission_date_time: ' . $_POST['submission_date_time']);
 
 // Collect form data
 $user_name = $_POST['user_name'];
-$date = $_POST['check_date'];
+$date = $_POST['check_date']; // For date input
 $check_time = $_POST['check_time']; // AM/PM value
 $submission_date_time = $_POST['submission_date_time']; // Use the submitted local date and time
 

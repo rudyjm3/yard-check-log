@@ -218,7 +218,10 @@ function getOrdinalSuffix(day) {
    // Set the value of the date input field
    const checkDateInput = document.getElementById('check-date');
    if (checkDateInput) {
-     const dateStr = now.toISOString().split('T')[0]; // YYYY-MM-DD format
+      const year = now.getFullYear();
+      const month = ('0' + (now.getMonth() + 1)).slice(-2); // Months are zero-based
+      const day = ('0' + now.getDate()).slice(-2);
+     const dateStr = `${year}-${month}-${day}`; // YYYY-MM-DD format
      checkDateInput.value = dateStr;
    }
  }
