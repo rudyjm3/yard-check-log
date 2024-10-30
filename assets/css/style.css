@@ -236,6 +236,9 @@ form {
    border: 1.5px solid var(--light-grey-color2);
    border-radius: 8px;
 }
+.eq-info-wrapper {
+   width: 190px;
+}
 .rental-id-label {
    color: var(--info-txt-color);
 
