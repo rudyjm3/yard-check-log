@@ -328,6 +328,11 @@ form {
 .rental-rates-list {
    padding-left: 20px;
 }
+.equipment-txt-wrapper {
+   width: 100%;
+   max-width: 260px;
+   min-width: 230px;
+}
 .equipment-txt-wrapper > p {
    font-weight: 600;
    color: var(--info-txt-color);
