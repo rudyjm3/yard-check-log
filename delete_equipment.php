@@ -11,14 +11,21 @@ error_reporting(E_ALL);
 
 // delete_equipment.php
 
-include 'db_connection_info.php';
+require 'db_connection_info.php';
 
-$id = $_GET['id'];
+$equipmentId = $_GET['id'];
 
-// Delete equipment
-$stmt = $conn->prepare("DELETE FROM equipment WHERE id = :id");
-$stmt->bindParam(':id', $id);
+// Instead of deleting, mark as deleted
+$stmt = $conn->prepare("UPDATE equipment SET is_deleted = 1 WHERE id = ?");
+$stmt->bind_param("i", $equipmentId);
 $stmt->execute();
 
-echo "Success";
+if ($stmt->affected_rows > 0) {
+    echo json_encode(['status' => 'success', 'message' => 'Equipment marked as deleted successfully']);
+} else {
+    echo json_encode(['status' => 'error', 'message' => 'Failed to mark equipment as deleted']);
+}
+
+$stmt->close();
+$conn->close();
 ?>
