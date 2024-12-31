@@ -1,4 +1,7 @@
 <?php
+//save_equipment.php
+
+
 // header("Cache-Control: no-cache, no-store, must-revalidate"); // Forces caches to always check for updates
 // header("Pragma: no-cache"); // HTTP 1.0 compatibility
 // header("Expires: 0"); // Ensures the content is always considered expired
