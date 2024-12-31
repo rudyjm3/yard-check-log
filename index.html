@@ -129,61 +129,84 @@
 
       <!-- Equipment Management Section -->
       <div id="equipment-management" class="content-section-container" style="display: none; position: relative;">
-        <h2>Manage Equipment</h2>
-        <button id="add-equipment-button" onclick="showAddEquipmentForm()">Add New Equipment</button>
-        <div id="equipment-list-management">
-          <!-- Equipment items will be dynamically inserted here -->
-        </div>
-        <!-- Equipment Form for Adding/Editing -->
-        <form id="equipment-form" style="display: none;">
-          <div class="form-header">
-            <h3 id="form-title">Add Equipment</h3>
-            <button type="button" class="close-button-form" onclick="cancelEquipmentForm()"><i class="fa-regular fa-circle-xmark"></i></button>
-          </div>
-          <input type="hidden" id="equipment-id" name="equipment_id">
-          <div class="form-control">
-            <label for="unit-id">Unit ID:</label>
-            <input type="text" id="unit-id" name="unit_id" required>
-          </div>
-          <div class="form-control">
-            <label for="equipment-name">Equipment Name:</label>
-            <input type="text" id="equipment-name" name="equipment_name" required>
-          </div>
-          <div class="form-control">
-            <label for="manufacturer">Manufacturer:</label>
-            <input type="text" id="manufacturer" name="manufacturer">
-          </div>
-          <div class="form-control">
-            <label for="model">Model:</label>
-            <input type="text" id="model" name="model">
-          </div>
-          <div class="form-control">
-            <label for="image-url">Image URL:</label>
-            <input type="text" id="image-url" name="image_url">
-          </div>
-          <!-- Rental Rates Inputs -->
-          <div class="form-control">
-            <label for="rental-rate-4h">Rental Rate (4 Hours):</label>
-            <input type="number" step="0.01" id="rental-rate-4h" name="rental_rate_4h">
-          </div>
-          <div class="form-control">
-            <label for="rental-rate-daily">Rental Rate (Daily):</label>
-            <input type="number" step="0.01" id="rental-rate-daily" name="rental_rate_daily">
-          </div>
-          <div class="form-control">
-            <label for="rental-rate-weekly">Rental Rate (Weekly):</label>
-            <input type="number" step="0.01" id="rental-rate-weekly" name="rental_rate_weekly">
-          </div>
-          <div class="form-control">
-            <label for="rental-rate-monthly">Rental Rate (Monthly):</label>
-            <input type="number" step="0.01" id="rental-rate-monthly" name="rental_rate_monthly">
-          </div>
-          <!-- End Rental Rates Inputs -->
-          <div class="button-wrapper">
-            <button type="submit" id="save-equipment-button">Save</button>
-            <button type="button" onclick="cancelEquipmentForm()">Cancel</button>
-          </div>
-        </form>
+         <h2>Manage Equipment</h2>
+       
+         <!-- TAB NAVIGATION -->
+         <div class="tabs">
+           <button class="tab-button tab-active" id="tab-active-equipment" onclick="showActiveEquipmentTab()">
+             Active Equipment
+           </button>
+           <button class="tab-button" id="tab-deactivated-equipment" onclick="showDeactivatedEquipmentTab()">
+             Deactivated Equipment
+           </button>
+         </div>
+       
+         <!-- TAB CONTENT FOR ACTIVE EQUIPMENT -->
+         <div id="active-equipment-container" class="tab-content">
+           <button id="add-equipment-button" onclick="showAddEquipmentForm()">Add New Equipment</button>
+           <div id="active-equipment-list">
+             <!-- Active equipment items will be dynamically inserted here -->
+           </div>
+         </div>
+       
+         <!-- TAB CONTENT FOR DEACTIVATED EQUIPMENT -->
+         <div id="deactivated-equipment-container" class="tab-content" style="display: none;">
+           <h3>Deactivated Equipment</h3>
+           <div id="deactivated-equipment-list">
+             <!-- Deactivated equipment items will be dynamically inserted here -->
+           </div>
+         </div>
+
+         <!-- Equipment Form for Adding/Editing -->
+         <form id="equipment-form" style="display: none;">
+            <div class="form-header">
+               <h3 id="form-title">Add Equipment</h3>
+               <button type="button" class="close-button-form" onclick="cancelEquipmentForm()"><i class="fa-regular fa-circle-xmark"></i></button>
+            </div>
+            <input type="hidden" id="equipment-id" name="equipment_id">
+            <div class="form-control">
+               <label for="unit-id">Unit ID:</label>
+               <input type="text" id="unit-id" name="unit_id" required>
+            </div>
+            <div class="form-control">
+               <label for="equipment-name">Equipment Name:</label>
+               <input type="text" id="equipment-name" name="equipment_name" required>
+            </div>
+            <div class="form-control">
+               <label for="manufacturer">Manufacturer:</label>
+               <input type="text" id="manufacturer" name="manufacturer">
+            </div>
+            <div class="form-control">
+               <label for="model">Model:</label>
+               <input type="text" id="model" name="model">
+            </div>
+            <div class="form-control">
+               <label for="image-url">Image URL:</label>
+               <input type="text" id="image-url" name="image_url">
+            </div>
+            <!-- Rental Rates Inputs -->
+            <div class="form-control">
+               <label for="rental-rate-4h">Rental Rate (4 Hours):</label>
+               <input type="number" step="0.01" id="rental-rate-4h" name="rental_rate_4h">
+            </div>
+            <div class="form-control">
+               <label for="rental-rate-daily">Rental Rate (Daily):</label>
+               <input type="number" step="0.01" id="rental-rate-daily" name="rental_rate_daily">
+            </div>
+            <div class="form-control">
+               <label for="rental-rate-weekly">Rental Rate (Weekly):</label>
+               <input type="number" step="0.01" id="rental-rate-weekly" name="rental_rate_weekly">
+            </div>
+            <div class="form-control">
+               <label for="rental-rate-monthly">Rental Rate (Monthly):</label>
+               <input type="number" step="0.01" id="rental-rate-monthly" name="rental_rate_monthly">
+            </div>
+            <!-- End Rental Rates Inputs -->
+            <div class="button-wrapper">
+               <button type="submit" id="save-equipment-button">Save</button>
+               <button type="button" onclick="cancelEquipmentForm()">Cancel</button>
+            </div>
+         </form>
       </div>
       <!-- End Equipment Management Section -->
 
