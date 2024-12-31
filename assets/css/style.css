@@ -115,18 +115,18 @@ header .page-title {
    justify-content: center;
    align-items: flex-start;
    width: 100%;
-  background-color: var(--light-grey-color1);
-  padding: 20px;
-  overflow-y: scroll;
-  overflow-x: hidden;
+   background-color: var(--light-grey-color1);
+   padding: 20px;
+   overflow-y: scroll;
+   overflow-x: hidden;
 }
 #submitted-yard-checks,#equipment-stats,#equipment-management {
    background-color: var(--main-white-color);
-    height: auto;
-    padding: 20px;
-    border-radius: 4px;
-    border: 1px solid var(--light-grey-color1);
-    box-shadow: rgba(167, 167, 167, 0.75) 0px 5px 10px -1px;
+   height: auto;
+   padding: 20px;
+   border-radius: 4px;
+   border: 1px solid var(--light-grey-color1);
+   box-shadow: rgba(167, 167, 167, 0.75) 0px 5px 10px -1px;
 }
 #equipment-stats {
    width: 80%;
@@ -141,11 +141,11 @@ form {
    max-width: 650px;
    min-width: 300px;
    padding: 20px;
-    border: 1px solid var(--light-grey-color1);
-    border-radius: 4px;
-    box-shadow: 0px 5px 10px -1px rgba(167, 167, 167, 0.75);
-    -webkit-box-shadow: 0px 5px 10px -1px rgba(167, 167, 167, 0.75);
-    -moz-box-shadow: 0px 5px 10px -1px rgba(167, 167, 167, 0.75);
+   border: 1px solid var(--light-grey-color1);
+   border-radius: 4px;
+   box-shadow: 0px 5px 10px -1px rgba(167, 167, 167, 0.75);
+   -webkit-box-shadow: 0px 5px 10px -1px rgba(167, 167, 167, 0.75);
+   -moz-box-shadow: 0px 5px 10px -1px rgba(167, 167, 167, 0.75);
 }
 
 .form-title-wrapper {
@@ -292,13 +292,43 @@ form {
 }
 
 /* Equipment Management Styles */
+/* Tab Buttons */
+.tabs {
+   display: flex;
+   gap: 10px;
+   margin-bottom: 20px;
+}
+ 
+.tab-button {
+   padding: 10px 20px;
+   background-color: var(--button-default-color);
+   border: 1px solid var(--light-grey-color2);
+   border-radius: 4px;
+   cursor: pointer;
+   transition: all 0.3s ease-in-out;
+}
+
+.tab-button:hover {
+   background-color: var(--hover-blue-color);
+   color: #fff;
+}
+
+.tab-button.tab-active {
+   background-color: var(--hover-blue-color);
+   color: #fff;
+}
+
+/* Tab Content */
+.tab-content {
+   display: block; /* We'll control actual visibility with inline styles or JS */
+}
 #equipment-management h2 {
-  text-align: center;
+   text-align: center;
 }
 
 #add-equipment-button {
-  display: block;
-  margin: 0 auto 20px;
+   display: block;
+   margin: 0 auto 20px;
 }
 
 #equipment-list-management .equipment-item {
