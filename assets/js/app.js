@@ -555,7 +555,7 @@ function loadEquipmentLists() {
          // Buttons: Edit + Deactivate (if active) or Reactivate (if inactive)
          let actionButtonsHTML = `
            <button class="equipment-edit-button" onclick="showEditEquipmentForm(${equipment.id})">
-             <span class="eq-list-btn-icon"><i class="fa-solid fa-pen-to-square"></i></span>
+             Edit <span class="eq-list-btn-icon"><i class="fa-solid fa-pen-to-square"></i></span>
            </button>
          `;
  
@@ -630,60 +630,6 @@ function deactivateEquipment(id) {
    }
  }
  
- // Load Equipment List for Management
-//  function loadEquipmentListManagement() {
-//    fetch('get_equipment.php')
-//      .then(response => response.json())
-//      .then(data => {
-//        const equipmentListDiv = document.getElementById('equipment-list-management');
-//        equipmentListDiv.innerHTML = '';
-//        data.forEach(equipment => {
-//          const equipmentItemDiv = document.createElement('div');
-//          equipmentItemDiv.classList.add('equipment-item');
- 
-//          // Create image element if image_url exists
-//          let imageHTML = '';
-//          if (equipment.image_url) {
-//            imageHTML = `<img src="${equipment.image_url}" alt="${equipment.equipment_name}" class="equipment-image">`;
-//          }
- 
-//          equipmentItemDiv.innerHTML = `
-//             <div class="equipment-image-wrapper">
-//                ${imageHTML}
-//             </div>
-//             <div class="equipment-info-container">
-//                <div class="equipment-txt-wrapper">
-//                   <p>Unit ID: <span class="eq-list-id-num-txt">${equipment.unit_id}</span></p>
-//                   <p>Name: <span class="eq-list-name-txt">${equipment.equipment_name}</span></p>
-//                   <p>Manufacturer: <span class="eq-list-manufacturer-txt">${equipment.manufacturer}</span></p>
-//                   <p>Model: <span class="eq-list-model-txt">${equipment.model}</span></p>
-//                </div>
-
-//                <div class="equipment-rates-wrapper">
-//                   <p><strong>Rental Rates:</strong></p>
-//                   <ul class="rental-rates-list">
-//                      <li>4 Hours: $${parseFloat(equipment.rental_rate_4h || 0).toFixed(2)}</li>
-//                      <li>Daily: $${parseFloat(equipment.rental_rate_daily || 0).toFixed(2)}</li>
-//                      <li>Weekly: $${parseFloat(equipment.rental_rate_weekly || 0).toFixed(2)}</li>
-//                      <li>Monthly: $${parseFloat(equipment.rental_rate_monthly || 0).toFixed(2)}</li>
-//                   </ul>
-//                </div>
-//             </div>
-//             <div class="equipment-button-wrapper">
-//                <button class="equipment-edit-button" onclick="showEditEquipmentForm(${equipment.id})"> <span class="eq-list-btn-icon"><i class="fa-solid fa-pen-to-square"></i></span></button>
-//                <button class="equipment-delete-button" onclick="deleteEquipment(${equipment.id})">Delete <span class="eq-list-btn-icon"><i class="fa-solid fa-trash"></i></span></button>
-//             </div>
-           
-           
-//          `;
- 
-//          equipmentListDiv.appendChild(equipmentItemDiv);
-//        });
-//      })
-//      .catch(error => console.error('Error:', error));
-//  }
- 
-
  // Show Form to Add New Equipment
  function showAddEquipmentForm() {
    const equipmentForm = document.getElementById('equipment-form');

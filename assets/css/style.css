@@ -300,6 +300,8 @@ form {
 }
  
 .tab-button {
+   height: 60px;
+   min-height: auto;
    padding: 10px 20px;
    background-color: var(--button-default-color);
    border: 1px solid var(--light-grey-color2);
@@ -326,18 +328,18 @@ form {
    text-align: center;
 }
 
-#add-equipment-button {
+/* #add-equipment-button {
    display: block;
    margin: 0 auto 20px;
-}
+} */
 
 #active-equipment-list .equipment-item,
 #deactivated-equipment-list .equipment-item {
    display: flex;
    justify-content: flex-start;
-   align-items: center;
+   /* align-items: center; */
    flex-wrap: wrap;
-   gap: 25px;
+   gap: 15px;
    width: 600px;
    border: 1px solid #ccc;
    border-radius: 4px;
@@ -359,13 +361,14 @@ form {
    justify-content: space-between;
    align-items: flex-start;
    flex-grow: 2;
+   width: 70%;
 }
 .rental-rates-list {
    padding-left: 20px;
 }
 .equipment-txt-wrapper {
    width: 100%;
-   max-width: 260px;
+   max-width: 250px;
    min-width: 230px;
 }
 .equipment-txt-wrapper > p {
