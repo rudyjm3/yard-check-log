@@ -259,7 +259,7 @@ function setActiveMenuItem() {
 //  }
  
  // Show Yard Check Form
- function showYardCheckForm() {
+function showYardCheckForm() {
    // clearYardCheckForm();
    document.getElementById('lg-equipment-yard-check-form').style.display = 'block';
    document.getElementById('equipment-management').style.display = 'none';
@@ -268,26 +268,15 @@ function setActiveMenuItem() {
    populateEquipmentList();
    // Set the active class
    setActiveMenuItem();
- }
+}
  
  // Show Yard Check Form from submitted yard check page
 function showAddYardCheckForm() {
    showYardCheckForm();
- }
-
- // Show Equipment Management Section
- function showEquipmentManagement() {
-   document.getElementById('lg-equipment-yard-check-form').style.display = 'none';
-   document.getElementById('equipment-management').style.display = 'block';
-   document.getElementById('submitted-yard-checks').style.display = 'none';
-   document.getElementById('equipment-stats').style.display = 'none';
-   loadEquipmentListManagement();
-   // Set the active class
-   setActiveMenuItem();
- }
+}
  
  // Show Submitted Yard Checks
- function showSubmittedYardChecks() {
+function showSubmittedYardChecks() {
    document.getElementById('lg-equipment-yard-check-form').style.display = 'none';
    document.getElementById('equipment-management').style.display = 'none';
    document.getElementById('submitted-yard-checks').style.display = 'block';
@@ -295,10 +284,10 @@ function showAddYardCheckForm() {
    loadSubmittedYardChecks();
    // Set the active class
    setActiveMenuItem();
- }
+}
  
  // Show Equipment Stats
- function showEquipmentStats() {
+function showEquipmentStats() {
    document.getElementById('lg-equipment-yard-check-form').style.display = 'none';
    document.getElementById('equipment-management').style.display = 'none';
    document.getElementById('submitted-yard-checks').style.display = 'none';
@@ -306,13 +295,12 @@ function showAddYardCheckForm() {
    loadEquipmentStats();
    // Set the active class
    setActiveMenuItem();
- }
- 
+}
 
  // Function to populate equipment list in the Yard Check Form
- async function populateEquipmentList() {
+async function populateEquipmentList() {
    try {
-     const response = await fetch('get_equipment.php');
+      const response = await fetch('get_equipment.php?onlyActive=true');
      const data = await response.json();
      equipmentData = data; // Store the equipment data globally
      const equipmentListDiv = document.getElementById('equipment-list');
@@ -400,10 +388,10 @@ function showAddYardCheckForm() {
    } catch (error) {
      console.error('Error:', error);
    }
- }
+}
  
  // Toggle Equipment Info Display
- function toggleEquipmentInfo(event, unitId) {
+function toggleEquipmentInfo(event, unitId) {
    event.preventDefault();
    const infoDiv = document.getElementById(`equipment-info-${unitId}`);
    if (infoDiv.style.display === 'none') {
@@ -411,7 +399,7 @@ function showAddYardCheckForm() {
    } else {
      infoDiv.style.display = 'none';
    }
- }
+}
  
  // Handle Yard Check Form Submission
  document.getElementById('lg-equipment-yard-check-form').addEventListener('submit', function(e) {
@@ -483,57 +471,163 @@ function showAddYardCheckForm() {
    document.getElementById('message-container').innerHTML = '';
  }
  
- // Load Equipment List for Management
- function loadEquipmentListManagement() {
+ // Equipment List Tab Switching 
+ function showActiveEquipmentTab() {
+   // Highlight the tab button
+   document.getElementById('tab-active-equipment').classList.add('tab-active');
+   document.getElementById('tab-deactivated-equipment').classList.remove('tab-active');
+ 
+   // Show active equipment container
+   document.getElementById('active-equipment-container').style.display = 'block';
+   // Hide deactivated
+   document.getElementById('deactivated-equipment-container').style.display = 'none';
+ }
+ 
+ function showDeactivatedEquipmentTab() {
+   // Highlight the tab button
+   document.getElementById('tab-active-equipment').classList.remove('tab-active');
+   document.getElementById('tab-deactivated-equipment').classList.add('tab-active');
+ 
+   // Show deactivated equipment container
+   document.getElementById('deactivated-equipment-container').style.display = 'block';
+   // Hide active
+   document.getElementById('active-equipment-container').style.display = 'none';
+ }
+
+// loadEquipmentListManagement();
+// Show Equipment Management Section
+function showEquipmentManagement() {
+   document.getElementById('lg-equipment-yard-check-form').style.display = 'none';
+   document.getElementById('equipment-management').style.display = 'block';
+   document.getElementById('submitted-yard-checks').style.display = 'none';
+   document.getElementById('equipment-stats').style.display = 'none';
+
+   // Default to showing active tab
+   showActiveEquipmentTab();
+
+   loadEquipmentLists(); // Load both active & deactivated
+
+   // Set the active class on the side menu (if needed)
+   setActiveMenuItem();
+}
+
+function loadEquipmentLists() {
    fetch('get_equipment.php')
      .then(response => response.json())
      .then(data => {
-       const equipmentListDiv = document.getElementById('equipment-list-management');
-       equipmentListDiv.innerHTML = '';
+       const activeEquipmentListDiv = document.getElementById('active-equipment-list');
+       const deactivatedEquipmentListDiv = document.getElementById('deactivated-equipment-list');
+ 
+       activeEquipmentListDiv.innerHTML = '';
+       deactivatedEquipmentListDiv.innerHTML = '';
+ 
        data.forEach(equipment => {
+         // Build the HTML for each equipment
          const equipmentItemDiv = document.createElement('div');
          equipmentItemDiv.classList.add('equipment-item');
  
-         // Create image element if image_url exists
          let imageHTML = '';
          if (equipment.image_url) {
            imageHTML = `<img src="${equipment.image_url}" alt="${equipment.equipment_name}" class="equipment-image">`;
          }
  
-         equipmentItemDiv.innerHTML = `
-            <div class="equipment-image-wrapper">
-               ${imageHTML}
-            </div>
-            <div class="equipment-info-container">
-               <div class="equipment-txt-wrapper">
-                  <p>Unit ID: <span class="eq-list-id-num-txt">${equipment.unit_id}</span></p>
-                  <p>Name: <span class="eq-list-name-txt">${equipment.equipment_name}</span></p>
-                  <p>Manufacturer: <span class="eq-list-manufacturer-txt">${equipment.manufacturer}</span></p>
-                  <p>Model: <span class="eq-list-model-txt">${equipment.model}</span></p>
-               </div>
-
-               <div class="equipment-rates-wrapper">
-                  <p><strong>Rental Rates:</strong></p>
-                  <ul class="rental-rates-list">
-                     <li>4 Hours: $${parseFloat(equipment.rental_rate_4h || 0).toFixed(2)}</li>
-                     <li>Daily: $${parseFloat(equipment.rental_rate_daily || 0).toFixed(2)}</li>
-                     <li>Weekly: $${parseFloat(equipment.rental_rate_weekly || 0).toFixed(2)}</li>
-                     <li>Monthly: $${parseFloat(equipment.rental_rate_monthly || 0).toFixed(2)}</li>
-                  </ul>
-               </div>
-            </div>
-            <div class="equipment-button-wrapper">
-               <button class="equipment-edit-button" onclick="showEditEquipmentForm(${equipment.id})"> <span class="eq-list-btn-icon"><i class="fa-solid fa-pen-to-square"></i></span></button>
-               <button class="equipment-delete-button" onclick="deleteEquipment(${equipment.id})">Delete <span class="eq-list-btn-icon"><i class="fa-solid fa-trash"></i></span></button>
-            </div>
-           
-           
+         const equipmentHTML = `
+           <div class="equipment-image-wrapper">${imageHTML}</div>
+           <div class="equipment-info-container">
+             <div class="equipment-txt-wrapper">
+               <p>Unit ID: <span class="eq-list-id-num-txt">${equipment.unit_id}</span></p>
+               <p>Name: <span class="eq-list-name-txt">${equipment.equipment_name}</span></p>
+               <p>Manufacturer: <span class="eq-list-manufacturer-txt">${equipment.manufacturer}</span></p>
+               <p>Model: <span class="eq-list-model-txt">${equipment.model}</span></p>
+             </div>
+             <div class="equipment-rates-wrapper">
+               <p><strong>Rental Rates:</strong></p>
+               <ul class="rental-rates-list">
+                 <li>4 Hours: $${parseFloat(equipment.rental_rate_4h || 0).toFixed(2)}</li>
+                 <li>Daily: $${parseFloat(equipment.rental_rate_daily || 0).toFixed(2)}</li>
+                 <li>Weekly: $${parseFloat(equipment.rental_rate_weekly || 0).toFixed(2)}</li>
+                 <li>Monthly: $${parseFloat(equipment.rental_rate_monthly || 0).toFixed(2)}</li>
+               </ul>
+             </div>
+           </div>
          `;
  
-         equipmentListDiv.appendChild(equipmentItemDiv);
+         // Buttons: Edit + Deactivate (if active) or Reactivate (if inactive)
+         let actionButtonsHTML = `
+           <button class="equipment-edit-button" onclick="showEditEquipmentForm(${equipment.id})">
+             Edit <span class="eq-list-btn-icon"><i class="fa-solid fa-pen-to-square"></i></span>
+           </button>
+         `;
+ 
+         if (equipment.is_active == 1) {
+           // Active => Show "Deactivate"
+           actionButtonsHTML += `
+             <button class="equipment-delete-button" onclick="deactivateEquipment(${equipment.id})">
+               Deactivate <span class="eq-list-btn-icon"><i class="fa-solid fa-ban"></i></span>
+             </button>
+           `;
+         } else {
+           // Inactive => Show "Reactivate" (green button) & still show Edit
+           // (We already added "Edit" above, so no need to add it again.)
+           actionButtonsHTML += `
+             <button class="equipment-reactivate-button" onclick="activateEquipment(${equipment.id})">
+               Reactivate <span class="eq-list-btn-icon"><i class="fa-solid fa-check"></i></span>
+             </button>
+           `;
+         }
+ 
+         equipmentItemDiv.innerHTML = `
+           ${equipmentHTML}
+           <div class="equipment-button-wrapper">
+             ${actionButtonsHTML}
+           </div>
+         `;
+ 
+         // Append to respective container
+         if (equipment.is_active == 1) {
+           activeEquipmentListDiv.appendChild(equipmentItemDiv);
+         } else {
+           deactivatedEquipmentListDiv.appendChild(equipmentItemDiv);
+         }
        });
      })
      .catch(error => console.error('Error:', error));
+}
+
+function deactivateEquipment(id) {
+   if (confirm('Are you sure you want to deactivate this equipment?')) {
+     fetch(`deactivate_equipment.php?id=${id}`, {
+       method: 'GET'
+     })
+     .then(response => response.json())
+     .then(result => {
+       if (result.status === 'success') {
+         alert(result.message);
+         loadEquipmentLists(); // Reload both lists
+       } else {
+         alert('Error: ' + result.message);
+       }
+     })
+     .catch(error => console.error('Error:', error));
+   }
+ }
+ 
+ function activateEquipment(id) {
+   if (confirm('Are you sure you want to reactivate this equipment?')) {
+     fetch(`activate_equipment.php?id=${id}`, {
+       method: 'GET'
+     })
+     .then(response => response.json())
+     .then(result => {
+       if (result.status === 'success') {
+         alert(result.message);
+         loadEquipmentLists(); // Reload both lists
+       } else {
+         alert('Error: ' + result.message);
+       }
+     })
+     .catch(error => console.error('Error:', error));
+   }
  }
  
  // Show Form to Add New Equipment
@@ -623,22 +717,27 @@ function showAddYardCheckForm() {
    })
    .catch(error => console.error('Error:', error));
  });
- 
- // Delete Equipment
- function deleteEquipment(id) {
-   if (confirm('Are you sure you want to delete this equipment?')) {
-     fetch(`delete_equipment.php?id=${id}`, {
+
+
+// Deactivate Equipment Function 
+function deactivateEquipment(id) {
+   if (confirm('Are you sure you want to deactivate this equipment?')) {
+     fetch(`deactivate_equipment.php?id=${id}`, {
        method: 'GET'
      })
-     .then(response => response.text())
+     .then(response => response.json())
      .then(result => {
-       alert('Equipment deleted successfully!');
-       loadEquipmentListManagement();
+       if (result.status === 'success') {
+         alert(result.message);
+         loadEquipmentLists();
+       } else {
+         alert('Error: ' + result.message);
+       }
      })
      .catch(error => console.error('Error:', error));
    }
  }
- 
+
  // Load Submitted Yard Checks
  function loadSubmittedYardChecks() {
    fetch('get_submitted_yard_checks.php')
@@ -703,11 +802,11 @@ function showAddYardCheckForm() {
 
              columnDiv.innerHTML = `
                <h4>${checkTime} Submission</h4>
-               <p><strong>Total number of equipment:</strong> ${yardCheck.total_equipment}</p>
-               <p><strong>Equipment currently available:</strong> ${yardCheck.equipment_available}</p>
-               <p><strong>Equipment currently rented out:</strong> ${yardCheck.equipment_rented_out}</p>
-               ${checkTime === 'PM' ? `<p><strong>Estimated profit:</strong> $<span class="profit-amount">${yardCheck.estimated_profit.toFixed(2)}</span></p>` : ''}
-               <p><strong>Equipment currently out of service:</strong> ${yardCheck.equipment_out_of_service}</p>
+               <p><strong>Total equipment:</strong> ${yardCheck.total_equipment}</p>
+               <p><strong>Equipment available:</strong> ${yardCheck.equipment_available}</p>
+               <p><strong>Equipment rented out:</strong> ${yardCheck.equipment_rented_out}</p>
+               ${checkTime === 'PM' ? `<p class="est-profit-txt"><strong>Estimated profit:</strong> $<span class="profit-amount">${yardCheck.estimated_profit.toFixed(2)}</span></p>` : ''}
+               <p><strong>Equipment out of service:</strong> ${yardCheck.equipment_out_of_service}</p>
                <p class="profit-loss-txt"><strong>Profit loss:</strong> $<span class="loss-amount">${yardCheck.profit_loss.toFixed(2)}</span></p>
                <p><strong>Submitted by:</strong> ${yardCheck.user_name}</p>
                <p class="time-submitted-txt"><strong>Time submitted:</strong> ${formattedSubmissionTime}</p>
