@@ -717,21 +717,7 @@ function deactivateEquipment(id) {
    })
    .catch(error => console.error('Error:', error));
  });
- 
- // Delete Equipment
-//  function deleteEquipment(id) {
-//    if (confirm('Are you sure you want to delete this equipment?')) {
-//      fetch(`delete_equipment.php?id=${id}`, {
-//        method: 'GET'
-//      })
-//      .then(response => response.text())
-//      .then(result => {
-//        alert('Equipment deleted successfully!');
-//        loadEquipmentListManagement();
-//      })
-//      .catch(error => console.error('Error:', error));
-//    }
-//  }
+
 
 // Deactivate Equipment Function 
 function deactivateEquipment(id) {
@@ -751,7 +737,6 @@ function deactivateEquipment(id) {
      .catch(error => console.error('Error:', error));
    }
  }
- 
 
  // Load Submitted Yard Checks
  function loadSubmittedYardChecks() {
@@ -817,11 +802,11 @@ function deactivateEquipment(id) {
 
              columnDiv.innerHTML = `
                <h4>${checkTime} Submission</h4>
-               <p><strong>Total number of equipment:</strong> ${yardCheck.total_equipment}</p>
-               <p><strong>Equipment currently available:</strong> ${yardCheck.equipment_available}</p>
-               <p><strong>Equipment currently rented out:</strong> ${yardCheck.equipment_rented_out}</p>
-               ${checkTime === 'PM' ? `<p><strong>Estimated profit:</strong> $<span class="profit-amount">${yardCheck.estimated_profit.toFixed(2)}</span></p>` : ''}
-               <p><strong>Equipment currently out of service:</strong> ${yardCheck.equipment_out_of_service}</p>
+               <p><strong>Total equipment:</strong> ${yardCheck.total_equipment}</p>
+               <p><strong>Equipment available:</strong> ${yardCheck.equipment_available}</p>
+               <p><strong>Equipment rented out:</strong> ${yardCheck.equipment_rented_out}</p>
+               ${checkTime === 'PM' ? `<p class="est-profit-txt"><strong>Estimated profit:</strong> $<span class="profit-amount">${yardCheck.estimated_profit.toFixed(2)}</span></p>` : ''}
+               <p><strong>Equipment out of service:</strong> ${yardCheck.equipment_out_of_service}</p>
                <p class="profit-loss-txt"><strong>Profit loss:</strong> $<span class="loss-amount">${yardCheck.profit_loss.toFixed(2)}</span></p>
                <p><strong>Submitted by:</strong> ${yardCheck.user_name}</p>
                <p class="time-submitted-txt"><strong>Time submitted:</strong> ${formattedSubmissionTime}</p>

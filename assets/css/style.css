@@ -562,7 +562,14 @@ form {
 .yard-check-card .card-column p {
   margin: 5px 0;
 }
-
+/*Hidding estimated profit text for now */
+.est-profit-txt {
+   display: none;
+}
+/*Hidding profit loss text for now */
+.profit-loss-txt {
+   display: none;
+}
 /*Hidding Time submitted for now */
 .time-submitted-txt {
    display: none;
