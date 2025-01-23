@@ -234,6 +234,24 @@ function getOrdinalSuffix(day) {
  // Global variables
  let equipmentData = []; // Will be populated from the server
  
+//Side menu collapse and open
+function sideMenuCollapse(event) {
+   // event.preventDefault();
+   const navContainer = document.getElementById('side-nav-container');
+   const menuTxt = document.querySelectorAll('.side-menu-txt');
+
+   if (navContainer.classList.contains('side-nav-container-collapsed')) {
+      navContainer.classList.remove('side-nav-container-collapsed');
+      menuTxt.forEach((txt) => {
+         txt.style.display = 'block';
+       });
+   } else {
+      navContainer.classList.add('side-nav-container-collapsed');
+      menuTxt.forEach((txt) => {
+         txt.style.display = 'none';
+       });
+   }
+}
  // Function to set the active menu item
 function setActiveMenuItem() {
    // Get all content containers

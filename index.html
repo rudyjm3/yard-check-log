@@ -11,7 +11,7 @@
   <!-- Font Awesome 6.5.2 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-  <script src="assets/js/app.js?v=3.0" defer></script>
+  <script src="assets/js/app.js" defer></script>
 
 </head>
 <body>
@@ -25,11 +25,13 @@
   <section id="main-content-section">
     <!-- Side Menu Start -->
     <nav id="side-nav-container">
+      <button id="menu-collapse-btn" onclick="sideMenuCollapse()"><i class="fa-solid fa-angle-left"></i><i class="fa-solid fa-angle-right"></i></button>
+
       <ul class="side-menu">
-        <li class="side-menu-item" onclick="showYardCheckForm()">Yard Check <span class="side-menu-item-icon-wrapper"><i class="fa-regular fa-clipboard"></i></span></li>
-        <li class="side-menu-item" onclick="showSubmittedYardChecks()">View Submitted Yard Checks <span class="side-menu-item-icon-wrapper"><i class="fa-regular fa-calendar-check"></i></span></li>
-        <li class="side-menu-item" onclick="showEquipmentStats()">Large Equipment Stats <span class="side-menu-item-icon-wrapper"><i class="fa-solid fa-chart-bar"></i></span></li>
-        <li class="side-menu-item" onclick="showEquipmentManagement()">Large Equipment <span class="side-menu-item-icon-wrapper"><i class="fa-solid fa-gear"></i></span></li>
+        <li class="side-menu-item" onclick="showYardCheckForm()"><p class="side-menu-txt">Yard Check</p><span class="side-menu-item-icon-wrapper"><i class="fa-regular fa-clipboard"></i></span></li>
+        <li class="side-menu-item" onclick="showSubmittedYardChecks()"><p class="side-menu-txt">View Submitted Yard Checks</p><span class="side-menu-item-icon-wrapper"><i class="fa-regular fa-calendar-check"></i></span></li>
+        <li class="side-menu-item" onclick="showEquipmentStats()"><p class="side-menu-txt">Large Equipment Stats</p><span class="side-menu-item-icon-wrapper"><i class="fa-solid fa-chart-bar"></i></span></li>
+        <li class="side-menu-item" onclick="showEquipmentManagement()"><p class="side-menu-txt">Large Equipment</p><span class="side-menu-item-icon-wrapper"><i class="fa-solid fa-gear"></i></span></li>
       </ul>
     </nav>
     <!-- Side Menu End -->

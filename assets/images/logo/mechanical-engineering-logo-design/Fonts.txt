@@ -1,0 +1,9 @@
+Fonts used in this design:
+
+Font: Bebas Neue
+Author: Ryoichi Tsunekawa
+Url: https://fonts.google.com/specimen/Bebas+Neue
+
+Font: Paytone One
+Author: Vernon Adams
+Url: https://fonts.google.com/specimen/Paytone+One

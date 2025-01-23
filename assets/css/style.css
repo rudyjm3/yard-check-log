@@ -43,17 +43,40 @@ header .page-title {
 
 #main-content-section {
   display: flex;
+  justify-content: flex-start;
   width: 100%;
   height: 100%;
   overflow: hidden;
 }
 
 /* Side Menu Styles */
+#menu-collapse-btn {
+   display: flex;
+   justify-content: center;
+   align-items: center ;
+   color: #fff;
+   position: absolute;
+   top: 50%;
+   right: -18px;
+   width: 36px;
+   height: 36px;
+   border-radius: 50px;
+   border: 4px solid var(--light-grey-color1);
+   background-color: var(--hover-blue-color);
+   cursor: pointer;
+   z-index: 10;
+}
+/* Apply this style to collapse the side menu */
+.side-nav-container-collapsed {
+   width: 65px !important;
+}
 #side-nav-container {
-   width: 100%;
+  position: relative;
+  width: 100%;
   max-width: 200px;
-  /* background-color: #f4f4f4; */
   background-color: var(--secondary-black-color);
+  transition: all 0.3s ease-in-out;
+  /* overflow: hidden; */
 }
 
 .side-menu {
