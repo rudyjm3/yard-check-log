@@ -154,6 +154,40 @@ header .page-title {
    padding-right: 0;
 }
 
+.side-menu-item-icon-wrapper {
+   /* Ensure position relative so tooltip is placed correctly */
+   position: relative;
+   display: inline-block; /* So we can position the tooltip via ::after */
+ }
+ 
+ /* Base tooltip (hidden by default) */
+ .side-menu-item-icon-wrapper::after {
+   content: "";
+   position: absolute;
+   opacity: 0;
+   visibility: hidden;
+   transition: opacity 0.2s ease;
+   background-color: rgba(0, 0, 0, 0.8); /* black w/ some transparency */
+   color: #fff;
+   padding: 4px 8px;
+   font-size: 0.8rem;
+   border-radius: 4px;
+   white-space: nowrap;
+   pointer-events: none; /* Don’t block cursor events */
+   /* transform: translateX(-50%); */
+   bottom: 10%; /* Position above the icon */
+   left: 135%;    /* Center horizontally under icon */
+   z-index: 999;
+ }
+ 
+ /* Show tooltip ONLY when side nav is collapsed */
+ .side-nav-container-collapsed .side-menu-item-icon-wrapper:hover::after {
+   /* Display the text from data-tooltip attribute */
+   content: attr(data-tooltip);
+   opacity: 1;
+   visibility: visible;
+ }
+
 /* Main Content Styles */
 #main-content-container {
    display: flex;
