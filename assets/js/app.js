@@ -235,23 +235,21 @@ function getOrdinalSuffix(day) {
  let equipmentData = []; // Will be populated from the server
  
 //Side menu collapse and open
-function sideMenuCollapse(event) {
-   // event.preventDefault();
+function sideMenuCollapse() {
    const navContainer = document.getElementById('side-nav-container');
-   const menuTxt = document.querySelectorAll('.side-menu-txt');
-
+   const collapseBtn = document.getElementById('menu-collapse-btn');
+   
+   navContainer.classList.toggle('side-nav-container-collapsed');
+ 
    if (navContainer.classList.contains('side-nav-container-collapsed')) {
-      navContainer.classList.remove('side-nav-container-collapsed');
-      menuTxt.forEach((txt) => {
-         txt.style.display = 'block';
-       });
+     // For example, show a "arrow-right" icon
+     collapseBtn.innerHTML = '<i class="fa-solid fa-arrow-right"></i>';
    } else {
-      navContainer.classList.add('side-nav-container-collapsed');
-      menuTxt.forEach((txt) => {
-         txt.style.display = 'none';
-       });
+     // Show "arrow-left"
+     collapseBtn.innerHTML = '<i class="fa-solid fa-arrow-left"></i>';
    }
 }
+
  // Function to set the active menu item
 function setActiveMenuItem() {
    // Get all content containers

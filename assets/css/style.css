@@ -26,8 +26,8 @@ body {
   flex-direction: column;
   height: 100dvh;
   overflow: hidden;
-
-  font-family: Arial, sans-serif;
+  font-family: "Roboto", serif;
+  /* font-family: Arial, sans-serif; */
   margin: 0;
   padding: 0;
 }
@@ -68,17 +68,20 @@ header .page-title {
 }
 /* Apply this style to collapse the side menu */
 .side-nav-container-collapsed {
-   width: 65px !important;
+   width: 55px !important;
 }
 #side-nav-container {
   position: relative;
   width: 100%;
   max-width: 200px;
   background-color: var(--secondary-black-color);
-  transition: all 0.3s ease-in-out;
-  /* overflow: hidden; */
+  transition: width 0.3s ease;  /* animate the width change */
+  /* overflow: hidden; 
+  overflow-y: auto; */
 }
-
+.side-nav-container-collapsed {
+   width: 60px;
+}
 .side-menu {
   list-style-type: none;
   padding: 0;
@@ -87,16 +90,20 @@ header .page-title {
 
 .side-menu-item {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   position: relative;
   padding: 15px;
   height: 70px;
   line-height: 1.5;
   color: var(--main-white-color);
-  transition: all 0.2s ease-in-out;
+  transition: justify-content 0.3s ease; /* so it can animate gracefully */
   cursor: pointer;
 }
+/* When collapsed, center the items */
+/* .side-nav-container-collapsed .side-menu-item {
+   justify-content: center;
+ } */
 .side-menu-item:after {
    position: absolute;
    right: 0;
@@ -109,7 +116,7 @@ header .page-title {
 .side-menu-item:hover {
    background-color: var(--hover-blue-color);
 }
-
+/* Menu item underline border styling */
 .side-menu-item:hover:after {
    width: 100%;
    animation: side-menu-item-animation 0.3s ease-in-out forwards;
@@ -117,7 +124,7 @@ header .page-title {
 .side-menu-item-active {
    background-color: var(--hover-blue-color);
 }
-
+/* Menu item underline border animation */
 @keyframes side-menu-item-animation {
    from {
       width: 0%;
@@ -127,9 +134,24 @@ header .page-title {
    }
 }
 
+/* The text elements */
+.side-menu-txt {
+   display: inline-block;
+   margin-left: 10px;
+   transition: opacity 0.3s ease; /* fade in/out */
+   opacity: 1;
+}
+.side-nav-container-collapsed .side-menu-txt {
+   opacity: 0;
+   pointer-events: none; /* prevents accidental hovers/clicks on hidden text */
+}
 .side-menu-item-icon-wrapper {
-  /* float: right; */
-  margin-left: 15px;
+  font-size: 22px;
+  padding-right: 15px;
+  transition: padding-right 0.3s ease;
+}
+.side-nav-container-collapsed .side-menu-item-icon-wrapper {
+   padding-right: 0;
 }
 
 /* Main Content Styles */
@@ -676,3 +698,20 @@ footer {
 .footer-wrapper > .footer-col {
    font-size: 12px
 }
+
+
+
+/* MEDIA QUERIES */
+@media (max-width: 450px) {
+   .page-title {
+      font-size: 12px;
+   }
+   /* Force collapsed class on small screens */
+   #side-nav-container {
+     width: 60px !important;
+   }
+   #side-nav-container .side-menu-txt {
+     opacity: 0 !important;
+     pointer-events: none;
+   }
+ }

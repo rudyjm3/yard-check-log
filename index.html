@@ -25,13 +25,16 @@
   <section id="main-content-section">
     <!-- Side Menu Start -->
     <nav id="side-nav-container">
-      <button id="menu-collapse-btn" onclick="sideMenuCollapse()"><i class="fa-solid fa-angle-left"></i><i class="fa-solid fa-angle-right"></i></button>
+      <button id="menu-collapse-btn" onclick="sideMenuCollapse()">
+         <i class="fa-solid fa-angle-left" id="collapse-icon"></i>
+         <!-- <i class="fa-solid fa-angle-right" id="expand-icon"></i> -->
+      </button>
 
       <ul class="side-menu">
-        <li class="side-menu-item" onclick="showYardCheckForm()"><p class="side-menu-txt">Yard Check</p><span class="side-menu-item-icon-wrapper"><i class="fa-regular fa-clipboard"></i></span></li>
-        <li class="side-menu-item" onclick="showSubmittedYardChecks()"><p class="side-menu-txt">View Submitted Yard Checks</p><span class="side-menu-item-icon-wrapper"><i class="fa-regular fa-calendar-check"></i></span></li>
-        <li class="side-menu-item" onclick="showEquipmentStats()"><p class="side-menu-txt">Large Equipment Stats</p><span class="side-menu-item-icon-wrapper"><i class="fa-solid fa-chart-bar"></i></span></li>
-        <li class="side-menu-item" onclick="showEquipmentManagement()"><p class="side-menu-txt">Large Equipment</p><span class="side-menu-item-icon-wrapper"><i class="fa-solid fa-gear"></i></span></li>
+        <li class="side-menu-item" onclick="showYardCheckForm()"><span class="side-menu-item-icon-wrapper"><i class="fa-regular fa-clipboard"></i></span><p class="side-menu-txt">Yard Check</p></li>
+        <li class="side-menu-item" onclick="showSubmittedYardChecks()"><span class="side-menu-item-icon-wrapper"><i class="fa-regular fa-calendar-check"></i></span><p class="side-menu-txt">View Submitted Yard Checks</p></li>
+        <li class="side-menu-item" onclick="showEquipmentStats()"><span class="side-menu-item-icon-wrapper"><i class="fa-solid fa-chart-bar"></i></span><p class="side-menu-txt">Large Equipment Stats</p></li>
+        <li class="side-menu-item" onclick="showEquipmentManagement()"><span class="side-menu-item-icon-wrapper"><i class="fa-solid fa-gear"></i></span><p class="side-menu-txt">Large Equipment</p></li>
       </ul>
     </nav>
     <!-- Side Menu End -->
