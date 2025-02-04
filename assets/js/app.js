@@ -243,10 +243,10 @@ function sideMenuCollapse() {
  
    if (navContainer.classList.contains('side-nav-container-collapsed')) {
      // For example, show a "arrow-right" icon
-     collapseBtn.innerHTML = '<i class="fa-solid fa-arrow-right"></i>';
+     collapseBtn.innerHTML = '<i class="fa-solid fa-angle-right"></i>';
    } else {
      // Show "arrow-left"
-     collapseBtn.innerHTML = '<i class="fa-solid fa-arrow-left"></i>';
+     collapseBtn.innerHTML = '<i class="fa-solid fa-angle-left"></i>';
    }
 }
 

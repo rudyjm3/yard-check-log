@@ -32,15 +32,28 @@ body {
   padding: 0;
 }
 header {
-  width: 100%;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   padding: 15px;
+   width: 100%;
+   background-color: #333;
+}
+.logo-container {
+   width: 25%;
+}
+.logo-container .logo-image {
+   width: auto;
 }
 header .page-title {
-  background-color: #333;
+  /* width: calc(100% - 200px); */
   color: #fff;
-  padding: 20px;
+  /* padding: 20px; */
   text-align: center;
 }
-
+header .page-title h1 {
+   font-size: 1.5rem;
+}
 #main-content-section {
   display: flex;
   justify-content: flex-start;
