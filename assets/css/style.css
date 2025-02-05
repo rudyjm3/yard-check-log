@@ -221,6 +221,9 @@ header .page-title h1 {
    border: 1px solid var(--light-grey-color1);
    box-shadow: rgba(167, 167, 167, 0.75) 0px 5px 10px -1px;
 }
+#submitted-yard-checks {
+   width: 100%;
+}
 #equipment-stats {
    width: 80%;
 }
@@ -635,7 +638,7 @@ form {
  }
  
  /* If you want to keep them side by side on larger screens */
- @media (min-width: 768px) {
+ @media (min-width: 790px) {
    .card-content {
      flex-direction: row;
    }
@@ -644,9 +647,9 @@ form {
    }
  }
 
-.yard-check-card .card-column {
+/* .yard-check-card .card-column {
   width: 48%;
-}
+} */
 
 .yard-check-card .card-column h4 {
   margin-bottom: 10px;
@@ -672,9 +675,15 @@ form {
   text-align: center;
 }
 
-.yard-check-card .button-wrapper button {
-  margin: 5px;
-}
+.yard-check-card .button-wrapper {
+   display: flex;
+   justify-content: center; /* side by side center alignment */
+   gap: 15px;
+ }
+ .yard-check-card .button-wrapper button {
+   /* keep or remove existing margins as you see fit */
+   margin: 0; /* if you want margin 0 since we have gap already */
+ }
 
 /* Equipment Stats Styles */
 #equipment-stats h2 {
@@ -765,5 +774,12 @@ footer {
     /* HIDE THE COLLAPSE BUTTON ON SMALL SCREENS */
    #menu-collapse-btn {
       display: none;
+   }
  }
- }
+
+@media (max-width: 900px) {
+   .yard-check-card .button-wrapper {
+      flex-direction: column;
+      align-items: center;
+   }
+}
