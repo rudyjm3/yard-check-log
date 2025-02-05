@@ -158,6 +158,7 @@ header .page-title h1 {
    opacity: 0;
    pointer-events: none; /* prevents accidental hovers/clicks on hidden text */
 }
+
 .side-menu-item-icon-wrapper {
   font-size: 22px;
   padding-right: 15px;
@@ -761,4 +762,8 @@ footer {
      opacity: 0 !important;
      pointer-events: none;
    }
+    /* HIDE THE COLLAPSE BUTTON ON SMALL SCREENS */
+   #menu-collapse-btn {
+      display: none;
+ }
  }
