@@ -755,73 +755,195 @@ function deactivateEquipment(id) {
  }
 
  // Load Submitted Yard Checks
- function loadSubmittedYardChecks() {
-   fetch('get_submitted_yard_checks.php')
+ // OLD FUNCTION CODE 
+//  function loadSubmittedYardChecks() {
+//    fetch('get_submitted_yard_checks.php')
+//      .then(response => response.json())
+//      .then(data => {
+//        const yardChecksListDiv = document.getElementById('yard-checks-list');
+//        yardChecksListDiv.innerHTML = '';
+//        // Group yard checks by date
+//        const yardChecksByDate = {};
+//        data.forEach(yardCheck => {
+//          if (!yardChecksByDate[yardCheck.date]) {
+//            yardChecksByDate[yardCheck.date] = {};
+//          }
+//          yardChecksByDate[yardCheck.date][yardCheck.check_time] = yardCheck;
+//          // console.log(yardCheck);
+//        });
+
+//        // Create cards for each date
+//        for (const date in yardChecksByDate) {
+//          const yardCheckDay = yardChecksByDate[date];
+//          const cardDiv = document.createElement('div');
+//          cardDiv.classList.add('yard-check-card');
+ 
+//          // Format date for title
+//          // Assume date is in 'YYYY-MM-DD' format
+//          // Parse the date string manually to create a Date object in local time
+//          const [yearStr, monthStr, dayStr] = date.split('-');
+//          const dateObj = new Date(Number(yearStr), Number(monthStr) - 1, Number(dayStr));
+
+//          const dayName = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][dateObj.getDay()];
+//          const monthName = ['January', 'February', 'March', 'April', 'May', 'June',
+//          'July', 'August', 'September', 'October', 'November', 'December'][dateObj.getMonth()];
+//          const dayNumber = dateObj.getDate();
+//          const ordinalSuffix = getOrdinalSuffix(dayNumber);
+//          const dayNumberWithSuffix = `${dayNumber}${ordinalSuffix}`;
+//          const year = dateObj.getFullYear();
+
+//          const cardTitle = `${dayName}, ${monthName} ${dayNumberWithSuffix}, ${year} - Yard Check`;
+
+//          cardDiv.innerHTML = `<h3>${cardTitle}</h3>`;
+ 
+//          const cardContentDiv = document.createElement('div');
+//          cardContentDiv.classList.add('card-content');
+ 
+//          ['AM', 'PM'].forEach(checkTime => {
+//            const yardCheck = yardCheckDay[checkTime];
+//            const columnDiv = document.createElement('div');
+//            columnDiv.classList.add('card-column');
+ 
+//            if (yardCheck) {
+//              // Parse the submission_date_time as local time
+//              const submissionDateTime = new Date(yardCheck.submission_date_time);
+ 
+//              // Format submission_time to HH:MM am/pm
+//              let hours = submissionDateTime.getHours();
+//              const minutes = submissionDateTime.getMinutes();
+//              const ampm = hours >= 12 ? 'pm' : 'am';
+//              hours = hours % 12 || 12; // Convert to 12-hour format
+//              const minutesStr = minutes < 10 ? `0${minutes}` : minutes;
+//              const formattedSubmissionTime = `${hours}:${minutesStr} ${ampm}`;
+
+
+//              columnDiv.innerHTML = `
+//                <h4>${checkTime} Submission</h4>
+//                <p><strong>Total equipment:</strong> ${yardCheck.total_equipment}</p>
+//                <p><strong>Equipment available:</strong> ${yardCheck.equipment_available}</p>
+//                <p><strong>Equipment rented out:</strong> ${yardCheck.equipment_rented_out}</p>
+//                ${checkTime === 'PM' ? `<p class="est-profit-txt"><strong>Estimated profit:</strong> $<span class="profit-amount">${yardCheck.estimated_profit.toFixed(2)}</span></p>` : ''}
+//                <p><strong>Equipment out of service:</strong> ${yardCheck.equipment_out_of_service}</p>
+//                <p class="profit-loss-txt"><strong>Profit loss:</strong> $<span class="loss-amount">${yardCheck.profit_loss.toFixed(2)}</span></p>
+//                <p><strong>Submitted by:</strong> ${yardCheck.user_name}</p>
+//                <p class="time-submitted-txt"><strong>Time submitted:</strong> ${formattedSubmissionTime}</p>
+//                <div class="button-wrapper">
+//                  <button onclick="viewYardCheckDetails(${yardCheck.id})">View Yard Check</button>
+//                  <button onclick="editYardCheck(${yardCheck.id})">Edit Yard Check</button>
+//                </div>
+//              `;
+//            } else {
+//              columnDiv.innerHTML = `
+//                <h4>${checkTime} Submission</h4>
+//                <p>No submission available.</p>
+//              `;
+//            }
+ 
+//            cardContentDiv.appendChild(columnDiv);
+//          });
+ 
+//          cardDiv.appendChild(cardContentDiv);
+//          yardChecksListDiv.appendChild(cardDiv);
+//        }
+//      })
+//      .catch(error => console.error('Error:', error));
+//  }
+
+
+// NEW FUNCTION CODE 
+function loadSubmittedYardChecks(startDate, endDate) {
+   // 1. Construct the URL with optional start/end date parameters
+   let url = 'get_submitted_yard_checks.php';
+   if (startDate && endDate) {
+     url += `?start_date=${startDate}&end_date=${endDate}`;
+   }
+ 
+   // 2. Fetch the data from the server
+   fetch(url)
      .then(response => response.json())
      .then(data => {
+       // 3. Get the container and clear existing content
        const yardChecksListDiv = document.getElementById('yard-checks-list');
        yardChecksListDiv.innerHTML = '';
-       // Group yard checks by date
+ 
+       // 4. Group yard checks by date (the same grouping logic you already have)
        const yardChecksByDate = {};
        data.forEach(yardCheck => {
          if (!yardChecksByDate[yardCheck.date]) {
            yardChecksByDate[yardCheck.date] = {};
          }
          yardChecksByDate[yardCheck.date][yardCheck.check_time] = yardCheck;
-         // console.log(yardCheck);
        });
-
-       // Create cards for each date
+ 
+       // 5. Create cards for each distinct date
        for (const date in yardChecksByDate) {
          const yardCheckDay = yardChecksByDate[date];
          const cardDiv = document.createElement('div');
          cardDiv.classList.add('yard-check-card');
  
-         // Format date for title
-         // Assume date is in 'YYYY-MM-DD' format
-         // Parse the date string manually to create a Date object in local time
+         // Convert the date string (YYYY-MM-DD) to a local Date object
          const [yearStr, monthStr, dayStr] = date.split('-');
          const dateObj = new Date(Number(yearStr), Number(monthStr) - 1, Number(dayStr));
-
-         const dayName = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][dateObj.getDay()];
-         const monthName = ['January', 'February', 'March', 'April', 'May', 'June',
-         'July', 'August', 'September', 'October', 'November', 'December'][dateObj.getMonth()];
+ 
+         // Format the date for the card title
+         const dayNames = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+         const monthNames = ['January','February','March','April','May','June',
+                             'July','August','September','October','November','December'];
+ 
+         const dayName = dayNames[dateObj.getDay()];
+         const monthName = monthNames[dateObj.getMonth()];
          const dayNumber = dateObj.getDate();
-         const ordinalSuffix = getOrdinalSuffix(dayNumber);
-         const dayNumberWithSuffix = `${dayNumber}${ordinalSuffix}`;
+ 
+         // Helper to get ordinal suffix (e.g., 1st, 2nd, 3rd)
+         function getOrdinalSuffix(num) {
+           if (num > 3 && num < 21) return 'th';
+           switch (num % 10) {
+             case 1: return 'st';
+             case 2: return 'nd';
+             case 3: return 'rd';
+             default: return 'th';
+           }
+         }
+         const dayNumberWithSuffix = dayNumber + getOrdinalSuffix(dayNumber);
          const year = dateObj.getFullYear();
-
+ 
+         // Build the card title
          const cardTitle = `${dayName}, ${monthName} ${dayNumberWithSuffix}, ${year} - Yard Check`;
-
          cardDiv.innerHTML = `<h3>${cardTitle}</h3>`;
  
+         // Create a container for AM/PM columns
          const cardContentDiv = document.createElement('div');
          cardContentDiv.classList.add('card-content');
  
+         // Show data for AM / PM
          ['AM', 'PM'].forEach(checkTime => {
            const yardCheck = yardCheckDay[checkTime];
            const columnDiv = document.createElement('div');
            columnDiv.classList.add('card-column');
  
            if (yardCheck) {
-             // Parse the submission_date_time as local time
+             // Convert submission_date_time to local date/time
              const submissionDateTime = new Date(yardCheck.submission_date_time);
  
-             // Format submission_time to HH:MM am/pm
+             // Format submission_time (HH:MM am/pm)
              let hours = submissionDateTime.getHours();
              const minutes = submissionDateTime.getMinutes();
              const ampm = hours >= 12 ? 'pm' : 'am';
-             hours = hours % 12 || 12; // Convert to 12-hour format
+             hours = hours % 12 || 12; // Convert 0 to 12
              const minutesStr = minutes < 10 ? `0${minutes}` : minutes;
              const formattedSubmissionTime = `${hours}:${minutesStr} ${ampm}`;
-
-
+ 
+             // Build the inner HTML for this column
              columnDiv.innerHTML = `
                <h4>${checkTime} Submission</h4>
                <p><strong>Total equipment:</strong> ${yardCheck.total_equipment}</p>
                <p><strong>Equipment available:</strong> ${yardCheck.equipment_available}</p>
                <p><strong>Equipment rented out:</strong> ${yardCheck.equipment_rented_out}</p>
-               ${checkTime === 'PM' ? `<p class="est-profit-txt"><strong>Estimated profit:</strong> $<span class="profit-amount">${yardCheck.estimated_profit.toFixed(2)}</span></p>` : ''}
+               ${
+                 checkTime === 'PM'
+                   ? `<p class="est-profit-txt"><strong>Estimated profit:</strong> $<span class="profit-amount">${yardCheck.estimated_profit.toFixed(2)}</span></p>`
+                   : ''
+               }
                <p><strong>Equipment out of service:</strong> ${yardCheck.equipment_out_of_service}</p>
                <p class="profit-loss-txt"><strong>Profit loss:</strong> $<span class="loss-amount">${yardCheck.profit_loss.toFixed(2)}</span></p>
                <p><strong>Submitted by:</strong> ${yardCheck.user_name}</p>
@@ -832,6 +954,7 @@ function deactivateEquipment(id) {
                </div>
              `;
            } else {
+             // No submission for AM/PM
              columnDiv.innerHTML = `
                <h4>${checkTime} Submission</h4>
                <p>No submission available.</p>
@@ -847,7 +970,7 @@ function deactivateEquipment(id) {
      })
      .catch(error => console.error('Error:', error));
  }
- 
+
  // View Yard Check Details
  function viewYardCheckDetails(id) {
    fetch(`get_yard_check_details.php?id=${id}`)
