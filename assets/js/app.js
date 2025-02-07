@@ -292,113 +292,105 @@ function showAddYardCheckForm() {
 }
  
  // Show Submitted Yard Checks
-// GLOBAL variable to track the currently viewed Monday
+// GLOBAL variable to store the currently displayed Monday
 let currentMonday = null;
 
 /**
- * Show the "Submitted Yard Checks" section, defaulting to the *local Monday* through Sunday range.
+ * Show "Submitted Yard Checks" for the current local week's Monday→Sunday.
  */
 function showSubmittedYardChecks() {
-  // 1. Hide other sections
+  // Hide other sections
   document.getElementById('lg-equipment-yard-check-form').style.display = 'none';
   document.getElementById('equipment-management').style.display = 'none';
   document.getElementById('equipment-stats').style.display = 'none';
 
-  // 2. Display #submitted-yard-checks
+  // Show #submitted-yard-checks
   document.getElementById('submitted-yard-checks').style.display = 'block';
 
-  // 3. Get the current local date/time and *force it to midnight* in local time
+  // Force "today" to local midnight to avoid partial-day offsets
   const now = new Date();
-  now.setHours(0, 0, 0, 0); // ensures we’re exactly at local midnight, not partial day
+  now.setHours(0, 0, 0, 0);
 
-  // dayOfWeek: 0 (Sun) to 6 (Sat). If it’s Sunday (0), treat as day 7 for easy math.
-  let dayOfWeek = now.getDay(); 
+  // dayOfWeek: 0=Sunday..6=Saturday. If Sunday=0, treat as 7 for easier math
+  let dayOfWeek = now.getDay();
   if (dayOfWeek === 0) {
-    dayOfWeek = 7; 
+    dayOfWeek = 7;
   }
 
-  // 4. “currentMonday” = now - (dayOfWeek - 1)
-  //    Example: If it’s Wednesday (3), dayOfWeek - 1 = 2, so we go back 2 days to Monday.
+  // currentMonday = now - (dayOfWeek - 1)
   currentMonday = new Date(now);
   currentMonday.setDate(now.getDate() - (dayOfWeek - 1));
 
-  // 5. Load the yard checks for that Monday->Sunday range
-  loadWeek(currentMonday, null, 0);
+  // Load the yard checks for that Monday→Sunday
+  loadWeek(currentMonday);
 
-  // 6. Highlight the correct side menu item
+  // Highlight side menu
   setActiveMenuItem();
 }
 
-
 /**
- * Load yard checks for a given Monday->Sunday range.
- * If none are found, keep skipping forward/backward until we find a non-empty week or exceed tries.
- *
- * @param {Date} mondayDate  - The Monday date for the desired week.
- * @param {string|null} direction - 'next', 'prev', or null if we're just loading the current week initially.
- * @param {number} tries     - How many times we've retried in the current direction (prevent infinite loops).
+ * Utility function: Convert a Date object to YYYY-MM-DD format
+ * (e.g., 2025-01-06)
  */
-function loadWeek(mondayDate, direction = null, tries = 0) {
-   // 1. Create a new Date object for Sunday (Monday + 6 days)
+function formatAsYyyyMmDd(dateObj) {
+   const year  = dateObj.getFullYear();
+   // Months are zero-based in JS, so .getMonth()+1
+   const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+   const day   = String(dateObj.getDate()).padStart(2, '0');
+   return `${year}-${month}-${day}`;
+ }
+ 
+/**
+ * Load yard checks for Monday→Sunday based on the given `mondayDate`.
+ * If the entire week is empty, we display a single card with a "No yard checks" message.
+ */
+function loadWeek(mondayDate) {
+   // 1. Calculate Sunday
    const sundayDate = new Date(mondayDate);
    sundayDate.setDate(mondayDate.getDate() + 6);
  
-   // 2. Format them as YYYY-MM-DD
-   const startDate = mondayDate.toISOString().split('T')[0]; 
-   const endDate   = sundayDate.toISOString().split('T')[0];
+   // 2. Format as YYYY-MM-DD
+   const startDate = formatAsYyyyMmDd(mondayDate);
+   const endDate   = formatAsYyyyMmDd(sundayDate);
  
-   // 3. Use your updated loadSubmittedYardChecks() that returns a Promise or
-   //    we can adapt it to return the data from the fetch, so we can check if it's empty.
-   //    Here's how you can wrap the call in a new Promise so we can detect empty data:
-   new Promise((resolve, reject) => {
-     // We adapt loadSubmittedYardChecks to be callback-based or do our own fetch here.
-     // For clarity, let's do our own fetch:
-     let url = 'get_submitted_yard_checks.php';
-     url += `?start_date=${startDate}&end_date=${endDate}`;
- 
-     fetch(url)
-       .then(resp => resp.json())
-       .then(data => resolve(data))
-       .catch(err => reject(err));
-   })
-   .then(data => {
-     if (!data || data.length === 0) {
-       // No yard checks found for this week
-       if (!direction) {
-         // If we're not explicitly moving next/prev, just show a message once.
-         alert(`No yard checks found for week of ${startDate} - ${endDate}.`);
+   // 3. Fetch yard checks from server
+   const url = `get_submitted_yard_checks.php?start_date=${startDate}&end_date=${endDate}`;
+   fetch(url)
+     .then(resp => resp.json())
+     .then(data => {
+       // 4. If the array is empty => show "no yard checks" message
+       if (!data || data.length === 0) {
+         renderEmptyWeek(startDate, endDate);
        } else {
-         // If user clicked "Next" or "Previous," keep skipping until we find a non-empty week or hit tries limit
-         if (tries < 52) {
-           // SHIFT one more week in the same direction
-           const shiftVal = (direction === 'next') ? 7 : -7;
-           mondayDate.setDate(mondayDate.getDate() + shiftVal);
- 
-           // Update global currentMonday
-           currentMonday = new Date(mondayDate);
- 
-           // Recursively call loadWeek again
-           loadWeek(mondayDate, direction, tries + 1);
-         } else {
-           // 52 attempts is about a year in the chosen direction; show a message
-           alert(`No yard checks found within a year of this range (${direction}).`);
-         }
+         // 5. Otherwise, display them
+         renderYardChecks(data);
        }
-     } else {
-       // We have yard checks => update #yard-checks-list
-       // 4. Actually show them the same way your loadSubmittedYardChecks logic does
-       renderYardChecks(data);
- 
-       // Optionally, if you want to do something else
-     }
-   })
-   .catch(error => {
-     console.error('Error fetching yard checks for this week:', error);
-     alert('An error occurred while loading yard checks.');
-   });
+     })
+     .catch(err => {
+       console.error('Error loading yard checks for this week:', err);
+       // Optional: you could show an alert or fallback message
+     });
  }
-  
 
+/**
+ * Render a single "empty" card stating no yard checks for the entire week.
+ */
+function renderEmptyWeek(startDate, endDate) {
+   const yardChecksListDiv = document.getElementById('yard-checks-list');
+   yardChecksListDiv.innerHTML = '';
+ 
+   // Create one card-like div with a message
+   const cardDiv = document.createElement('div');
+   cardDiv.classList.add('yard-check-card');
+ 
+   cardDiv.innerHTML = `
+     <h3>No yard check submissions found for the week of ${startDate} - ${endDate} 
+     or yard check data is not available.</h3>
+   `;
+ 
+   yardChecksListDiv.appendChild(cardDiv);
+ }
+ 
  // Show Equipment Stats
 function showEquipmentStats() {
    document.getElementById('lg-equipment-yard-check-form').style.display = 'none';
@@ -1068,32 +1060,73 @@ function loadSubmittedYardChecks(startDate, endDate) {
      .catch(error => console.error('Error:', error));
  }
  
- function renderYardChecks(data) {
+/**
+ * Render yard checks for a non-empty data array.
+ * If a particular AM/PM is missing, we show "No submission available." in that slot.
+ */
+function renderYardChecks(data) {
    const yardChecksListDiv = document.getElementById('yard-checks-list');
    yardChecksListDiv.innerHTML = '';
  
-   // Group by date, build cards, etc.
-   // (use the code from your updated loadSubmittedYardChecks approach)
+   // 1. Group yard checks by date
    const yardChecksByDate = {};
-   data.forEach(yardCheck => {
-     if (!yardChecksByDate[yardCheck.date]) {
-       yardChecksByDate[yardCheck.date] = {};
+   data.forEach(yc => {
+     if (!yardChecksByDate[yc.date]) {
+       yardChecksByDate[yc.date] = {};
      }
-     yardChecksByDate[yardCheck.date][yardCheck.check_time] = yardCheck;
+     yardChecksByDate[yc.date][yc.check_time] = yc;
    });
  
+   // 2. For each date, create a card
    for (const date in yardChecksByDate) {
-     const yardCheckDay = yardChecksByDate[date];
+     const dayMap = yardChecksByDate[date];
      const cardDiv = document.createElement('div');
      cardDiv.classList.add('yard-check-card');
  
-     // ... format the date, build columns for AM/PM, etc. ...
-     // Your existing logic
+     // Format date (Monday, January 6th, 2025, etc.)
+     // (Same date formatting logic you used before)
+     const [yearStr, monthStr, dayStr] = date.split('-');
+     const dateObj = new Date(+yearStr, +monthStr - 1, +dayStr);
  
+     const dayName    = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][dateObj.getDay()];
+     const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+     const monthName  = monthNames[dateObj.getMonth()];
+     const dayNumber  = dateObj.getDate();
+     const suffix     = getOrdinalSuffix(dayNumber);
+     const fullTitle  = `${dayName}, ${monthName} ${dayNumber}${suffix}, ${dateObj.getFullYear()} - Yard Check`;
+ 
+     cardDiv.innerHTML = `<h3>${fullTitle}</h3>`;
+ 
+     // 3. Create a card-content container for AM/PM columns
+     const cardContentDiv = document.createElement('div');
+     cardContentDiv.classList.add('card-content');
+ 
+     // For each "AM" / "PM"
+     ['AM', 'PM'].forEach(checkTime => {
+       const yc = dayMap[checkTime];
+       const columnDiv = document.createElement('div');
+       columnDiv.classList.add('card-column');
+ 
+       if (yc) {
+         // We have data for that time
+         // (Same logic as your existing code to display the yard check)
+         // ...
+       } else {
+         // No submission for that slot => show "No submission available."
+         columnDiv.innerHTML = `
+           <h4>${checkTime} Submission</h4>
+           <p>No submission available.</p>
+         `;
+       }
+ 
+       cardContentDiv.appendChild(columnDiv);
+     });
+ 
+     cardDiv.appendChild(cardContentDiv);
      yardChecksListDiv.appendChild(cardDiv);
    }
  }
- 
+  
  // Filter submitted yard checks
  function filterSubmittedYardChecks() {
    const startInput = document.getElementById('filter-start-date');
@@ -1111,18 +1144,17 @@ function loadSubmittedYardChecks(startDate, endDate) {
  }
  
  function showNextWeek() {
-   // SHIFT currentMonday forward by 7 days
+   // SHIFT currentMonday by +7 days
    currentMonday.setDate(currentMonday.getDate() + 7);
-   // Then attempt to load that/future weeks
-   loadWeek(currentMonday, 'next', 0);
+   loadWeek(currentMonday);
  }
  
  function showPreviousWeek() {
-   // SHIFT currentMonday backward by 7 days
+   // SHIFT currentMonday by -7 days
    currentMonday.setDate(currentMonday.getDate() - 7);
-   // Then attempt to load that/past weeks
-   loadWeek(currentMonday, 'prev', 0);
+   loadWeek(currentMonday);
  }
+ 
  
  // View Yard Check Details
  function viewYardCheckDetails(id) {
@@ -1170,7 +1202,6 @@ function loadSubmittedYardChecks(startDate, endDate) {
    modalContainer.innerHTML = modalContent;
    modalContainer.style.display = 'block';
  }
- 
  
  // Close Modal
  function closeModal() {
