@@ -292,41 +292,113 @@ function showAddYardCheckForm() {
 }
  
  // Show Submitted Yard Checks
- function showSubmittedYardChecks() {
-   // 1. Hide other sections
-   document.getElementById('lg-equipment-yard-check-form').style.display = 'none';
-   document.getElementById('equipment-management').style.display = 'none';
-   document.getElementById('equipment-stats').style.display = 'none';
+// GLOBAL variable to track the currently viewed Monday
+let currentMonday = null;
+
+/**
+ * Show the "Submitted Yard Checks" section, defaulting to the *local Monday* through Sunday range.
+ */
+function showSubmittedYardChecks() {
+  // 1. Hide other sections
+  document.getElementById('lg-equipment-yard-check-form').style.display = 'none';
+  document.getElementById('equipment-management').style.display = 'none';
+  document.getElementById('equipment-stats').style.display = 'none';
+
+  // 2. Display #submitted-yard-checks
+  document.getElementById('submitted-yard-checks').style.display = 'block';
+
+  // 3. Get the current local date/time and *force it to midnight* in local time
+  const now = new Date();
+  now.setHours(0, 0, 0, 0); // ensures we’re exactly at local midnight, not partial day
+
+  // dayOfWeek: 0 (Sun) to 6 (Sat). If it’s Sunday (0), treat as day 7 for easy math.
+  let dayOfWeek = now.getDay(); 
+  if (dayOfWeek === 0) {
+    dayOfWeek = 7; 
+  }
+
+  // 4. “currentMonday” = now - (dayOfWeek - 1)
+  //    Example: If it’s Wednesday (3), dayOfWeek - 1 = 2, so we go back 2 days to Monday.
+  currentMonday = new Date(now);
+  currentMonday.setDate(now.getDate() - (dayOfWeek - 1));
+
+  // 5. Load the yard checks for that Monday->Sunday range
+  loadWeek(currentMonday, null, 0);
+
+  // 6. Highlight the correct side menu item
+  setActiveMenuItem();
+}
+
+
+/**
+ * Load yard checks for a given Monday->Sunday range.
+ * If none are found, keep skipping forward/backward until we find a non-empty week or exceed tries.
+ *
+ * @param {Date} mondayDate  - The Monday date for the desired week.
+ * @param {string|null} direction - 'next', 'prev', or null if we're just loading the current week initially.
+ * @param {number} tries     - How many times we've retried in the current direction (prevent infinite loops).
+ */
+function loadWeek(mondayDate, direction = null, tries = 0) {
+   // 1. Create a new Date object for Sunday (Monday + 6 days)
+   const sundayDate = new Date(mondayDate);
+   sundayDate.setDate(mondayDate.getDate() + 6);
  
-   // 2. Display #submitted-yard-checks
-   document.getElementById('submitted-yard-checks').style.display = 'block';
+   // 2. Format them as YYYY-MM-DD
+   const startDate = mondayDate.toISOString().split('T')[0]; 
+   const endDate   = sundayDate.toISOString().split('T')[0];
  
-   // 3. Compute current Monday->Sunday
-   //    (If today is Sunday, dayOfWeek = 0 => treat as 7 so offset is 6)
-   const today = new Date();
-   let dayOfWeek = today.getDay(); // 0=Sunday, 1=Mon, etc.
-   if (dayOfWeek === 0) {
-     dayOfWeek = 7; // treat Sunday as 7 for simpler logic
-   }
-   // currentMonday = today - (dayOfWeek - 1)
-   const currentMonday = new Date(today);
-   currentMonday.setDate(today.getDate() - (dayOfWeek - 1));
+   // 3. Use your updated loadSubmittedYardChecks() that returns a Promise or
+   //    we can adapt it to return the data from the fetch, so we can check if it's empty.
+   //    Here's how you can wrap the call in a new Promise so we can detect empty data:
+   new Promise((resolve, reject) => {
+     // We adapt loadSubmittedYardChecks to be callback-based or do our own fetch here.
+     // For clarity, let's do our own fetch:
+     let url = 'get_submitted_yard_checks.php';
+     url += `?start_date=${startDate}&end_date=${endDate}`;
  
-   // Sunday is Monday + 6 days
-   const sunday = new Date(currentMonday);
-   sunday.setDate(currentMonday.getDate() + 6);
+     fetch(url)
+       .then(resp => resp.json())
+       .then(data => resolve(data))
+       .catch(err => reject(err));
+   })
+   .then(data => {
+     if (!data || data.length === 0) {
+       // No yard checks found for this week
+       if (!direction) {
+         // If we're not explicitly moving next/prev, just show a message once.
+         alert(`No yard checks found for week of ${startDate} - ${endDate}.`);
+       } else {
+         // If user clicked "Next" or "Previous," keep skipping until we find a non-empty week or hit tries limit
+         if (tries < 52) {
+           // SHIFT one more week in the same direction
+           const shiftVal = (direction === 'next') ? 7 : -7;
+           mondayDate.setDate(mondayDate.getDate() + shiftVal);
  
-   // Convert to YYYY-MM-DD strings
-   const startDate = currentMonday.toISOString().split('T')[0]; // e.g. "2023-07-10"
-   const endDate   = sunday.toISOString().split('T')[0];        // e.g. "2023-07-16"
+           // Update global currentMonday
+           currentMonday = new Date(mondayDate);
  
-   // 4. Load yard checks in that range
-   loadSubmittedYardChecks(startDate, endDate);
+           // Recursively call loadWeek again
+           loadWeek(mondayDate, direction, tries + 1);
+         } else {
+           // 52 attempts is about a year in the chosen direction; show a message
+           alert(`No yard checks found within a year of this range (${direction}).`);
+         }
+       }
+     } else {
+       // We have yard checks => update #yard-checks-list
+       // 4. Actually show them the same way your loadSubmittedYardChecks logic does
+       renderYardChecks(data);
  
-   // 5. Highlight correct side menu item
-   setActiveMenuItem();
+       // Optionally, if you want to do something else
+     }
+   })
+   .catch(error => {
+     console.error('Error fetching yard checks for this week:', error);
+     alert('An error occurred while loading yard checks.');
+   });
  }
- 
+  
+
  // Show Equipment Stats
 function showEquipmentStats() {
    document.getElementById('lg-equipment-yard-check-form').style.display = 'none';
@@ -995,7 +1067,33 @@ function loadSubmittedYardChecks(startDate, endDate) {
      })
      .catch(error => console.error('Error:', error));
  }
-
+ 
+ function renderYardChecks(data) {
+   const yardChecksListDiv = document.getElementById('yard-checks-list');
+   yardChecksListDiv.innerHTML = '';
+ 
+   // Group by date, build cards, etc.
+   // (use the code from your updated loadSubmittedYardChecks approach)
+   const yardChecksByDate = {};
+   data.forEach(yardCheck => {
+     if (!yardChecksByDate[yardCheck.date]) {
+       yardChecksByDate[yardCheck.date] = {};
+     }
+     yardChecksByDate[yardCheck.date][yardCheck.check_time] = yardCheck;
+   });
+ 
+   for (const date in yardChecksByDate) {
+     const yardCheckDay = yardChecksByDate[date];
+     const cardDiv = document.createElement('div');
+     cardDiv.classList.add('yard-check-card');
+ 
+     // ... format the date, build columns for AM/PM, etc. ...
+     // Your existing logic
+ 
+     yardChecksListDiv.appendChild(cardDiv);
+   }
+ }
+ 
  // Filter submitted yard checks
  function filterSubmittedYardChecks() {
    const startInput = document.getElementById('filter-start-date');
@@ -1012,7 +1110,20 @@ function loadSubmittedYardChecks(startDate, endDate) {
    loadSubmittedYardChecks(startDate, endDate);
  }
  
-
+ function showNextWeek() {
+   // SHIFT currentMonday forward by 7 days
+   currentMonday.setDate(currentMonday.getDate() + 7);
+   // Then attempt to load that/future weeks
+   loadWeek(currentMonday, 'next', 0);
+ }
+ 
+ function showPreviousWeek() {
+   // SHIFT currentMonday backward by 7 days
+   currentMonday.setDate(currentMonday.getDate() - 7);
+   // Then attempt to load that/past weeks
+   loadWeek(currentMonday, 'prev', 0);
+ }
+ 
  // View Yard Check Details
  function viewYardCheckDetails(id) {
    fetch(`get_yard_check_details.php?id=${id}`)
