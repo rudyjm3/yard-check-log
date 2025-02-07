@@ -292,15 +292,31 @@ function showAddYardCheckForm() {
 }
  
  // Show Submitted Yard Checks
-function showSubmittedYardChecks() {
+ function showSubmittedYardChecks() {
    document.getElementById('lg-equipment-yard-check-form').style.display = 'none';
    document.getElementById('equipment-management').style.display = 'none';
    document.getElementById('submitted-yard-checks').style.display = 'block';
    document.getElementById('equipment-stats').style.display = 'none';
-   loadSubmittedYardChecks();
-   // Set the active class
+ 
+   // Compute current Monday->Sunday
+   const today = new Date();
+   const dayOfWeek = today.getDay(); // 0=Sunday,1=Mon,...
+   // If dayOfWeek is 0 (Sunday), make it 7 for easier calc:
+   const offset = (dayOfWeek === 0) ? 6 : (dayOfWeek - 1);
+   const monday = new Date(today);
+   monday.setDate(today.getDate() - offset);
+   const sunday = new Date(monday);
+   sunday.setDate(monday.getDate() + 6);
+ 
+   // Format as YYYY-MM-DD
+   const startDate = monday.toISOString().split('T')[0];
+   const endDate = sunday.toISOString().split('T')[0];
+ 
+   // Now fetch only that range
+   loadSubmittedYardChecks(startDate, endDate);
+ 
    setActiveMenuItem();
-}
+ }
  
  // Show Equipment Stats
 function showEquipmentStats() {
