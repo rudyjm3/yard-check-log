@@ -293,28 +293,37 @@ function showAddYardCheckForm() {
  
  // Show Submitted Yard Checks
  function showSubmittedYardChecks() {
+   // 1. Hide other sections
    document.getElementById('lg-equipment-yard-check-form').style.display = 'none';
    document.getElementById('equipment-management').style.display = 'none';
-   document.getElementById('submitted-yard-checks').style.display = 'block';
    document.getElementById('equipment-stats').style.display = 'none';
  
-   // Compute current Monday->Sunday
+   // 2. Display #submitted-yard-checks
+   document.getElementById('submitted-yard-checks').style.display = 'block';
+ 
+   // 3. Compute current Monday->Sunday
+   //    (If today is Sunday, dayOfWeek = 0 => treat as 7 so offset is 6)
    const today = new Date();
-   const dayOfWeek = today.getDay(); // 0=Sunday,1=Mon,...
-   // If dayOfWeek is 0 (Sunday), make it 7 for easier calc:
-   const offset = (dayOfWeek === 0) ? 6 : (dayOfWeek - 1);
-   const monday = new Date(today);
-   monday.setDate(today.getDate() - offset);
-   const sunday = new Date(monday);
-   sunday.setDate(monday.getDate() + 6);
+   let dayOfWeek = today.getDay(); // 0=Sunday, 1=Mon, etc.
+   if (dayOfWeek === 0) {
+     dayOfWeek = 7; // treat Sunday as 7 for simpler logic
+   }
+   // currentMonday = today - (dayOfWeek - 1)
+   const currentMonday = new Date(today);
+   currentMonday.setDate(today.getDate() - (dayOfWeek - 1));
  
-   // Format as YYYY-MM-DD
-   const startDate = monday.toISOString().split('T')[0];
-   const endDate = sunday.toISOString().split('T')[0];
+   // Sunday is Monday + 6 days
+   const sunday = new Date(currentMonday);
+   sunday.setDate(currentMonday.getDate() + 6);
  
-   // Now fetch only that range
+   // Convert to YYYY-MM-DD strings
+   const startDate = currentMonday.toISOString().split('T')[0]; // e.g. "2023-07-10"
+   const endDate   = sunday.toISOString().split('T')[0];        // e.g. "2023-07-16"
+ 
+   // 4. Load yard checks in that range
    loadSubmittedYardChecks(startDate, endDate);
  
+   // 5. Highlight correct side menu item
    setActiveMenuItem();
  }
  
@@ -986,6 +995,23 @@ function loadSubmittedYardChecks(startDate, endDate) {
      })
      .catch(error => console.error('Error:', error));
  }
+
+ // Filter submitted yard checks
+ function filterSubmittedYardChecks() {
+   const startInput = document.getElementById('filter-start-date');
+   const endInput = document.getElementById('filter-end-date');
+   const startDate = startInput.value;
+   const endDate = endInput.value;
+ 
+   if (!startDate || !endDate) {
+     alert("Please select both a start and end date.");
+     return;
+   }
+ 
+   // Reuse your existing loadSubmittedYardChecks() with the date range
+   loadSubmittedYardChecks(startDate, endDate);
+ }
+ 
 
  // View Yard Check Details
  function viewYardCheckDetails(id) {
