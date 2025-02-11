@@ -295,34 +295,36 @@ let currentMonday = null;
  * Show "Submitted Yard Checks" for the current local week's Monday→Sunday.
  */
 function showSubmittedYardChecks() {
-  // Hide other sections
-  document.getElementById('lg-equipment-yard-check-form').style.display = 'none';
-  document.getElementById('equipment-management').style.display = 'none';
-  document.getElementById('equipment-stats').style.display = 'none';
-
-  // Show #submitted-yard-checks
-  document.getElementById('submitted-yard-checks').style.display = 'block';
-
-  // Force "today" to local midnight to avoid partial-day offsets
-  const now = new Date();
-  now.setHours(0, 0, 0, 0);
-
-  // dayOfWeek: 0=Sunday..6=Saturday. If Sunday=0, treat as 7 for easier math
-  let dayOfWeek = now.getDay();
-  if (dayOfWeek === 0) {
-    dayOfWeek = 7;
-  }
-
-  // currentMonday = now - (dayOfWeek - 1)
-  currentMonday = new Date(now);
-  currentMonday.setDate(now.getDate() - (dayOfWeek - 1));
-
-  // Now call your loadSubmittedYardChecks function
-  loadSubmittedYardChecks();
-
-  // Highlight side menu
-  setActiveMenuItem();
-}
+   // Hide other sections
+   document.getElementById('lg-equipment-yard-check-form').style.display = 'none';
+   document.getElementById('equipment-management').style.display = 'none';
+   document.getElementById('equipment-stats').style.display = 'none';
+   document.getElementById('submitted-yard-checks').style.display = 'block';
+ 
+   // Force local midnight on “today”
+   const now = new Date();
+   now.setHours(0, 0, 0, 0);
+ 
+   let dayOfWeek = now.getDay();
+   if (dayOfWeek === 0) {
+     dayOfWeek = 7; // treat Sunday as day 7
+   }
+   currentMonday = new Date(now);
+   currentMonday.setDate(now.getDate() - (dayOfWeek - 1));
+ 
+   // Compute Sunday
+   const sunday = new Date(currentMonday);
+   sunday.setDate(currentMonday.getDate() + 6);
+ 
+   // **Declare and define** startDate & endDate:
+   const startDate = formatAsYyyyMmDd(currentMonday);
+   const endDate   = formatAsYyyyMmDd(sunday);
+ 
+   // Call your fetch+render function
+   loadSubmittedYardChecks(startDate, endDate);
+ 
+   setActiveMenuItem();
+ }
 
 /**
  * Utility function: Convert a Date object to YYYY-MM-DD format
