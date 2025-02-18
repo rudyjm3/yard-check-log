@@ -338,6 +338,9 @@ function filterSubmittedYardChecks() {
   }
 
   loadSubmittedYardChecks(startDate, endDate);
+
+  /* update currentMonday to the “start” date so Next/Prev know where to begin */
+  currentMonday = new Date(startDate + "T00:00:00");
 }
 
 /* -------------------------
