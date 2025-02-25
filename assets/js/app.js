@@ -347,6 +347,123 @@ function filterSubmittedYardChecks() {
    7. YARD CHECK FORM SUBMISSION
 ------------------------- */
 
+ // Show Yard Check Form
+ function showYardCheckForm() {
+   // clearYardCheckForm();
+   document.getElementById('lg-equipment-yard-check-form').style.display = 'block';
+   document.getElementById('equipment-management').style.display = 'none';
+   document.getElementById('submitted-yard-checks').style.display = 'none';
+   document.getElementById('equipment-stats').style.display = 'none';
+   populateEquipmentList();
+   // Set the active class
+   setActiveMenuItem();
+}
+
+// Function to populate equipment list in the Yard Check Form
+async function populateEquipmentList() {
+   try {
+      const response = await fetch('get_equipment.php?onlyActive=true');
+     const data = await response.json();
+     equipmentData = data; // Store the equipment data globally
+     const equipmentListDiv = document.getElementById('equipment-list');
+     equipmentListDiv.innerHTML = '';
+     data.forEach(equipment => {
+       // Create a container for each equipment
+       const equipmentDiv = document.createElement('div');
+       equipmentDiv.classList.add('form-control');
+ 
+       // Create image element if image_url exists
+       let imageHTML = '';
+       if (equipment.image_url) {
+         imageHTML = `<img src="${equipment.image_url}" alt="${equipment.equipment_name}" class="equipment-image">`;
+       }
+ 
+       // Equipment label
+       const label = document.createElement('label');
+       label.htmlFor = `equipment-status-${equipment.unit_id}`;
+       label.innerHTML = `
+       <div class="img-eq-info_wrapper">
+         <div class="image-wrapper">
+            ${imageHTML}
+         </div>
+         <div class="eq-info-wrapper">
+            <p class="rental-id-label">Unit ID - <span class="rental-id-num">${equipment.unit_id}</span></p>
+            <p class="equipment-name">${equipment.equipment_name}</p>
+         </div>
+       </div>
+         
+      <div class="view-more-wrapper">
+         <a href="#" onclick="toggleEquipmentInfo(event, '${equipment.unit_id}')">View more info</a>
+         <div id="equipment-info-${equipment.unit_id}" class="equipment-info" style="display: none;">
+            <p><strong>Manufacturer:</strong> ${equipment.manufacturer}</p>
+            <p><strong>Model:</strong> ${equipment.model}</p>
+         </div>
+      </div>
+      <!-- Selection wrapper appended here -->
+       `;
+       // Wrapper for select element
+       const statusOptionWrapper = document.createElement('div');
+       statusOptionWrapper.classList.add('option-wrapper');
+       const statusLabel = document.createElement('label');
+       statusLabel.classList.add('status-label');
+       statusLabel.textContent = 'Equipment Status';
+
+       // Status select
+       const select = document.createElement('select');
+       select.name = `equipment_status_${equipment.unit_id}`;
+       select.id = `equipment-status-${equipment.unit_id}`;
+       select.required = true;
+ 
+       // Options
+       const defaultOption = document.createElement('option');
+       defaultOption.disabled = true;
+       defaultOption.selected = true;
+       defaultOption.textContent = 'Select equipment status';
+ 
+       const availableOption = document.createElement('option');
+       availableOption.value = 'Available';
+       availableOption.textContent = 'Available';
+ 
+       const rentedOption = document.createElement('option');
+       rentedOption.value = 'Rented';
+       rentedOption.textContent = 'Rented';
+ 
+       const outOfServiceOption = document.createElement('option');
+       outOfServiceOption.value = 'Out of Service';
+       outOfServiceOption.textContent = 'Out of Service';
+ 
+       // Append options to select
+       select.appendChild(defaultOption);
+       select.appendChild(availableOption);
+       select.appendChild(rentedOption);
+       select.appendChild(outOfServiceOption);
+ 
+       // Append label and select to equipmentDiv
+       equipmentDiv.appendChild(label);
+       statusOptionWrapper.appendChild(statusLabel);
+       statusOptionWrapper.appendChild(select);
+       equipmentDiv.appendChild(statusOptionWrapper);
+
+       // Append equipmentDiv to equipmentListDiv
+       equipmentListDiv.appendChild(equipmentDiv);
+     });
+   } catch (error) {
+     console.error('Error:', error);
+   }
+}
+ 
+ // Toggle Equipment Info Display
+function toggleEquipmentInfo(event, unitId) {
+   event.preventDefault();
+   const infoDiv = document.getElementById(`equipment-info-${unitId}`);
+   if (infoDiv.style.display === 'none') {
+     infoDiv.style.display = 'block';
+   } else {
+     infoDiv.style.display = 'none';
+   }
+}
+
+ // Handle Yard Check Form Submission
 document.getElementById('lg-equipment-yard-check-form').addEventListener('submit', function(e) {
   e.preventDefault();
 
@@ -382,6 +499,7 @@ document.getElementById('lg-equipment-yard-check-form').addEventListener('submit
       }
     })
     .catch(error => console.error('Error:', error));
+    showSubmittedYardChecks();
 });
 
 function showDuplicateSubmissionMessage(existingYardCheck) {
