@@ -32,7 +32,6 @@ try {
         // Update existing equipment
         $stmt = $conn->prepare("UPDATE equipment SET
             unit_id = :unit_id,
-            
             equipment_name = :equipment_name,
             manufacturer = :manufacturer,
             model = :model,
@@ -58,9 +57,9 @@ try {
     } else {
         // Insert new equipment
         $stmt = $conn->prepare("INSERT INTO equipment
-            (unit_id, equipment_name, manufacturer, model, rental_rate_4h, rental_rate_daily, rental_rate_weekly, rental_rate_monthly, image_url)
+            (unit_id, is_active, equipment_name, manufacturer, model, rental_rate_4h, rental_rate_daily, rental_rate_weekly, rental_rate_monthly, image_url)
             VALUES
-            (:unit_id, :equipment_name, :manufacturer, :model, :rental_rate_4h, :rental_rate_daily, :rental_rate_weekly, :rental_rate_monthly, :image_url)");
+            (:unit_id, 1, :equipment_name, :manufacturer, :model, :rental_rate_4h, :rental_rate_daily, :rental_rate_weekly, :rental_rate_monthly, :image_url)");
 
         $params = [
             ':unit_id' => $unit_id,
