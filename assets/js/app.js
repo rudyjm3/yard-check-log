@@ -182,7 +182,7 @@ function showSubmittedYardChecks() {
  * else partial placeholders for missing AM/PM.
  */
 function loadSubmittedYardChecks(startDate, endDate) {
-   debugger;
+   // debugger;
   let url = 'get_submitted_yard_checks.php';
   if (startDate && endDate) {
     url += `?start_date=${startDate}&end_date=${endDate}`;
@@ -566,6 +566,7 @@ function showEditEquipmentForm(id) {
   fetch(`get_equipment.php?id=${id}`)
     .then(resp => resp.json())
     .then(equipment => {
+      
       const equipmentForm = document.getElementById('equipment-form');
       document.getElementById('form-title').textContent = 'Edit Equipment';
       document.getElementById('equipment-id').value = equipment.id;
@@ -610,7 +611,7 @@ document.getElementById('equipment-form').addEventListener('submit', function(e)
         setTimeout(() => {
           equipmentForm.style.display = 'none';
         }, 500);
-        loadEquipmentListManagement();
+        loadEquipmentLists();
       } else {
         alert('Error: ' + result.message);
       }

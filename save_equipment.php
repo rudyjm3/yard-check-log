@@ -32,6 +32,7 @@ try {
         // Update existing equipment
         $stmt = $conn->prepare("UPDATE equipment SET
             unit_id = :unit_id,
+            
             equipment_name = :equipment_name,
             manufacturer = :manufacturer,
             model = :model,
