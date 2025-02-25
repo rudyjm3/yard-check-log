@@ -593,19 +593,19 @@ function loadEquipmentLists() {
         `;
         let actionButtonsHTML = `
           <button class="equipment-edit-button" onclick="showEditEquipmentForm(${equipment.id})">
-            Edit <span class="eq-list-btn-icon"><i class="fa-solid fa-pen-to-square"></i></span>
+            <span class="eq-list-btn-icon"><i class="fa-solid fa-pen-to-square"></i></span> Edit 
           </button>
         `;
         if (equipment.is_active == 1) {
           actionButtonsHTML += `
             <button class="equipment-delete-button" onclick="deactivateEquipment(${equipment.id})">
-              Deactivate <span class="eq-list-btn-icon"><i class="fa-solid fa-ban"></i></span>
+              <span class="eq-list-btn-icon"><i class="fa-solid fa-ban"></i></span> Deactivate 
             </button>
           `;
         } else {
           actionButtonsHTML += `
             <button class="equipment-reactivate-button" onclick="activateEquipment(${equipment.id})">
-              Reactivate <span class="eq-list-btn-icon"><i class="fa-solid fa-check"></i></span>
+              <span class="eq-list-btn-icon"><i class="fa-solid fa-check"></i></span> Reactivate 
             </button>
           `;
         }

@@ -506,7 +506,7 @@ form {
    transition: all 0.3s ease-in-out;
 }
 .eq-list-btn-icon {
-   margin-left: 5px;
+   margin-right: 10px;
 }
 .equipment-edit-button:hover {
    background-color: var(--hover-blue-color);
