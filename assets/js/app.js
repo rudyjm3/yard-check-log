@@ -61,6 +61,28 @@ function getDatesInRange(startStr, endStr) {
   return dates;
 }
 
+/* SCROLL TO TOP BUTTON */
+
+const container = document.getElementById('main-content-container');
+const scrollToTopButton = document.getElementById('scrollToTopButton');
+
+// Listen for scroll events on the container
+container.addEventListener('scroll', function() {
+   const scrollPercent = container.scrollTop / (container.scrollHeight - container.clientHeight);
+
+   // Toggle the 'show' class if scrolled more than 25%
+   if (scrollPercent > 0.25) {
+      scrollToTopButton.classList.add('show');
+   } else {
+      scrollToTopButton.classList.remove('show');
+   }
+});
+
+// Function to smoothly scroll to the top of the container
+function scrollToTop() {
+   container.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
 /* -------------------------
    3. DISPLAY CURRENT DATE/TIME
 ------------------------- */
