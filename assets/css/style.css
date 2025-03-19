@@ -291,6 +291,16 @@ form {
   margin-top: 20px;
 }
 
+/* .form-control-yard-check {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 15px;
+  padding: 10px 20px;
+} */
+
 .form-control {
    display: flex;
    justify-content: flex-start;
@@ -326,10 +336,13 @@ form {
 }
 
 /* Equipment List Styles */
+/* For Yard Check Form */
 .equipment-list > .form-control {
    display: flex;
    justify-content: space-between;
    align-items: flex-start;
+   flex-direction: column;
+   gap: 15px;
    border: 1px solid #ccc;
    border-radius: 4px;
    padding: 15px;
@@ -367,7 +380,7 @@ form {
 }
 .rental-id-label {
    color: var(--info-txt-color);
-
+   font-weight: bold;
 }
 .rental-id-num {
    color: #333;
@@ -403,6 +416,44 @@ form {
 /* #lg-equipment-yard-check-form > .form-wrapper > .form-control:nth-child(3) {
    margin-bottom: 25px;
 } */
+.option-wrapper {
+   width: 100%;
+} 
+.option-wrapper .status-label {
+   position: relative;
+   margin-bottom: 25px;
+   font-weight: bold;
+   font-size: 1.1rem;
+   color: var(--light-grey-color2);
+}
+.option-wrapper .status-label::after {
+   content: "";
+   position: absolute;
+   top: 26px;
+   left: 0;
+   border: solid 1px var(--light-grey-color2);
+   width: 100%;
+   height: 0.6px;
+}
+.radio-btn-group-wrapper {
+   display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.radio-option {
+   text-align: center;
+}
+.radio-option input[type="radio"] {
+   width: 24px;
+   height: 24px;
+   cursor: pointer;
+}
+.radio-option label {
+   font-size: 1rem;
+   font-weight: 600;
+   color: var(--secondary-black-color);
+}
 
 /* Message Container */
 #message-container .message {

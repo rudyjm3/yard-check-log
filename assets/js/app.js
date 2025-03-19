@@ -384,11 +384,12 @@ function filterSubmittedYardChecks() {
 // Function to populate equipment list in the Yard Check Form
 async function populateEquipmentList() {
    try {
-      const response = await fetch('get_equipment.php?onlyActive=true');
+     const response = await fetch('get_equipment.php?onlyActive=true');
      const data = await response.json();
      equipmentData = data; // Store the equipment data globally
      const equipmentListDiv = document.getElementById('equipment-list');
      equipmentListDiv.innerHTML = '';
+ 
      data.forEach(equipment => {
        // Create a container for each equipment
        const equipmentDiv = document.createElement('div');
@@ -400,79 +401,82 @@ async function populateEquipmentList() {
          imageHTML = `<img src="${equipment.image_url}" alt="${equipment.equipment_name}" class="equipment-image">`;
        }
  
-       // Equipment label
+       // Equipment label with equipment image and info
        const label = document.createElement('label');
        label.htmlFor = `equipment-status-${equipment.unit_id}`;
        label.innerHTML = `
-       <div class="img-eq-info_wrapper">
-         <div class="image-wrapper">
-            ${imageHTML}
+         <div class="img-eq-info_wrapper">
+           <div class="image-wrapper">
+             ${imageHTML}
+           </div>
+           <div class="eq-info-wrapper">
+             <p class="rental-id-label">Unit ID - <span class="rental-id-num">${equipment.unit_id}</span></p>
+             <p class="equipment-name">${equipment.equipment_name}</p>
+             <div class="view-more-wrapper">
+               <a href="#" onclick="toggleEquipmentInfo(event, '${equipment.unit_id}')">View more info</a>
+               <div id="equipment-info-${equipment.unit_id}" class="equipment-info" style="display: none;">
+                 <p><strong>Manufacturer:</strong> ${equipment.manufacturer}</p>
+                 <p><strong>Model:</strong> ${equipment.model}</p>
+               </div>
+             </div>
+           </div>
          </div>
-         <div class="eq-info-wrapper">
-            <p class="rental-id-label">Unit ID - <span class="rental-id-num">${equipment.unit_id}</span></p>
-            <p class="equipment-name">${equipment.equipment_name}</p>
-         </div>
-       </div>
-         
-      <div class="view-more-wrapper">
-         <a href="#" onclick="toggleEquipmentInfo(event, '${equipment.unit_id}')">View more info</a>
-         <div id="equipment-info-${equipment.unit_id}" class="equipment-info" style="display: none;">
-            <p><strong>Manufacturer:</strong> ${equipment.manufacturer}</p>
-            <p><strong>Model:</strong> ${equipment.model}</p>
-         </div>
-      </div>
-      <!-- Selection wrapper appended here -->
+         <!-- Selection wrapper appended here -->
        `;
-       // Wrapper for select element
+ 
+       // Create wrapper for the equipment status radio buttons
        const statusOptionWrapper = document.createElement('div');
        statusOptionWrapper.classList.add('option-wrapper');
        const statusLabel = document.createElement('label');
        statusLabel.classList.add('status-label');
        statusLabel.textContent = 'Equipment Status';
-
-       // Status select
-       const select = document.createElement('select');
-       select.name = `equipment_status_${equipment.unit_id}`;
-       select.id = `equipment-status-${equipment.unit_id}`;
-       select.required = true;
- 
-       // Options
-       const defaultOption = document.createElement('option');
-       defaultOption.disabled = true;
-       defaultOption.selected = true;
-       defaultOption.textContent = 'Select equipment status';
- 
-       const availableOption = document.createElement('option');
-       availableOption.value = 'Available';
-       availableOption.textContent = 'Available';
- 
-       const rentedOption = document.createElement('option');
-       rentedOption.value = 'Rented';
-       rentedOption.textContent = 'Rented';
- 
-       const outOfServiceOption = document.createElement('option');
-       outOfServiceOption.value = 'Out of Service';
-       outOfServiceOption.textContent = 'Out of Service';
- 
-       // Append options to select
-       select.appendChild(defaultOption);
-       select.appendChild(availableOption);
-       select.appendChild(rentedOption);
-       select.appendChild(outOfServiceOption);
- 
-       // Append label and select to equipmentDiv
-       equipmentDiv.appendChild(label);
        statusOptionWrapper.appendChild(statusLabel);
-       statusOptionWrapper.appendChild(select);
+ 
+       // Create a wrapper for radio buttons and radio labels
+       const radioBtnGroupWrapper = document.createElement('div');
+       radioBtnGroupWrapper.classList.add('radio-btn-group-wrapper');
+ 
+       // Array of equipment status options
+       const statuses = ['Available', 'Rented', 'Out of Service'];
+ 
+       // Create a radio button and its label for each status option
+       statuses.forEach(status => {
+         const radioContainer = document.createElement('div');
+         radioContainer.classList.add('radio-option');
+ 
+         const radioInput = document.createElement('input');
+         radioInput.type = 'radio';
+         // Use a common name so that only one option can be selected per equipment
+         radioInput.name = `equipment_status_${equipment.unit_id}`;
+         // Create a unique id for each radio button
+         radioInput.id = `equipment-status-${equipment.unit_id}-${status.toLowerCase().replace(/\s+/g, '-')}`;
+         radioInput.value = status;
+         radioInput.required = true;
+ 
+         const radioLabel = document.createElement('label');
+         radioLabel.htmlFor = radioInput.id;
+         radioLabel.textContent = status;
+ 
+         radioContainer.appendChild(radioInput);
+         radioContainer.appendChild(radioLabel);
+         radioBtnGroupWrapper.appendChild(radioContainer);
+       });
+ 
+       // Append the radio buttons group wrapper to the status option wrapper
+       statusOptionWrapper.appendChild(radioBtnGroupWrapper);
+ 
+       // Append the equipment label and the status option wrapper to the equipmentDiv
+       equipmentDiv.appendChild(label);
        equipmentDiv.appendChild(statusOptionWrapper);
-
-       // Append equipmentDiv to equipmentListDiv
+ 
+       // Append the equipmentDiv to the equipmentListDiv
        equipmentListDiv.appendChild(equipmentDiv);
      });
    } catch (error) {
      console.error('Error:', error);
    }
-}
+ }
+ 
  
  // Toggle Equipment Info Display
 function toggleEquipmentInfo(event, unitId) {
