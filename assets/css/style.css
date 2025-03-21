@@ -326,13 +326,25 @@ form {
 }
 
 .button-wrapper {
-  text-align: center;
+  /* text-align: center; */
+  margin: 30px 0 15px 0;
 }
 
-.button-wrapper button {
-  padding: 10px 20px;
-  font-size: 16px;
-  margin: 5px;
+#submit-button-ydchk {
+   width: 100%;
+   font-size: 1.4rem;
+   font-weight: 500;
+   background: var(--hover-blue-color);
+   color: var(--light-grey-color1);
+   border: none;
+   padding: 10px 20px;
+   cursor: pointer;
+   border-radius: 4px;
+   transition: background 0.3s ease-in-out;
+}
+#submit-button-ydchk:hover {
+   background: var(--button-green-hover-color);
+   color: #fff;
 }
 
 /* Equipment List Styles */
@@ -351,6 +363,9 @@ form {
    box-shadow: 0px 5px 10px -1px rgba(167, 167, 167, 0.75);
    -webkit-box-shadow: 0px 5px 10px -1px rgba(167, 167, 167, 0.75);
    -moz-box-shadow: 0px 5px 10px -1px rgba(167, 167, 167, 0.75);
+}
+.equipment-list > .form-control:nth-last-child(1) {
+   margin-bottom: 0px;
 }
 .img-eq-info_wrapper {
    display: flex;
@@ -389,10 +404,14 @@ form {
 .equipment-name {
   font-weight: bold;
 }
-
+.equipment-name::before {
+  content: "Description: ";
+  font-weight: 600;
+  color: var(--info-txt-color);
+}
 .equipment-info {
   margin-left: 20px;
-  font-size: 0.9em;
+  font-size: 1em;
 }
 #check-date,#user-name,#check-time {
    width: 300px;
@@ -422,24 +441,24 @@ form {
 .option-wrapper .status-label {
    position: relative;
    margin-bottom: 25px;
-   font-weight: bold;
-   font-size: 1.1rem;
-   color: var(--light-grey-color2);
+   font-weight: 600;
+   font-size: 1.05rem;
+   color: var(--info-txt-color);
 }
 .option-wrapper .status-label::after {
    content: "";
    position: absolute;
    top: 26px;
    left: 0;
-   border: solid 1px var(--light-grey-color2);
+   border-top: solid 1.6px #c8c8c8;
    width: 100%;
-   height: 0.6px;
+   height: 0px;
 }
 .radio-btn-group-wrapper {
    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    margin-bottom: 10px;
+   justify-content: space-around;
+   align-items: center;
+   margin-bottom: 10px;
 }
 .radio-option {
    text-align: center;
