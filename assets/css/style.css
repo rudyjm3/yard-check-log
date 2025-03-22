@@ -313,6 +313,7 @@ form {
 
 .form-control label {
   display: block;
+  width: 100%;
   margin-bottom: 5px;
 }
 
@@ -369,10 +370,10 @@ form {
 }
 .img-eq-info_wrapper {
    display: flex;
-   justify-content: space-between;
+   justify-content: flex-start;
    align-items: flex-start;
    flex-wrap: wrap;
-   gap: 15px;
+   gap: 20px;
 }
 /* Equipment Image Styles */
 .equipment-image-wrapper {
@@ -384,14 +385,15 @@ form {
    overflow: hidden;
 }
 .equipment-image {
-   max-width: 120px;
+   max-width: 150px;
    width: 100%;
    height: 100%;
    border: 1.5px solid var(--light-grey-color2);
    border-radius: 8px;
 }
 .eq-info-wrapper {
-   width: 190px;
+   width: 50%;
+   height: 100%;
 }
 .rental-id-label {
    color: var(--info-txt-color);
