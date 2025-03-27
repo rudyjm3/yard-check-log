@@ -273,9 +273,12 @@ form {
    -moz-box-shadow: 0px 5px 10px -1px rgba(167, 167, 167, 0.75);
 }
 
-/* .form-title-wrapper {
-   text-align: center;
-} */
+.form-title-wrapper {
+   position: relative;
+   width: calc(100% + 40px);
+   top: -20px;
+   left: -20px;
+}
 
 .yard-check-form-title {
    text-align: left;
@@ -288,9 +291,10 @@ form {
 }
 
 .date-time-title {
-  font-size: 1rem;
-  font-weight: 500;
-  color: #666;
+   padding: 5px 20px;
+   font-size: 1rem;
+   font-weight: 500;
+   color: #666;
 }
 
 .form-wrapper {
