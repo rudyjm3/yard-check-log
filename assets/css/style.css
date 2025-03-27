@@ -273,17 +273,23 @@ form {
    -moz-box-shadow: 0px 5px 10px -1px rgba(167, 167, 167, 0.75);
 }
 
-.form-title-wrapper {
-  text-align: center;
-}
+/* .form-title-wrapper {
+   text-align: center;
+} */
 
-.form-title {
-  font-size: 24px;
-  margin-bottom: 10px;
+.yard-check-form-title {
+   text-align: left;
+   background-color: #67a5d5;
+   border-radius: 4px 4px 0 0;
+   padding: 20px;
+   color: var(--light-grey-color1); 
+   font-size: 1.5rem;
+   font-weight: 500;
 }
 
 .date-time-title {
-  font-size: 16px;
+  font-size: 1rem;
+  font-weight: 500;
   color: #666;
 }
 
