@@ -354,12 +354,15 @@ form {
    transition: background 0.3s ease-in-out;
 }
 #submit-button-ydchk:hover {
-   background: var(--button-green-hover-color);
+   background: var(--button-green-color);
    color: #fff;
 }
 
 /* Equipment List Styles */
 /* For Yard Check Form */
+#user-name {
+   text-transform: capitalize; /*User name input */
+}
 .equipment-list > .form-control {
    display: flex;
    justify-content: space-between;
@@ -885,6 +888,20 @@ footer {
     /* HIDE THE COLLAPSE BUTTON ON SMALL SCREENS */
    #menu-collapse-btn {
       display: none;
+   }
+   /* Yard check form */
+   .yard-check-form-title {
+      font-size: 1.2rem;
+      text-align: center; 
+   }
+   .date-time-title {
+      font-size: 0.8rem;
+   }
+   .form-wrapper {
+      margin-top: 0px;
+   }
+   .form-wrapper .form-control input,select {
+      width: 100% !important;
    }
  }
 
