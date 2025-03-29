@@ -381,7 +381,7 @@ form {
 .equipment-list > .form-control:nth-last-child(1) {
    margin-bottom: 0px;
 }
-.img-eq-info_wrapper {
+.img-eq-info-wrapper {
    display: flex;
    justify-content: flex-start;
    align-items: flex-start;
@@ -873,7 +873,7 @@ footer {
 
 
 /* MEDIA QUERIES */
-@media (max-width: 450px) {
+@media (max-width: 500px) {
    .page-title {
       font-size: 12px;
    }
@@ -889,7 +889,7 @@ footer {
    #menu-collapse-btn {
       display: none;
    }
-   /* Yard check form */
+   /* Yard check form responsive styles*/
    .yard-check-form-title {
       font-size: 1.2rem;
       text-align: center; 
@@ -903,8 +903,26 @@ footer {
    .form-wrapper .form-control input,select {
       width: 100% !important;
    }
- }
+   
+   .img-eq-info-wrapper {
+      justify-content: center;
+   }
+   .img-eq-info-wrapper .image-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 80%;
+   }
+   .img-eq-info-wrapper .image-wrapper .equipment-image {
+      max-width: 100%;
+      height: auto;
 
+   }
+   .img-eq-info-wrapper .eq-info-wrapper {
+      width: 100%;
+   }
+ }
+/* Submitted Yard check section responsive styles */
 @media (max-width: 900px) {
    .yard-check-card .button-wrapper {
       flex-direction: column;

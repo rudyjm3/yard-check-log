@@ -405,7 +405,7 @@ async function populateEquipmentList() {
        const label = document.createElement('label');
        label.htmlFor = `equipment-status-${equipment.unit_id}`;
        label.innerHTML = `
-         <div class="img-eq-info_wrapper">
+         <div class="img-eq-info-wrapper">
            <div class="image-wrapper">
              ${imageHTML}
            </div>
