@@ -777,38 +777,48 @@ function viewYardCheckDetails(id) {
 }
 
 function showYardCheckDetails(yardCheck) {
-  const modalContainer = document.getElementById('modal-container');
-
-  // "YYYY-MM-DD" -> "MM/DD/YYYY"
-  const [year, month, day] = yardCheck.date.split('-');
-  const formattedDate = `${month}/${day}/${year}`;
-
-  const equipmentStatuses = yardCheck.equipment_statuses.map(status => `
-    <div>
-      <p><strong>Unit ID:</strong> ${status.unit_id}</p>
-      <p><strong>Equipment Name:</strong> ${status.equipment_name}</p>
-      <p><strong>Status:</strong> ${status.equipment_status}</p>
-    </div>
-    <hr>
-  `).join('');
-
-  const modalContent = `
-    <div class="modal">
-      <div class="modal-content">
-        <span class="close-button" onclick="closeModal()">&times;</span>
-        <h2>Yard Check Details</h2>
-        <p><strong>Date:</strong> ${formattedDate}</p>
-        <p><strong>Time:</strong> ${yardCheck.check_time}</p>
-        <p><strong>Submitted by:</strong> ${yardCheck.user_name}</p>
-        <div>${equipmentStatuses}</div>
-        <button onclick="editYardCheck(${yardCheck.id})">Edit</button>
-        <button onclick="printYardCheck(${yardCheck.id})">Print</button>
-      </div>
-    </div>
-  `;
-  modalContainer.innerHTML = modalContent;
-  modalContainer.style.display = 'block';
-}
+   const modalContainer = document.getElementById('modal-container');
+ 
+   // Format the date from "YYYY-MM-DD" to "MM/DD/YYYY"
+   const [year, month, day] = yardCheck.date.split('-');
+   const formattedDate = `${month}/${day}/${year}`;
+ 
+   const equipmentStatuses = yardCheck.equipment_statuses.map(status => {
+     const statusClass = status.equipment_status.toLowerCase().replace(/ /g, '-');
+     return `
+       <div>
+         <p><strong>Unit ID:</strong> ${status.unit_id}</p>
+         <p><strong>Equipment Name:</strong> ${status.equipment_name}</p>
+         <p>
+           <strong>Status:</strong> 
+           <span class="status-print-color status-${statusClass}">
+             ${status.equipment_status}
+           </span>
+         </p>
+       </div>
+       <hr>
+     `;
+   }).join('');
+ 
+   const modalContent = `
+     <div class="modal">
+       <div class="modal-content">
+         <span class="close-button" onclick="closeModal()">&times;</span>
+         <h2>Yard Check Details</h2>
+         <p><strong>Date:</strong> ${formattedDate}</p>
+         <p><strong>Time:</strong> ${yardCheck.check_time}</p>
+         <p><strong>Submitted by:</strong> ${yardCheck.user_name}</p>
+         <div>${equipmentStatuses}</div>
+         <button onclick="editYardCheck(${yardCheck.id})">Edit</button>
+         <button onclick="printYardCheck(${yardCheck.id})">Print</button>
+       </div>
+     </div>
+   `;
+ 
+   modalContainer.innerHTML = modalContent;
+   modalContainer.style.display = 'block';
+ }
+ 
 
 function closeModal() {
   document.getElementById('modal-container').style.display = 'none';

@@ -822,10 +822,29 @@ form {
   background-color: #fff;
   margin: 5% auto;
   padding: 20px;
-  width: 50%;
-  height: 80%;
+  width: 75%;
+  height: 85%;
   position: relative;
   overflow-y: scroll;
+}
+#modal-container hr {
+   margin: 6px 0;
+}
+/* Equipment status colors for modal */
+.status-print-color {
+   color: #f6f6f6;
+   font-weight: 600;
+   padding: 2px 8px;
+   border-radius: 8px;
+}
+.status-available {
+background-color: #0ce21d; /* Green */
+}
+.status-rented {
+background-color: #007bff; /* Blue */
+}
+.status-out-of-service {
+background-color: #dc3545; /* Red */
 }
 
 #modal-container .close-button {
