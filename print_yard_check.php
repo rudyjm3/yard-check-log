@@ -35,12 +35,30 @@ $equipmentStatuses = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Yard Check Print</title>
-    <style>
-        body { font-family: Arial, sans-serif; }
-        h2 { text-align: center; }
-        .equipment-item { border-bottom: 1px solid #ccc; padding: 10px 0; }
-        .equipment-item:last-child { border-bottom: none; }
+   <title>Yard Check Print</title>
+   <style>
+      body { font-family: Arial, sans-serif; }
+      h2 { text-align: center; }
+      .equipment-item { border-bottom: 1px solid #ccc; padding: 10px 0; }
+      .equipment-item:last-child { border-bottom: none; }
+      .status-print-color {
+         color: #f6f6f6;
+         font-weight: 600;
+         padding: 5px 8px;
+         border-radius: 8px;
+      }
+
+      .status-available {
+      background-color: #0ce21d; /* Green */
+      }
+
+      .status-rented {
+      background-color: #007bff; /* Blue */
+      }
+
+      .status-out-of-service {
+      background-color: #dc3545; /* Red */
+      }
     </style>
 </head>
 <body>
@@ -54,7 +72,9 @@ $equipmentStatuses = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <div class="equipment-item">
             <p><strong>Unit ID:</strong> <?php echo $status['unit_id']; ?></p>
             <p><strong>Equipment Name:</strong> <?php echo $status['equipment_name']; ?></p>
-            <p><strong>Status:</strong> <?php echo $status['equipment_status']; ?></p>
+            <p><strong>Status:</strong> <span class="status-print-color status-<?php echo strtolower(str_replace(' ', '-', $status['equipment_status'])); ?>">
+            <?php echo $status['equipment_status']; ?>
+            </span></p>
         </div>
     <?php endforeach; ?>
     <script>
