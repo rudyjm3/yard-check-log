@@ -854,7 +854,22 @@ background-color: #dc3545; /* Red */
   font-size: 24px;
   cursor: pointer;
 }
-
+.modal-content button {
+   margin-top: 20px;
+   padding: 10px 20px;
+   width: 25%;
+   font-size: 1.2rem;
+   background-color: var(--button-default-color);
+   color: #fff;
+   border: none;
+   border-radius: 4px;
+   cursor: pointer;
+   transition: background-color 0.3s ease-in-out;
+}
+.modal-content button:hover {
+   background-color: var(--hover-blue-color);
+   font-weight: 600;
+}
 /* Profit and Loss Colors */
 .profit-amount {
   color: lightgreen;
