@@ -715,9 +715,9 @@ form {
   text-align: center;
 }
 
-#submitted-yard-checks button {
+/* #submitted-yard-checks button {
   margin-bottom: 20px;
-}
+} */
 
 .yard-check-card {
   border-bottom: 3px solid var(--hover-blue-color);
@@ -794,10 +794,23 @@ form {
    justify-content: center; /* side by side center alignment */
    gap: 15px;
  }
- .yard-check-card .button-wrapper button {
-   /* keep or remove existing margins as you see fit */
-   margin: 0; /* if you want margin 0 since we have gap already */
- }
+.yard-check-card .button-wrapper button {
+   margin: 0px;
+   padding: 10px 20px;
+   width: 100%;
+   font-size: 1.2rem;
+   background-color: var(--button-default-color);
+   color: #fff;
+   border: none;
+   border-radius: 4px;
+   cursor: pointer;
+   transition: background-color 0.3s ease-in-out;
+}
+.yard-check-card .button-wrapper button:hover {
+   background-color: var(--hover-blue-color);
+   font-weight: 600;
+}
+
 
 /* Equipment Stats Styles */
 #equipment-stats h2 {
