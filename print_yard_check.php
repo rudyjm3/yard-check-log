@@ -45,15 +45,15 @@ $equipmentStatuses = $stmt->fetchAll(PDO::FETCH_ASSOC);
          color: #f6f6f6;
          font-weight: 600;
          padding: 5px 8px;
-         border-radius: 8px;
+         border-radius: 4px;
       }
 
       .status-available {
-      background-color: #0ce21d; /* Green */
+      background-color: #0dca1c; /* Green */
       }
 
       .status-rented {
-      background-color: #007bff; /* Blue */
+      background-color: #4aa5eb; /* Blue */
       }
 
       .status-out-of-service {
@@ -62,25 +62,28 @@ $equipmentStatuses = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </style>
 </head>
 <body>
-    <h2>Yard Check Details</h2>
-    <p><strong>Date:</strong> <?php echo $yardCheck['date']; ?></p>
-    <p><strong>Time:</strong> <?php echo $yardCheck['check_time']; ?></p>
-    <p><strong>Submitted by:</strong> <?php echo $yardCheck['user_name']; ?></p>
-    <hr>
-    <h3>Equipment Statuses</h3>
-    <?php foreach ($equipmentStatuses as $status): ?>
-        <div class="equipment-item">
+
+   <h2>Yard Check Details</h2>
+   <p><strong>Date:</strong> 
+      <?php echo date('m/d/Y', strtotime($yardCheck['date'])); ?>
+   </p>
+   <p><strong>Time:</strong> <?php echo $yardCheck['check_time']; ?></p>
+   <p><strong>Submitted by:</strong> <?php echo $yardCheck['user_name']; ?></p>
+   <hr>
+   <h3>Equipment Statuses</h3>
+   <?php foreach ($equipmentStatuses as $status): ?>
+      <div class="equipment-item">
             <p><strong>Unit ID:</strong> <?php echo $status['unit_id']; ?></p>
             <p><strong>Equipment Name:</strong> <?php echo $status['equipment_name']; ?></p>
             <p><strong>Status:</strong> <span class="status-print-color status-<?php echo strtolower(str_replace(' ', '-', $status['equipment_status'])); ?>">
             <?php echo $status['equipment_status']; ?>
             </span></p>
-        </div>
-    <?php endforeach; ?>
-    <script>
-        window.onload = function() {
+      </div>
+   <?php endforeach; ?>
+   <script>
+      window.onload = function() {
             window.print();
-        };
-    </script>
+      };
+   </script>
 </body>
 </html>
