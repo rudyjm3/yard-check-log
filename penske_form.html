@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Penske Check-In (Truck Drop-Off) Form</title>
+
+   <!-- Stylesheet -->
+  <link rel="stylesheet" href="assets/css/style.css?v=1.2">
+  <!-- Font Awesome 6.5.2 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+   
+      <div class="container">
+         <form id="penske-checkin-form">
+            <h2>Penske Check-In (Truck Drop-Off)</h2>
+          
+            <div class="form-control">
+              <label>Truck Number:<br>
+                <input type="text" name="truck_number" required>
+              </label>
+            </div>
+          
+            <div class="form-control">
+              <label>Odometer Reading:<br>
+                <input type="number" name="odometer_reading" required>
+              </label>
+            </div>
+          
+            <div class="form-control">
+              <label>Fuel Level:<br>
+                <select name="fuel_level" required>
+                  <option value="">Select</option>
+                  <option value="Full">Full</option>
+                  <option value="7/8">7/8</option>
+                  <option value="3/4">3/4</option>
+                  <option value="5/8">5/8</option>
+                  <option value="1/2">1/2</option>
+                  <option value="3/8">3/8</option>
+                  <option value="1/4">1/4</option>
+                  <option value="1/8">1/8</option>
+                  <option value="E">Empty</option>
+                </select>
+              </label>
+            </div>
+          
+            <div class="form-control">
+              <label>Towing Number (if applicable):<br>
+                <input type="text" name="towing_number">
+              </label>
+            </div>
+          
+            <div class="form-control">
+              <label>Date:<br>
+                <input type="date" name="date" required>
+              </label>
+            </div>
+          
+            <div class="form-control">
+              <label>Time:<br>
+                <input type="time" name="time" required>
+              </label>
+            </div>
+          
+            <div class="form-control">
+              <label>Hiker Name:<br>
+                <input type="text" name="hiker_name" required>
+              </label>
+            </div>
+          
+            <div class="form-control">
+              <label>Check-In Completed (Y/N):<br>
+                <select name="check_in_complete" required>
+                  <option value="">Select</option>
+                  <option value="Y">Yes</option>
+                  <option value="N">No</option>
+                  <option value="TBB">To Be Completed</option>
+                </select>
+              </label>
+            </div>
+          
+            <button type="submit">Submit Check-In</button>
+          </form>
+          
+          
+
+          <!-- Penske check out form start-->
+
+          <form id="penske-checkout-form">
+            <h2>Penske Check-Out (Truck Release)</h2>
+          
+            <div class="form-control">
+              <label>Truck Number:<br>
+                <input type="text" name="truck_number" required>
+              </label>
+            </div>
+          
+            <div class="form-control">
+              <label>Odometer Reading:<br>
+                <input type="number" name="odometer_reading" required>
+              </label>
+            </div>
+          
+            <div class="form-control">
+              <label>Fuel Level:<br>
+                <select name="fuel_level" required>
+                  <option value="">Select</option>
+                  <option value="Full">Full</option>
+                  <option value="7/8">7/8</option>
+                  <option value="3/4">3/4</option>
+                  <option value="5/8">5/8</option>
+                  <option value="1/2">1/2</option>
+                  <option value="3/8">3/8</option>
+                  <option value="1/4">1/4</option>
+                  <option value="1/8">1/8</option>
+                  <option value="E">Empty</option>
+                </select>
+              </label>
+            </div>
+          
+            <div class="form-control">
+              <label>Towing Number (if applicable):<br>
+                <input type="text" name="towing_number">
+              </label>
+            </div>
+          
+            <div class="form-control">
+              <label>Date:<br>
+                <input type="date" name="date" required>
+              </label>
+            </div>
+          
+            <div class="form-control">
+              <label>Time:<br>
+                <input type="time" name="time" required>
+              </label>
+            </div>
+          
+            <div class="form-control">
+              <label>Hiker Name:<br>
+                <input type="text" name="hiker_name" required>
+              </label>
+            </div>
+          
+            <div class="form-control">
+              <label>Check-Out Completed (Y/N):<br>
+                <select name="check_out_complete" required>
+                  <option value="">Select</option>
+                  <option value="Y">Yes</option>
+                  <option value="N">No</option>
+                  <option value="TBB">To Be Completed</option>
+                </select>
+              </label>
+            </div>
+          
+            <button type="submit">Submit Check-Out</button>
+          </form>
+          
+          
+           
+          
+      </div>
+
+</body>
+</html>
