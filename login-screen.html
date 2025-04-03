@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Site login</title>
+
+   <!-- Stylesheet -->
+  <link rel="stylesheet" href="assets/css/style.css?v=1.2">
+  <!-- Font Awesome 6.5.2 -->
+  <link rel="styt-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+
+   <div class="container">
+      <div class="form-container">
+         <form id="login-form">
+         <h2>Login</h2>
+        
+         <div class="form-control">
+            <label>LDAP:<br>
+              <input type="text" name="username" required>
+            </label>
+         </div>
+        
+         <div class="form-control">
+            <label>Pin:<br>
+              <input type="password" name="password" maxlength="4" required>
+            </label>
+         </div>
+        
+         <button type="submit">Login</button>
+         </form>
+         <div class="form-control">
+            <p>Don't have an account? <a href="register.html">Register here</a></p>
+      </div>
+
+      <div class="form-container">
+         <button id="penske-login-btn">
+            <i class="fa-solid fa-truck"></i> Penske Hiker
+         </button>
+      </div>
+      
+   </div>
+          
+
+</body>
+</html>
