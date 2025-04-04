@@ -12,155 +12,95 @@
 </head>
 <body>
    
-      <div class="container">
-         <form id="penske-checkin-form">
-            <h2>Penske Check-In (Truck Drop-Off)</h2>
-          
-            <div class="form-control">
-              <label>Truck Number:<br>
-                <input type="text" name="truck_number" required>
-              </label>
-            </div>
-          
-            <div class="form-control">
-              <label>Odometer Reading:<br>
-                <input type="number" name="odometer_reading" required>
-              </label>
-            </div>
-          
-            <div class="form-control">
-              <label>Fuel Level:<br>
-                <select name="fuel_level" required>
-                  <option value="">Select</option>
-                  <option value="Full">Full</option>
-                  <option value="7/8">7/8</option>
-                  <option value="3/4">3/4</option>
-                  <option value="5/8">5/8</option>
-                  <option value="1/2">1/2</option>
-                  <option value="3/8">3/8</option>
-                  <option value="1/4">1/4</option>
-                  <option value="1/8">1/8</option>
-                  <option value="E">Empty</option>
-                </select>
-              </label>
-            </div>
-          
-            <div class="form-control">
-              <label>Towing Number (if applicable):<br>
-                <input type="text" name="towing_number">
-              </label>
-            </div>
-          
-            <div class="form-control">
-              <label>Date:<br>
-                <input type="date" name="date" required>
-              </label>
-            </div>
-          
-            <div class="form-control">
-              <label>Time:<br>
-                <input type="time" name="time" required>
-              </label>
-            </div>
-          
-            <div class="form-control">
-              <label>Hiker Name:<br>
-                <input type="text" name="hiker_name" required>
-              </label>
-            </div>
-          
-            <div class="form-control">
-              <label>Check-In Completed (Y/N):<br>
-                <select name="check_in_complete" required>
-                  <option value="">Select</option>
-                  <option value="Y">Yes</option>
-                  <option value="N">No</option>
-                  <option value="TBB">To Be Completed</option>
-                </select>
-              </label>
-            </div>
-          
-            <button type="submit">Submit Check-In</button>
-          </form>
-          
-          
-
-          <!-- Penske check out form start-->
-
-          <form id="penske-checkout-form">
-            <h2>Penske Check-Out (Truck Release)</h2>
-          
-            <div class="form-control">
-              <label>Truck Number:<br>
-                <input type="text" name="truck_number" required>
-              </label>
-            </div>
-          
-            <div class="form-control">
-              <label>Odometer Reading:<br>
-                <input type="number" name="odometer_reading" required>
-              </label>
-            </div>
-          
-            <div class="form-control">
-              <label>Fuel Level:<br>
-                <select name="fuel_level" required>
-                  <option value="">Select</option>
-                  <option value="Full">Full</option>
-                  <option value="7/8">7/8</option>
-                  <option value="3/4">3/4</option>
-                  <option value="5/8">5/8</option>
-                  <option value="1/2">1/2</option>
-                  <option value="3/8">3/8</option>
-                  <option value="1/4">1/4</option>
-                  <option value="1/8">1/8</option>
-                  <option value="E">Empty</option>
-                </select>
-              </label>
-            </div>
-          
-            <div class="form-control">
-              <label>Towing Number (if applicable):<br>
-                <input type="text" name="towing_number">
-              </label>
-            </div>
-          
-            <div class="form-control">
-              <label>Date:<br>
-                <input type="date" name="date" required>
-              </label>
-            </div>
-          
-            <div class="form-control">
-              <label>Time:<br>
-                <input type="time" name="time" required>
-              </label>
-            </div>
-          
-            <div class="form-control">
-              <label>Hiker Name:<br>
-                <input type="text" name="hiker_name" required>
-              </label>
-            </div>
-          
-            <div class="form-control">
-              <label>Check-Out Completed (Y/N):<br>
-                <select name="check_out_complete" required>
-                  <option value="">Select</option>
-                  <option value="Y">Yes</option>
-                  <option value="N">No</option>
-                  <option value="TBB">To Be Completed</option>
-                </select>
-              </label>
-            </div>
-          
-            <button type="submit">Submit Check-Out</button>
-          </form>
-          
-          
-           
-          
-      </div>
+   <div class="container">
+      <form id="penske-form">
+         <h2>Penske Truck Hiker Form</h2>
+         
+         <div class="form-control">
+            <label>Type of Transaction:<br>
+               <select name="transaction_type" id="transaction_type" required onchange="updateCheckOutStatus()">
+               <option value="">Select</option>
+               <option value="dropoff">Truck Drop-Off</option>
+               <option value="pickup">Truck Pick-Up</option>
+               </select>
+            </label>
+         </div>
+         
+         <div class="form-control">
+            <label>Truck Number:<br>
+               <input type="text" name="truck_number" required>
+            </label>
+         </div>
+         
+         <div class="form-control">
+            <label>Odometer Reading:<br>
+               <input type="number" name="odometer_reading" required>
+            </label>
+         </div>
+         
+         <div class="form-control">
+            <label>Fuel Level:<br>
+               <select name="fuel_level" required>
+               <option value="">Select</option>
+               <option value="Full">Full</option>
+               <option value="7/8">7/8</option>
+               <option value="3/4">3/4</option>
+               <option value="5/8">5/8</option>
+               <option value="1/2">1/2</option>
+               <option value="3/8">3/8</option>
+               <option value="1/4">1/4</option>
+               <option value="1/8">1/8</option>
+               <option value="E">Empty</option>
+               </select>
+            </label>
+         </div>
+         
+         <div class="form-control">
+            <label>Towing Number (if applicable):<br>
+               <input type="text" name="towing_number">
+            </label>
+         </div>
+         
+         <div class="form-control">
+            <label>Date:<br>
+               <input type="date" name="date" required>
+            </label>
+         </div>
+         
+         <div class="form-control">
+            <label>Time:<br>
+               <input type="time" name="time" required>
+            </label>
+         </div>
+         
+         <div class="form-control">
+            <label>Hiker Name:<br>
+               <input type="text" name="hiker_name" required>
+            </label>
+         </div>
+         
+         <!-- Hidden field automatically set based on transaction type -->
+         <input type="hidden" name="check_out_complete" id="check_out_complete" value="">
+         
+         <button type="submit">Submit</button>
+      </form>
+         
+      <script>
+      function updateCheckOutStatus() {
+         const type = document.getElementById('transaction_type').value;
+         const checkOutInput = document.getElementById('check_out_complete');
+      
+         if (type === 'pickup') {
+            checkOutInput.value = 'Y';
+         } else if (type === 'dropoff') {
+            checkOutInput.value = 'N';
+         } else {
+            checkOutInput.value = '';
+         }
+      }
+      </script>
+         
+   </div>
 
 </body>
 </html>
