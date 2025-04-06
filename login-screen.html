@@ -12,8 +12,8 @@
 </head>
 <body>
 
-   <div class="container">
-      <div class="form-container">
+   <div class="container bkground-image">
+      <div class="form-container glassmorphism-white">
          <form id="login-form">
          <h2>Login</h2>
         
@@ -33,16 +33,56 @@
          </form>
          <div class="form-control">
             <p>Don't have an account? <a href="register.html">Register here</a></p>
+         </div>
       </div>
 
-      <div class="form-container">
-         <button id="penske-login-btn">
-            <i class="fa-solid fa-truck"></i> Penske Hiker
-         </button>
-      </div>
-      
+      <div class="form-container glassmorphism-black">
+         <div class="btn-wrapper">
+            <button id="penske-login-btn">
+               <i class="fa-solid fa-truck"></i> Penske Hiker
+            </button>
+         </div>
+      </div> 
    </div>
           
 
 </body>
+<script>
+   function setRandomBackgroundImage(imageArray, className) {
+   
+  if (!Array.isArray(imageArray) || imageArray.length === 0) {
+    console.error("Error: imageArray must be a non-empty array.");
+    return;
+  }
+
+  const randomIndex = Math.floor(Math.random() * imageArray.length);
+  const randomImage = imageArray[randomIndex];
+  const elements = document.getElementsByClassName(className);
+
+  if (elements.length > 0) {
+    for (let i = 0; i < elements.length; i++) {
+      const element = elements[i];
+      element.style.backgroundImage = `url('${randomImage}')`;
+      // Optionally set background size, repeat, etc.
+      // element.style.backgroundSize = 'cover';
+      // element.style.backgroundRepeat = 'no-repeat';
+      // element.style.backgroundPosition = 'center';
+    }
+  } else {
+    console.warn(`Warning: No elements found with class name '${className}'.`);
+  }
+}
+
+//Image Array
+const backgroundImages = [
+  "assets/images/bulldozer-2195329_1920.jpg",
+  "assets/images/skyscraper-1482844_1920.jpg",
+  "assets/images/floor-plan-1857175_1920.jpg",
+];
+
+document.addEventListener('DOMContentLoaded', function() {
+  setRandomBackgroundImage(backgroundImages, 'bkground-image');
+});
+
+</script>
 </html>
