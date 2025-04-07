@@ -8,41 +8,60 @@
    <!-- Stylesheet -->
   <link rel="stylesheet" href="assets/css/style.css?v=1.2">
   <!-- Font Awesome 6.5.2 -->
-  <link rel="styt-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
+   <div class="bkground-image"></div>
 
-   <div class="container bkground-image">
-      <div class="form-container glassmorphism-white">
-         <form id="login-form">
-         <h2>Login</h2>
-        
-         <div class="form-control">
-            <label>LDAP:<br>
-              <input type="text" name="username" required>
-            </label>
-         </div>
-        
-         <div class="form-control">
-            <label>Pin:<br>
-              <input type="password" name="password" maxlength="4" required>
-            </label>
-         </div>
-        
-         <button type="submit">Login</button>
-         </form>
-         <div class="form-control">
-            <p>Don't have an account? <a href="register.html">Register here</a></p>
+   <div class="container">
+      <div class="logo-container">
+         <div class="logo-wrapper">
+           <img src="assets/images/Screenshot 2025-03-19 030102.png" alt="Logo" class="logo"> 
          </div>
       </div>
 
-      <div class="form-container glassmorphism-black">
-         <div class="btn-wrapper">
-            <button id="penske-login-btn">
-               <i class="fa-solid fa-truck"></i> Penske Hiker
-            </button>
+      <!-- Associate Login Form -->
+      <div class="login-wrapper">
+         <div class="form-container glassmorphism-black">
+            <div class="login-form-header-wrapper">
+               <h2>Rental Associate Login</h2>
+            </div>
+            <form id="login-form">
+               <div class="form-control">
+                  <label>LDAP:</label>
+                  <input type="text" name="username" placeholder="LDAP" autocomplete="off" required>
+               </div>
+         
+               <div class="form-control">
+                  <label>Pin:</label>
+                  <input type="password" name="password" maxlength="4" placeholder="Pin" autocomplete="off" required>
+               </div>
+               <div class="btn-wrapper">
+                  <button id="associate-login-btn" type="submit">Login</button>
+               </div>
+               
+               <div class="form-control">
+                  <p class="login-register-txt">Don't have an account? 
+                     <a href="register.html">Register here</a>
+                  </p>
+               </div>
+            </form>
          </div>
-      </div> 
+         
+         
+         <!-- Penske Login -->
+         <div class="form-container glassmorphism-black">
+            <div class="login-form-header-wrapper penske-form-header-wrapper">
+               <h2>Penske Hiker Login</h2>
+            </div>
+            <div class="btn-wrapper">
+               <button id="penske-login-btn">
+                  <i class="fa-solid fa-truck"></i> Log Non-rev
+               </button>
+            </div>
+         </div> 
+      </div>
+      
    </div>
           
 
@@ -78,6 +97,7 @@ const backgroundImages = [
   "assets/images/bulldozer-2195329_1920.jpg",
   "assets/images/skyscraper-1482844_1920.jpg",
   "assets/images/floor-plan-1857175_1920.jpg",
+  "assets/images/Rental_Brand_Demo.avif",
 ];
 
 document.addEventListener('DOMContentLoaded', function() {

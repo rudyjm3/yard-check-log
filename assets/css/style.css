@@ -14,6 +14,7 @@
   --button-green-color: #08af16;
   --button-green-hover-color: #0ce21d;
   --button-red-color: #c11616;
+  --brand-color-green: #76B39D;
 }
 
 /* assets/css/style.css */
@@ -50,7 +51,7 @@ header {
 }
 .glassmorphism-white {
    background: rgba( 255, 255, 255, 0.25 );
-   box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+   box-shadow: 0 10px 32px 0 rgba( 31, 38, 135, 0.37 );
    backdrop-filter: blur( 8px );
    -webkit-backdrop-filter: blur( 8px );
    border-radius: 10px;
@@ -58,7 +59,7 @@ header {
 }
 .glassmorphism-black {
    background: rgba( 51, 51, 51, 0.25 );
-   box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+   box-shadow: 0 10px 32px 0 rgba( 31, 38, 135, 0.37 );
    backdrop-filter: blur( 8px );
    -webkit-backdrop-filter: blur( 8px );
    border-radius: 10px;
@@ -66,9 +67,6 @@ header {
 }
 /* Glassmorphism Styles End */
 .bkground-image {
-   /* background-image: url("../images/bulldozer-2195329_1920.jpg");
-   background-image: url("../images/skyscraper-1482844_1920.jpg");
-   background-image: url("../images/floor-plan-1857175_1920.jpg"); */
    background-size: cover;
    background-position: center;
    background-repeat: no-repeat;
@@ -77,7 +75,8 @@ header {
    left: 0;
    width: 100%;
    height: 100%;
-   /* z-index: -1; */
+   filter: brightness(0.7);
+   z-index: -1;
 }
 /* Login Page Styles */
 .container {
@@ -86,19 +85,106 @@ header {
    align-items: center;
    flex-wrap: wrap;
    gap: 15px;
+   padding: 50px;
    width: 100%;
    height: 100%;
+}
+.logo-container {
+   width: 100%;
+   margin-bottom: 40px;
+}
+.logo-wrapper {
+   display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.logo-wrapper .logo {
+   width: 400px;
+   border-radius: 8px;
+   box-shadow: 0 10px 15px rgba(0, 0, 0, 0.4);
+   -webkit-box-shadow: 0 10px 15px rgba(0, 0, 0, 0.4);
+   -moz-box-shadow: 0 10px 15px rgba(0, 0, 0, 0.4);
+}
+.login-wrapper {
+   display: flex;
+   justify-content: space-evenly;
+   align-items: normal;
+   width: 100%;
+   max-width: 1000px;
 }
 .form-container {
    display: flex;
    justify-content: center;
    align-items: center;
    flex-direction: column;
-   width: 25%;
-   height: 50%;
+   width: 40%;
+   height: auto;
    padding: 20px;
    border-radius: 10px;
-   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+   box-shadow: 0 10px 10px rgba(0, 0, 0, 0.3);
+}
+.login-form-header-wrapper {
+   width: calc(100% + 28px);
+   position: relative;
+   top: -14px;
+   padding: 20px;
+   background-color: rgba(51, 51, 51, 0.6);
+   border-radius: 7px 7px 0 0;
+}
+.penske-form-header-wrapper {
+   top: -117px;
+}
+.login-form-header-wrapper h2 {
+   padding: 0 20px;
+   text-align: center;
+   font-weight: 400;
+   font-size: 1.5rem;
+   color: var(--brand-color-green);
+}
+.login-wrapper #login-form .form-control label {
+   color: var(--main-white-color);
+   font-size: 1rem;
+   font-weight: 600;
+   display: none;
+}
+.login-wrapper #login-form .form-control input {
+   width: 100%;
+   height: 40px;
+   padding: 8px;
+   border-radius: 4px;
+   box-sizing: border-box;
+   margin-bottom: 15px;
+   font-size: 1.1rem;
+   font-weight: 500;
+   border: 1px solid var(--main-white-color);
+   outline: none;
+   transition: all 0.2s ease-in-out;
+}
+.login-wrapper #login-form .form-control input::placeholder {
+   color: var(--info-txt-color);
+   font-size: 1rem;
+   font-weight: 500;
+}
+.login-wrapper #login-form .form-control input:focus::placeholder {
+   color: var(--info-txt-color);
+   font-size: 1rem;
+   font-weight: 500;
+}
+.login-wrapper #login-form .form-control input:focus {
+   border: 3px solid var(--brand-color-green);   
+   box-shadow: 0px 7px 10px 4px rgb(0 0 0 / 37%);
+   transition: all 0.2s ease-in-out;
+}
+/* .login-wrapper #login-form .form-control input:valid {
+   border-color: var(--hover-blue-color);
+}
+.login-wrapper #login-form .form-control input:invalid {
+   border-color: var(--button-red-color);
+} */
+
+.login-wrapper #login-form .form-control button {
+   width: 100%;
+   padding: 10px 20px;
 }
 .btn-wrapper {
    display: flex;
@@ -107,30 +193,58 @@ header {
    margin-top: 10px;
    padding: 15px;
 }
-#penske-login-btn {
+#associate-login-btn {
    width: 100%;
-   padding: 10px 20px;
+   padding: 10px;
+   background-color: var(--button-default-color);
+   color: var(--brand-color-green);
    font-size: 1.2rem;
    font-weight: 500;
-   background-color: var(--hover-blue-color);
-   color: var(--light-grey-color1);
    border: none;
    cursor: pointer;
    border-radius: 4px;
    transition: background 0.3s ease-in-out;
 }
+#associate-login-btn:hover {
+   background-color: var(--hover-blue-color);
+   color: var(--main-white-color);
+}
+.login-register-txt {
+   font-size: 1rem;
+   color: var(--main-white-color);
+   margin-top: 10px;
+   text-align: center;
+}
+.login-register-txt a {
+   color: var(--brand-color-green);
+   text-decoration: none;
+   font-weight: 500;
+}
+#penske-login-btn {
+   width: 271px;
+   padding: 10px 20px;
+   font-size: 1.2rem;
+   font-weight: 500;
+   background-color: var(--button-default-color);
+   color: var(--brand-color-green);
+   border: none;
+   cursor: pointer;
+   border-radius: 4px;
+   transition: all 0.3s ease-in-out;
+}
+#penske-login-btn i {
+   margin-right: 10px;
+}
 #penske-login-btn:hover {
-   background-color: var(--button-green-color);
-   color: #fff;
+   background-color: var(--hover-blue-color);
+   color: var(--main-white-color);
 }
 /* Login Page Styles End */
 
-.logo-container {
-   width: 25%;
-}
-.logo-container .logo-image {
+
+/* .logo-container .logo-image {
    width: auto;
-}
+} */
 header .page-title {
   /* width: calc(100% - 200px); */
   color: #fff;
