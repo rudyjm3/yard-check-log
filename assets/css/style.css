@@ -251,10 +251,98 @@ header {
 }
 /* Login Page Styles End */
 
+/* PENSKE FORM PAGE STYLES */
+.penske-form-bkground-image {
+   background-image: url("../images/skyscraper-1482844_1920.jpg");
+   background-size: cover;
+   background-position: center;
+   background-repeat: no-repeat;
+   position: absolute;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 100%;
+   filter: brightness(0.7);
+   z-index: -1;
+}
+#penske-form {
+   width: 100%;
+   height: 80dvh;
+   max-width: 650px;
+   min-width: 300px;
+   padding: 20px 0px;
+   overflow: hidden;
+   overflow-y: scroll;
+}
+#penske-form::-webkit-scrollbar/* width */{
+  width: 5px;
+}
 
-/* .logo-container .logo-image {
-   width: auto;
-} */
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
+#penske-form legend {
+   font-size: 1.2rem;
+   color: var(--main-white-color);
+   margin-bottom: 10px;
+}
+#penske-form label {
+   color: var(--main-white-color);
+   font-size: 1rem;
+   font-weight: 500;
+   display: block;
+   margin-bottom: 5px;
+}
+#penske-form input[type="text"],
+#penske-form input[type="select"],
+#penske-form input[type="number"],
+#penske-form input[type="date"],
+#penske-form input[type="time"] {
+   width: 100%;
+   padding: 10px;
+   font-size: 1rem;
+   border: 3px solid transparent;
+   border-radius: 4px;
+}
+#penske-form input:focus {
+   border: 3px solid var(--brand-color-green);   
+   box-shadow: 0px 7px 10px 4px rgb(0 0 0 / 37%);
+   transition: all 0.2s ease-in-out;
+}
+#penske-form input:focus-visible {
+   border: 3px solid var(--brand-color-green);   
+   box-shadow: 0px 7px 10px 4px rgb(0 0 0 / 37%);
+   transition: all 0.2s ease-in-out;
+}
+#penske-submit-btn {
+   width: 100%;
+   padding: 10px 20px;
+   font-size: 1.2rem;
+   font-weight: 500;
+   background-color: var(--button-default-color);
+   color: var(--brand-color-green);
+   border: none;
+   cursor: pointer;
+   border-radius: 4px;
+   transition: all 0.3s ease-in-out;
+}
+#penske-submit-btn:hover {
+   background-color: var(--hover-blue-color);
+   color: var(--main-white-color);
+}
+/* PENSKE FORM PAGE STYLES END */
+
 header .page-title {
   /* width: calc(100% - 200px); */
   color: #fff;
