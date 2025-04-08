@@ -14,9 +14,18 @@
   --button-green-color: #08af16;
   --button-green-hover-color: #0ce21d;
   --button-red-color: #c11616;
+  
+  /* Brand Colors */
   --brand-color-green: #76B39D;
+  --brand-color-light-green: #97C5B4;
+  --brand-color-mid-green: #589E85;
+  --brand-color-ivory: #F9F8EB;
+  --brand-color-black: rgb(19, 19, 19);
 }
-
+.brand-background-gradient {
+  background: rgb(30,30,30);
+  background: linear-gradient(45deg, rgba(30,30,30,1) 0%, rgba(60,60,60,1) 71%);
+}
 /* assets/css/style.css */
 
 /* General Styles */
@@ -100,6 +109,7 @@ header {
 }
 .logo-wrapper .logo {
    width: 400px;
+   padding: 15px;
    border-radius: 8px;
    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.4);
    -webkit-box-shadow: 0 10px 15px rgba(0, 0, 0, 0.4);
@@ -457,10 +467,6 @@ header .page-title h1 {
    width: 80%;
 }
 /* Form Styles */
-form {
-   /* background-color: var(--main-white-color); */
-}
-
 #lg-equipment-yard-check-form {
    width: 100%;
    max-width: 650px;
@@ -470,7 +476,7 @@ form {
    border-radius: 4px;
    box-shadow: 0px 5px 10px -1px rgba(167, 167, 167, 0.75);
    -webkit-box-shadow: 0px 5px 10px -1px rgba(167, 167, 167, 0.75);
-   -moz-box-shadow: 0px 5px 10px -1px rgba(167, 167, 167, 0.75);
+   -moz-box-shadow: 0px 5px 10px -1px rgba(167, 167, 167, 0.75);background-color: var(--main-white-color);
 }
 
 .form-title-wrapper {
