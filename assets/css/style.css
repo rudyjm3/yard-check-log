@@ -26,6 +26,18 @@
   background: rgb(30,30,30);
   background: linear-gradient(45deg, rgba(30,30,30,1) 0%, rgba(60,60,60,1) 71%);
 }
+/* REMOVE NUMBER INPUT ARROWS / SPINNERS */
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
 /* assets/css/style.css */
 
 /* General Styles */
@@ -187,10 +199,10 @@ header {
 }
 /* .login-wrapper #login-form .form-control input:valid {
    border-color: var(--hover-blue-color);
-}
+}*/
 .login-wrapper #login-form .form-control input:invalid {
    border-color: var(--button-red-color);
-} */
+}
 
 .login-wrapper #login-form .form-control button {
    width: 100%;
@@ -253,9 +265,9 @@ header {
 
 /* PENSKE FORM PAGE STYLES */
 .penske-form-bkground-image {
-   background-image: url("../images/penske-trucks.jpg");
+   background-image: url("../images/penske-truck-bg.webp");
    background-size: cover;
-   background-position: center;
+   background-position:left;
    background-repeat: no-repeat;
    position: absolute;
    top: 0;
@@ -344,7 +356,7 @@ header {
    transition: all 0.3s ease-in-out;
 }
 #penske-submit-btn:hover {
-   background-color: var(--hover-blue-color);
+   background-color: var(--brand-color-mid-green);
    color: var(--main-white-color);
 }
 /* PENSKE FORM PAGE STYLES END */
