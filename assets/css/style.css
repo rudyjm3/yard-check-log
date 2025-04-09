@@ -253,7 +253,7 @@ header {
 
 /* PENSKE FORM PAGE STYLES */
 .penske-form-bkground-image {
-   background-image: url("../images/skyscraper-1482844_1920.jpg");
+   background-image: url("../images/penske-trucks.jpg");
    background-size: cover;
    background-position: center;
    background-repeat: no-repeat;
@@ -270,37 +270,37 @@ header {
    height: 80dvh;
    max-width: 650px;
    min-width: 300px;
-   padding: 20px 0px;
+   padding: 20px 15px 20px 0px;
    overflow: hidden;
    overflow-y: scroll;
 }
 #penske-form::-webkit-scrollbar/* width */{
-  width: 5px;
+  width: 4px;
 }
-
 /* Track */
 ::-webkit-scrollbar-track {
-  background: #f1f1f1; 
+  background: #8a8a8a; 
 }
- 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #888; 
+  background: #3d3d3d; 
 }
-
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #555; 
+  background: var(--brand-color-mid-green); 
+}
+#penske-form fieldset {
+   margin-bottom: 15px;
 }
 #penske-form legend {
    font-size: 1.2rem;
-   color: var(--main-white-color);
-   margin-bottom: 10px;
+   font-weight: 400;
+   color: var(--brand-color-green);
 }
 #penske-form label {
    color: var(--main-white-color);
    font-size: 1rem;
-   font-weight: 500;
+   font-weight: 400;
    display: block;
    margin-bottom: 5px;
 }
@@ -310,10 +310,15 @@ header {
 #penske-form input[type="date"],
 #penske-form input[type="time"] {
    width: 100%;
-   padding: 10px;
-   font-size: 1rem;
-   border: 3px solid transparent;
+   height: 40px;
+   padding: 8px;
+   font-size: 1.1rem;
+   font-weight: 500;
+   border: 1px solid var(--main-white-color);
    border-radius: 4px;
+   box-sizing: border-box;
+   outline: none;
+   transition: all 0.2s ease-in-out;
 }
 #penske-form input:focus {
    border: 3px solid var(--brand-color-green);   
@@ -328,6 +333,7 @@ header {
 #penske-submit-btn {
    width: 100%;
    padding: 10px 20px;
+   margin-top: 20px;
    font-size: 1.2rem;
    font-weight: 500;
    background-color: var(--button-default-color);
@@ -373,11 +379,11 @@ header .page-title h1 {
    padding: 10px;
    font-size: 20px;
    color: var(--light-grey-color1);
-   background-color: var(--hover-blue-color);
+   background-color: var(--brand-color-mid-green);
    cursor: pointer;
-   box-shadow: 0px 5px 10px 0px rgba(74,165,235,0.5);
-   -webkit-box-shadow: 0px 5px 10px 0px rgba(74,165,235,0.5);
-   -moz-box-shadow: 0px 5px 10px 0px rgba(74,165,235,0.5);
+   box-shadow: 0 10px 10px rgba(0, 0, 0, 0.3);
+   -webkit-box-shadow: 0 10px 10px rgba(0, 0, 0, 0.3);
+   -moz-box-shadow: 0 10px 10px rgba(0, 0, 0,0.3);
    opacity: 0;
    visibility: hidden;
    transition: opacity 0.5s ease, visibility 0.5s ease;

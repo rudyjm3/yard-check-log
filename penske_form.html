@@ -31,6 +31,27 @@
                </label>
             </div>
          </fieldset>      
+
+         <fieldset>
+            <legend>Hiker Information</legend>
+            <div class="form-control">
+               <label>Date:<br>
+                  <input type="date" name="date" required>
+               </label>
+            </div>
+            
+            <div class="form-control">
+               <label>Time:<br>
+                  <input type="time" name="time" required>
+               </label>
+            </div>
+            
+            <div class="form-control">
+               <label>Hiker Name:<br>
+                  <input type="text" name="hiker_name" required>
+               </label>
+            </div>
+         </fieldset>
          
          <fieldset>
             <legend>Truck Information</legend>
@@ -71,30 +92,13 @@
                   <input type="text" name="towing_number">
                </label>
             </div>
-         </fieldset>
-         
-         <div class="form-control">
-            <label>Date:<br>
-               <input type="date" name="date" required>
-            </label>
-         </div>
-         
-         <div class="form-control">
-            <label>Time:<br>
-               <input type="time" name="time" required>
-            </label>
-         </div>
-         
-         <div class="form-control">
-            <label>Hiker Name:<br>
-               <input type="text" name="hiker_name" required>
-            </label>
-         </div>
-         
+         </fieldset>         
          <!-- Hidden field automatically set based on transaction type -->
          <input type="hidden" name="check_out_complete" id="check_out_complete" value="">
+         <div class="form-control">
+            <button type="submit" id="penske-submit-btn">Submit</button>
+         </div>
          
-         <button type="submit" id="penske-submit-btn">Submit</button>
       </form>
    </div>    
 
