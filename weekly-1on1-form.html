@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Rental Associate Weekly 1:1</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    .form-control { margin-bottom: 15px; }
+    .form-control label { display: block; margin-bottom: 5px; font-weight: bold; }
+    .form-control input, .form-control textarea {
+      width: 100%; padding: 8px; box-sizing: border-box;
+    }
+    .form-control input.goal-met { background-color: #d4edda; border-color: #28a745; }
+    .form-control input.goal-missed { background-color: #f8d7da; border-color: #dc3545; }
+    fieldset { margin-top: 25px; padding: 20px; border: 1px solid #ccc; }
+    legend { font-weight: bold; font-size: 1.2em; padding: 0 10px; }
+    .inline { display: inline-block; width: 48%; }
+    .inline input { width: 95%; }
+    .date-range { display: flex; gap: 10px; }
+    .date-range .form-control { flex: 1; margin-bottom: 0; }
+    small, span.goal-info { color: #555; font-weight: normal; }
+    .btn-wrapper { margin-top: 30px; }
+
+    #print-btn {
+      margin-right: 10px;
+      padding: 10px 20px;
+      background-color: #eee;
+      border: 1px solid #999;
+      font-weight: bold;
+      cursor: pointer;
+   }
+
+
+   @media print {
+      body {
+         margin: 0;
+         padding: 0;
+         font-size: 11pt;
+         color: #000;
+         background: #fff;
+      }
+
+      form {
+         width: 100%;
+         margin: 0;
+         padding: 0;
+      }
+
+      fieldset {
+         border: 1px solid #000;
+         margin: 15px 0;
+         padding: 10px;
+         page-break-inside: avoid;
+      }
+
+      legend {
+         font-size: 1rem;
+         font-weight: bold;
+      }
+
+      .form-control {
+         margin-bottom: 10px;
+         break-inside: avoid;
+      }
+
+      .form-control input,
+      .form-control textarea {
+         border: 1px solid #000;
+         padding: 5px;
+         background: #fff;
+         color: #000;
+      }
+
+      .goal-met,
+      .goal-missed {
+         background: none !important;
+         border: 1px solid #000 !important;
+      }
+
+      .btn-wrapper {
+         display: none !important; /* Hide submit button */
+      }
+
+      .date-range {
+         display: block !important;
+      }
+
+      .inline {
+         display: block !important;
+         width: 100% !important;
+      }
+
+      output {
+         display: inline-block;
+         font-weight: bold;
+         margin-left: 5px;
+      }
+
+      @page {
+         margin: 1in;
+      }
+      #print-btn {
+         display: none !important;
+      }
+
+   }
+
+</style>
+</head>
+<body>
+
+<div class="login-form-header-wrapper">
+   <h2>Rental Associate Weekly 1:1 Conversation Guide</h2>
+</div>
+
+<form id="weekly-1on1-form">
+
+  <fieldset>
+    <legend>General Information</legend>
+    <div class="form-control">
+      <label for="date">Date of 1:1</label>
+      <input type="date" name="date" id="date" />
+    </div>
+    <div class="form-control">
+      <label>Week of (Mon - Sun)</label>
+      <div class="date-range">
+        <div class="form-control">
+          <label for="week_start">Start Date</label>
+          <input type="date" name="week_start" id="week_start" />
+        </div>
+        <div class="form-control">
+          <label for="week_end">End Date</label>
+          <input type="date" name="week_end" id="week_end" />
+        </div>
+      </div>
+    </div>
+    <div class="form-control">
+      <label for="ds_name">DS Name</label>
+      <input type="text" name="ds_name" id="ds_name" />
+    </div>
+    <div class="form-control">
+      <label for="associate_name">Associate Name</label>
+      <input type="text" name="associate_name" id="associate_name" />
+    </div>
+  </fieldset>
+
+  <fieldset>
+   <legend>Sales Summary</legend>
+   <div class="form-control">
+     <label for="sales_plan">D78 Sales Plan for the Week ($)</label>
+     <input type="number" name="sales_plan" id="sales_plan" oninput="calculateSalesDifference()" />
+   </div>
+   <div class="form-control">
+     <label for="actual_sales">Actual Sales for the Week ($)</label>
+     <input type="number" name="actual_sales" id="actual_sales" oninput="calculateSalesDifference()" />
+   </div>
+   <div class="form-control">
+     <label>Difference</label>
+     <output id="sales_difference">$0.00</output>
+   </div>
+ </fieldset>
+
+  <fieldset>
+    <legend>Rental Center Metrics</legend>
+
+    <div class="form-control">
+      <label for="avf">Staffing: AvF%</label>
+      <input type="text" name="avf" id="avf" />
+    </div>
+
+    <div class="form-control inline">
+      <label for="contracts_created">Contracts Created</label>
+      <input type="number" name="contracts_created" id="contracts_created" />
+    </div>
+    <div class="form-control inline">
+      <label for="contracts_closed">Contracts Closed Out</label>
+      <input type="number" name="contracts_closed" id="contracts_closed" />
+    </div>
+
+    <div class="form-control inline">
+      <label for="dp_store">Damage Protection Attachment % (Store)</label>
+      <input type="text" name="dp_store" id="dp_store" oninput="highlightGoal(this, 85)" />
+      <small>Department Goal: 85%</small>
+    </div>
+    <div class="form-control inline">
+      <label for="dp_associate">Damage Protection Attachment % (Associate)</label>
+      <input type="text" name="dp_associate" id="dp_associate" oninput="highlightGoal(this, 85)" />
+    </div>
+
+    <div class="form-control">
+      <label for="voc_ltra">Tool Rental VOC - LTRA (%) <span class="goal-info">(Department Goal: 85%)</span></label>
+      <input type="text" name="voc_ltra" id="voc_ltra" oninput="highlightGoal(this, 85)" />
+    </div>
+    <div class="form-control">
+      <label for="rental_get">Rental GET (%) <span class="goal-info">(Department Goal: 85%)</span></label>
+      <input type="text" name="rental_get" id="rental_get" oninput="highlightGoal(this, 85)" />
+    </div>
+    <div class="form-control">
+      <label for="roisp">ROPIS Prep % <span class="goal-info">(Department Goal: 85%)</span></label>
+      <input type="text" name="ropis" id="ropis" oninput="highlightGoal(this, 85)" />
+    </div>
+    <div class="form-control">
+      <label for="markdowns">Total Markdowns (%) <span class="goal-info">(Department Goal: 3%)</span></label>
+      <input type="text" name="markdowns" id="markdowns" oninput="highlightGoalBelow(this, 3)" />
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Contract Activity</legend>
+    <div class="form-control">
+      <label for="critical_down">Critical Down Tools w/o Parts on Order (Techs)</label>
+      <input type="text" name="critical_down" id="critical_down" />
+    </div>
+    <div class="form-control">
+      <label for="tech_contract_activity">Tool Techs Contract Activity <span class="goal-info">(Goal: Less than 15%)</span></label>
+      <input type="text" name="tech_contract_activity" id="tech_contract_activity" oninput="highlightGoalBelow(this, 15)" />
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Opportunities and Action Plan</legend>
+    <p>Determine the top opportunities for the Rental Center and individual associate using the metrics listed above (find). Develop a plan for educating (know) and developing (grow) the associate.</p>
+    <div class="form-control">
+      <label for="rc_opportunities">Rental Center Opportunities (Find)</label>
+      <textarea name="rc_opportunities" id="rc_opportunities"></textarea>
+    </div>
+    <div class="form-control">
+      <label for="rc_actions">Know & Grow Actions (Rental Center)</label>
+      <textarea name="rc_actions" id="rc_actions"></textarea>
+    </div>
+    <div class="form-control">
+      <label for="associate_opportunities">Associate Opportunities (Find)</label>
+      <textarea name="associate_opportunities" id="associate_opportunities"></textarea>
+    </div>
+    <div class="form-control">
+      <label for="associate_actions">Know & Grow Actions (Associate)</label>
+      <textarea name="associate_actions" id="associate_actions"></textarea>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Discussion Points</legend>
+    <div class="form-control">
+      <p>Are there any roadblocks or obstacles currently preventing the associate from meeting the Rental Center metrics or performing their duties as a Rental Associate?</p>
+      <textarea name="roadblocks" id="roadblocks"></textarea>
+    </div>
+    <div class="form-control">
+      <p>What resources does the associate need access to in order to grow and drive success in the Rental Center?</p>
+      <textarea name="resources" id="resources"></textarea>
+    </div>
+    <div class="form-control">
+      <p>What strengths of the associate can be celebrated?</p>
+      <textarea name="strengths" id="strengths"></textarea>
+    </div>
+  </fieldset>
+
+  <div class="btn-wrapper">
+    <button type="submit" id="submit-weekly1_1-btn">Submit</button>
+  </div>
+  <div class="btn-wrapper">
+   <button type="button" onclick="window.print()" id="print-btn">Print</button>
+ </div>
+ 
+
+</form>
+
+<script>
+  function calculateSalesDifference() {
+    const plan = parseFloat(document.getElementById('sales_plan').value) || 0;
+    const actual = parseFloat(document.getElementById('actual_sales').value) || 0;
+    const diff = actual - plan;
+    document.getElementById('sales_difference').textContent = `$${diff.toFixed(2)}`;
+  }
+
+  function highlightGoal(input, goal) {
+    const value = parseFloat(input.value);
+    input.classList.remove('goal-met', 'goal-missed');
+    if (!isNaN(value)) {
+      input.classList.add(value >= goal ? 'goal-met' : 'goal-missed');
+    }
+  }
+
+  function highlightGoalBelow(input, maxAllowed) {
+    const value = parseFloat(input.value);
+    input.classList.remove('goal-met', 'goal-missed');
+    if (!isNaN(value)) {
+      input.classList.add(value <= maxAllowed ? 'goal-met' : 'goal-missed');
+    }
+  }
+</script>
+
+</body>
+</html>
