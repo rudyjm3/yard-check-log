@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Equip Flow - Login Page</title>
+
+   <!-- Stylesheet -->
+  <link rel="stylesheet" href="assets/css/style.css?v=1.2">
+  <!-- Font Awesome 6.5.2 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+   <!-- <div class="bkground-image"></div> -->
+
+   <div class="container">
+      <section id="dashboard-header-container">
+         <div class="title-wrapper">
+            <h1>Dash Board</h1> 
+         </div> 
+      </section>
+
+      <section id="dashboard-weather-container">
+         <div id="weather-header">
+            <h3>Current Weather - <span class="current-date-txt">April, Monday 21st, 2025</span></h3>
+         </div>
+
+         <div class="weather-days-container">
+            <!-- Current Weather Card -->
+            <div class="current-weather-card">
+               <p class="current-day">Today</p>
+               <div class="weather-info-wrapper">
+                  <div class="weather-icon-wrapper">
+                     <img src="" alt="Weather Icon" class="weather-icon"> 
+                  </div>
+                  <div class="weather-temp-wrapper">
+                     <p class="current-temp"></p>
+                     <p class="current-hi-txt">High: <span class="current-hi-temp">75°F</span></p>
+                  </div>
+                  <p class="weather-description"></p>
+                  <p class="weather-summary"></p>
+               </div>
+            </div>
+            <!-- Upcoming Weather Days -->
+            <!-- <div class="weather-days-wrapper">
+               <div class="weather-days-card">
+                  <div class="weather-day-date">
+                     <p class="weather-day">Tue</p>
+                     <p class="weather-day-num">21</p>
+                  </div>
+                  <div class="weather-info-wrapper">
+                     <div class="weather-icon-wrapper">
+                        <img src="assets/images/weather-icons/cloudy.png" alt="Weather Icon" class="weather-icon"> 
+                     </div>
+                     <div class="weather-temps-wrapper">
+                        <p class="hi-temp">75°F</p>
+                        <p class="lo-temp">65°F</p>
+                     </div>
+                  </div>
+               </div>
+               <div class="weather-days-card">
+                  <div class="weather-day-date">
+                     <p class="weather-day">Wed</p>
+                     <p class="weather-day-num">21</p>
+                  </div>
+                  <div class="weather-info-wrapper">
+                     <div class="weather-icon-wrapper">
+                        <img src="assets/images/weather-icons/cloudy.png" alt="Weather Icon" class="weather-icon"> 
+                     </div>
+                     <div class="weather-temps-wrapper">
+                        <p class="hi-temp">75°F</p>
+                        <p class="lo-temp">65°F</p>
+                     </div>
+                  </div>
+               </div>
+            </div> -->
+            <!-- Upcoming Weather Days -->
+            <div class="weather-days-wrapper">
+               <!-- JavaScript will dynamically populate these -->
+            </div>
+         </div>
+      </section>
+
+      <section id="alerts-container">
+         <div class="alerts-header-wrapper">
+            <h3>Alerts</h3> 
+         </div>
+         <div class="alerts-card-wrapper">
+            <div class="alert-card">
+               <p class="alert-title">Penske Hiker</p>
+               <p class="alert-description">There are <span>3</span> Penske hiker submissions to confirm.</p>
+            </div>
+            <div class="alert-card">
+               <p class="alert-title">Maintenance Alert</p>
+               <p class="alert-description">Monthly Pickup Maintenance Inspection Due</p>
+            </div>
+            <div class="alert-card">
+               <p class="alert-title">Rental Markdown</p>
+               <p class="alert-description">There are <span>5</span> markdown submissions to review.</p>
+            </div>
+            <div class="alert-card">
+               <p class="alert-title">Yard Checks</p>
+               <p class="alert-description">There are <span>2</span> missing yard check submissions.</p> 
+               <div class="alert-button-wrapper">
+                  <button class="alert-btn-yardcheck" onclick="showSubmittedYardChecks()">View submitted yardchecks</button>
+               </div>
+            </div>
+
+         </div>
+  
+      </section>
+              
+   </div>
+          
+
+</body>
+<script>
+
+   // Fetch Weather Data from Meteosource API
+   // Fetch Weather Data from Meteosource API (RapidAPI)
+   async function fetchWeatherData() {
+  const url = 'https://ai-weather-by-meteosource.p.rapidapi.com/daily?place_id=sevierville&language=en&units=us';
+  const options = {
+    method: 'GET',
+    headers: {
+      'x-rapidapi-key': '0f232f78d2msh80bdc35b786d01dp1a92dcjsn0ab324d9264b',
+      'x-rapidapi-host': 'ai-weather-by-meteosource.p.rapidapi.com'
+    }
+  };
+
+  try {
+    const response = await fetch(url, options);
+    const data = await response.json();
+    console.log(data);
+    displayWeatherData(data);
+  } catch (error) {
+    console.error('Error fetching weather data:', error);
+  }
+}
+
+// function formatDate(dateString) {
+//   const date = new Date(dateString);
+//   return date.toLocaleDateString('en-US', {
+//     month: 'long',
+//     weekday: 'long',
+//     day: 'numeric',
+//     year: 'numeric'
+//   });
+// }
+function formatDate(dateString) {
+  const [year, month, day] = dateString.split('-').map(Number);
+  const date = new Date(Date.UTC(year, month - 1, day));
+  return date.toLocaleDateString('en-US', {
+    month: 'long',
+    weekday: 'long',
+    day: 'numeric',
+    year: 'numeric'
+  });
+}
+
+
+// Helper: Map icon number from API to your local asset path
+function getMappedIcon(iconNumber) {
+//   const iconNumPadded = iconNumber.toString().padStart(2, '0');
+  return `assets/images/metrosource-weather-icons/set02/big/${iconNumber}.png`;
+}
+
+function displayWeatherData(data) {
+  const currentWeather = data.daily.data[0];
+  console.log(currentWeather);
+
+  document.querySelector('.current-date-txt').textContent = formatDate(currentWeather.day);
+  document.querySelector('.current-temp').textContent = `${Math.round(currentWeather.temperature)}°F`;
+  document.querySelector('.current-hi-temp').textContent = `${Math.round(currentWeather.temperature_max)}°F`;
+  document.querySelector('.weather-description').textContent = currentWeather.weather;
+  document.querySelector('.weather-summary').textContent = currentWeather.summary;
+  document.querySelector('.current-weather-card .weather-icon').src = getMappedIcon(currentWeather.icon);
+
+  const upcomingDays = data.daily.data.slice(1, 7);
+  const weatherDaysWrapper = document.querySelector('.weather-days-wrapper');
+
+  weatherDaysWrapper.innerHTML = '';
+
+  upcomingDays.forEach(day => {
+    const dateObj = new Date(day.day);
+
+    const cardHTML = `
+      <div class="weather-days-card">
+        <div class="weather-day-date">
+          <p class="weather-day">${dateObj.toLocaleDateString('en-US', { weekday: 'short' })}</p>
+          <p class="weather-day-num">${dateObj.getDate()}</p>
+        </div>
+        <div class="weather-info-wrapper">
+          <div class="weather-icon-wrapper">
+            <img src="${getMappedIcon(day.icon)}" alt="Weather Icon" class="weather-icon"> 
+          </div>
+          <div class="weather-temps-wrapper">
+            <p class="hi-temp">${Math.round(day.temperature_max)}°F</p>
+            <p class="lo-temp">${Math.round(day.temperature_min)}°F</p>
+          </div>
+        </div>
+      </div>
+    `;
+
+    weatherDaysWrapper.insertAdjacentHTML('beforeend', cardHTML);
+  });
+}
+
+document.addEventListener('DOMContentLoaded', fetchWeatherData);
+
+
+//    function setRandomBackgroundImage(imageArray, className) {
+   
+//   if (!Array.isArray(imageArray) || imageArray.length === 0) {
+//     console.error("Error: imageArray must be a non-empty array.");
+//     return;
+//   }
+
+//   const randomIndex = Math.floor(Math.random() * imageArray.length);
+//   const randomImage = imageArray[randomIndex];
+//   const elements = document.getElementsByClassName(className);
+
+//   if (elements.length > 0) {
+//     for (let i = 0; i < elements.length; i++) {
+//       const element = elements[i];
+//       element.style.backgroundImage = `url('${randomImage}')`;
+//       // Optionally set background size, repeat, etc.
+//       // element.style.backgroundSize = 'cover';
+//       // element.style.backgroundRepeat = 'no-repeat';
+//       // element.style.backgroundPosition = 'center';
+//     }
+//   } else {
+//     console.warn(`Warning: No elements found with class name '${className}'.`);
+//   }
+// }
+
+// //Image Array
+// const backgroundImages = [
+//   "assets/images/bulldozer-2195329_1920.jpg",
+//   "assets/images/skyscraper-1482844_1920.jpg",
+//   "assets/images/floor-plan-1857175_1920.jpg",
+//   "assets/images/Rental_Brand_Demo.avif",
+// ];
+
+// document.addEventListener('DOMContentLoaded', function() {
+//   setRandomBackgroundImage(backgroundImages, 'bkground-image');
+// });
+
+
+</script>
+</html>
