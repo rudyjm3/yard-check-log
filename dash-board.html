@@ -182,13 +182,15 @@ function displayWeatherData(data) {
   weatherDaysWrapper.innerHTML = '';
 
   upcomingDays.forEach(day => {
-    const dateObj = new Date(day.day);
+   //  const dateObj = new Date(day.day);
+   const [year, month, dateNum] = day.day.split('-').map(Number);
+  const dateObj = new Date(Date.UTC(year, month - 1, dateNum));
 
     const cardHTML = `
       <div class="weather-days-card">
         <div class="weather-day-date">
-          <p class="weather-day">${dateObj.toLocaleDateString('en-US', { weekday: 'short' })}</p>
-          <p class="weather-day-num">${dateObj.getDate()}</p>
+            <p class="weather-day">${dateObj.toLocaleDateString('en-US', { weekday: 'short' })}</p>
+            <p class="weather-day-num">${dateObj.getUTCDate()}</p>
         </div>
         <div class="weather-info-wrapper">
           <div class="weather-icon-wrapper">
