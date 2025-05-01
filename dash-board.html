@@ -36,6 +36,7 @@
                   <div class="weather-temp-wrapper">
                      <p class="current-temp"></p>
                      <p class="current-hi-txt">High: <span class="current-hi-temp">75°F</span></p>
+                     <p class="current-lo-txt">Low: <span class="current-lo-temp">65°F</span></p>
                   </div>
                   <p class="weather-description"></p>
                   <p class="weather-summary"></p>
@@ -163,65 +164,149 @@
 <script>
 
    // Fetch Weather Data from Meteosource API (RapidAPI)
-   async function fetchWeatherData() {
-  const url = 'https://ai-weather-by-meteosource.p.rapidapi.com/daily?place_id=sevierville&language=en&units=us';
-  const options = {
-    method: 'GET',
-    headers: {
-      'x-rapidapi-key': '0f232f78d2msh80bdc35b786d01dp1a92dcjsn0ab324d9264b',
-      'x-rapidapi-host': 'ai-weather-by-meteosource.p.rapidapi.com'
-    }
-  };
+//    async function fetchWeatherData() {
+//   const url = 'https://ai-weather-by-meteosource.p.rapidapi.com/daily?place_id=sevierville&language=en&units=us';
+//   const options = {
+//     method: 'GET',
+//     headers: {
+//       'x-rapidapi-key': '0f232f78d2msh80bdc35b786d01dp1a92dcjsn0ab324d9264b',
+//       'x-rapidapi-host': 'ai-weather-by-meteosource.p.rapidapi.com'
+//     }
+//   };
 
-  try {
-    const response = await fetch(url, options);
-    const data = await response.json();
-    console.log(data);
-    displayWeatherData(data);
-  } catch (error) {
-    console.error('Error fetching weather data:', error);
-  }
+//   try {
+//     const response = await fetch(url, options);
+//     const data = await response.json();
+//     console.log(data);
+//     displayWeatherData(data);
+//   } catch (error) {
+//     console.error('Error fetching weather data:', error);
+//   }
+// }
+// // Format Date Function for current date
+// function formatDate(dateString) {
+//   const [year, month, day] = dateString.split('-');
+  
+//   // Use manual month/day mapping to ensure no timezone shift
+//   const months = ["January", "February", "March", "April", "May", "June", 
+//                   "July", "August", "September", "October", "November", "December"];
+//   const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+//   // Create date safely without timezone shift
+//   const date = new Date(`${year}-${month}-${day}T00:00:00`);
+
+//   // Manually format without timezone adjustment
+//   const formattedDate = `${weekdays[date.getUTCDay()]}, ${months[parseInt(month) - 1]} ${parseInt(day)}, ${year}`;
+
+//   return formattedDate;
+// }
+
+// // Helper: Map icon number from API to your local asset path
+// function getMappedIcon(iconNumber) {
+// //   const iconNumPadded = iconNumber.toString().padStart(2, '0');
+//   return `assets/images/metrosource-weather-icons/set02/big/${iconNumber}.png`;
+// }
+// // Display weather for days after current day
+// function displayWeatherData(data) {
+//   const currentWeather = data.daily.data[0];
+
+//   document.querySelector('.current-date-txt').textContent = formatDate(currentWeather.day);
+//   document.querySelector('.current-temp').textContent = `${Math.round(currentWeather.temperature)}°F`;
+//   document.querySelector('.current-hi-temp').textContent = `${Math.round(currentWeather.temperature_max)}°F`;
+//   document.querySelector('.weather-description').textContent = currentWeather.weather;
+//   document.querySelector('.weather-summary').textContent = currentWeather.summary;
+//   document.querySelector('.current-weather-card .weather-icon').src = getMappedIcon(currentWeather.icon);
+
+//   const weatherDaysWrapper = document.querySelector('.weather-days-wrapper');
+//   weatherDaysWrapper.innerHTML = '';
+
+//   // ✅ SKIP today's data by starting from index 1
+//   const upcomingDays = data.daily.data.slice(1, 7); // Items 1-6 = next 6 days
+  
+//   upcomingDays.forEach(day => {
+//     const [year, month, dateNum] = day.day.split('-').map(Number);
+//     const dateObj = new Date(Date.UTC(year, month - 1, dateNum));
+
+//     const cardHTML = `
+//       <div class="weather-days-card">
+//         <div class="weather-day-date">
+//           <p class="weather-day">${dateObj.toLocaleDateString('en-US', { weekday: 'short' })}</p>
+//           <p class="weather-day-num">${dateObj.getUTCDate()}</p>
+//         </div>
+//         <div class="weather-info-wrapper">
+//           <div class="weather-icon-wrapper">
+//             <img src="${getMappedIcon(day.icon)}" alt="Weather Icon" class="weather-icon"> 
+//           </div>
+//           <div class="weather-temps-wrapper">
+//             <p class="hi-temp">${Math.round(day.temperature_max)}°F</p>
+//             <p class="lo-temp">${Math.round(day.temperature_min)}°F</p>
+//           </div>
+//         </div>
+//       </div>
+//     `;
+
+//     weatherDaysWrapper.insertAdjacentHTML('beforeend', cardHTML);
+//   });
+// }
+
+
+// 1. Gets today's date in YYYY-MM-DD format (to match API format)
+function getTodayDateString() {
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  const mm = String(today.getMonth() + 1).padStart(2, '0');
+  const dd = String(today.getDate()).padStart(2, '0');
+  return `${yyyy}-${mm}-${dd}`;
 }
-// Format Date Function for current date
+
+// 2. Formats a date string from API to readable form (like "Wednesday, April 30, 2025")
 function formatDate(dateString) {
   const [year, month, day] = dateString.split('-');
-  
-  // Use manual month/day mapping to ensure no timezone shift
   const months = ["January", "February", "March", "April", "May", "June", 
                   "July", "August", "September", "October", "November", "December"];
   const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-
-  // Create date safely without timezone shift
   const date = new Date(`${year}-${month}-${day}T00:00:00`);
-
-  // Manually format without timezone adjustment
   const formattedDate = `${weekdays[date.getUTCDay()]}, ${months[parseInt(month) - 1]} ${parseInt(day)}, ${year}`;
-
   return formattedDate;
 }
 
-// Helper: Map icon number from API to your local asset path
+// 3. Maps icon numbers to the correct file path in your assets
 function getMappedIcon(iconNumber) {
-//   const iconNumPadded = iconNumber.toString().padStart(2, '0');
   return `assets/images/metrosource-weather-icons/set02/big/${iconNumber}.png`;
 }
-// Display weather for days after current day
-function displayWeatherData(data) {
-  const currentWeather = data.daily.data[0];
+// Format weather text to be more readable
+function formatWeatherText(text) {
+  return text
+    .replace(/_/g, ' ')                    // replace underscores with spaces
+    .replace(/\b\w/g, char => char.toUpperCase()); // capitalize first letter of each word
+}
 
+// 4. Main function that processes and displays weather data
+function displayWeatherData(data) {
+  const todayString = getTodayDateString();
+
+  // Find the forecast object for today
+  const todayIndex = data.daily.data.findIndex(day => day.day === todayString);
+  if (todayIndex === -1) {
+    console.error("Today's weather data not found.");
+    return;
+  }
+
+  // Get today's forecast
+  const currentWeather = data.daily.data[todayIndex];
   document.querySelector('.current-date-txt').textContent = formatDate(currentWeather.day);
   document.querySelector('.current-temp').textContent = `${Math.round(currentWeather.temperature)}°F`;
   document.querySelector('.current-hi-temp').textContent = `${Math.round(currentWeather.temperature_max)}°F`;
-  document.querySelector('.weather-description').textContent = currentWeather.weather;
+  document.querySelector('.current-lo-temp').textContent = `${Math.round(currentWeather.temperature_min)}°F`;
+  document.querySelector('.weather-description').textContent = formatWeatherText(currentWeather.weather);
   document.querySelector('.weather-summary').textContent = currentWeather.summary;
   document.querySelector('.current-weather-card .weather-icon').src = getMappedIcon(currentWeather.icon);
 
+  // Get the next 6 forecast days
+  const upcomingDays = data.daily.data.slice(todayIndex + 1, todayIndex + 7);
   const weatherDaysWrapper = document.querySelector('.weather-days-wrapper');
-  weatherDaysWrapper.innerHTML = '';
+  weatherDaysWrapper.innerHTML = ''; // Clear previous content
 
-  // ✅ SKIP today's data by starting from index 1
-  const upcomingDays = data.daily.data.slice(2, 8); // Items 1-6 = next 6 days
-  
   upcomingDays.forEach(day => {
     const [year, month, dateNum] = day.day.split('-').map(Number);
     const dateObj = new Date(Date.UTC(year, month - 1, dateNum));
@@ -243,13 +328,36 @@ function displayWeatherData(data) {
         </div>
       </div>
     `;
-
     weatherDaysWrapper.insertAdjacentHTML('beforeend', cardHTML);
   });
 }
 
+// 5. Fetches the weather data from the API and kicks off the display
+async function fetchWeatherData() {
+  const url = 'https://ai-weather-by-meteosource.p.rapidapi.com/daily?place_id=sevierville&language=en&units=us';
+  const options = {
+    method: 'GET',
+    headers: {
+      'x-rapidapi-key': '0f232f78d2msh80bdc35b786d01dp1a92dcjsn0ab324d9264b',
+      'x-rapidapi-host': 'ai-weather-by-meteosource.p.rapidapi.com'
+    }
+  };
 
+  try {
+    const response = await fetch(url, options);
+    const data = await response.json();
+    console.log(data); // For debugging
+    displayWeatherData(data);
+  } catch (error) {
+    console.error('Error fetching weather data:', error);
+  }
+}
+
+// 6. Run everything after the DOM is ready
 document.addEventListener('DOMContentLoaded', fetchWeatherData);
+
+
+// document.addEventListener('DOMContentLoaded', fetchWeatherData);
 
 
 //    function setRandomBackgroundImage(imageArray, className) {
