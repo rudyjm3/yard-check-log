@@ -559,6 +559,91 @@ header .page-title h1 {
    overflow-y: scroll;
    overflow-x: hidden;
 }
+/* DASHBOARD STYLING START */
+#dashboard-header-container,#dashboard-weather-container {
+   width: 100%;
+   padding: 20px;
+}
+#dashboard-header-container .title-wrapper {
+   width: 100%;
+}
+#dashboard-header-container .title-wrapper h2 {
+   color: var(--brand-color-mid-green);
+}
+
+#weather-header h3 {
+   color: var(--secondary-black-color);
+}
+#weather-header h3 .current-date-txt {
+   color: var(--brand-color-gren);
+}
+#weather-days-container {
+   display: flex;
+   justify-content: space-between;
+   align-items: baseline;
+   width: 100%;
+}
+.current-weather-card {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   flex-direction: column;
+   width: 200px;
+   padding: 5px;
+   border: 1px solid var(--light-grey-color2);
+   border-radius: 4px;
+}
+.current-weather-card .current-day {
+   font-weight: 600;
+   font-size: 1.2rem;
+   margin-bottom: 10px;
+}
+.weather-icon-wrapper .weather-icon {
+   width: 100%;
+   max-width: 75px;
+   height: auto;
+}
+.weather-icon-wrapper .weather-description {
+   width: 100%;
+   font-weight: 500;
+}
+.weather-info-wrapper {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   /* flex-direction: column; */
+   gap: 10px;
+   flex-wrap: wrap;
+}
+.weather-temp-wrapper {
+   text-align: center;
+}
+.weather-temp-wrapper .current-temp {
+   font-weight: 600;
+   font-size: 1.6rem;
+}
+.weather-temp-wrapper .current-hi-txt,.current-lo-txt {
+   font-size: 0.7rem;
+}
+.weather-summary {
+   flex-grow: 1;
+   text-align: center;
+}
+.weather-days-wrapper {
+   display: flex;
+   justify-content: space-around;
+   align-items: center;
+   width: 100%;
+}
+.weather-days-wrapper .weather-days-card {
+   text-align: center;
+   padding: 10px;
+   border: 1px solid var(--light-grey-color2);
+   border-radius: 4px;
+}
+
+/* END DASHBOARD STYLING */
+
 #submitted-yard-checks,#equipment-stats,#equipment-management {
    background-color: var(--main-white-color);
    height: auto;
