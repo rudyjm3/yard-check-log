@@ -581,6 +581,7 @@ header .page-title h1 {
    display: flex;
    justify-content: space-between;
    align-items: baseline;
+   gap: 15px;
    width: 100%;
 }
 .current-weather-card {
@@ -598,15 +599,25 @@ header .page-title h1 {
    font-size: 1.2rem;
    margin-bottom: 10px;
 }
+.weather-icon-wrapper {
+   display: flex;
+   justify-content: space-evenly;
+   align-items: center;
+   width: 100%;
+}
 .weather-icon-wrapper .weather-icon {
    width: 100%;
    max-width: 75px;
    height: auto;
 }
-.weather-icon-wrapper .weather-description {
+.weather-icon-wrapper .current-temp {
+   font-weight: 600;
+   font-size: 2rem;
+}
+/* .weather-icon-wrapper .weather-description {
    width: 100%;
    font-weight: 500;
-}
+} */
 .weather-info-wrapper {
    display: flex;
    justify-content: space-between;
@@ -617,13 +628,15 @@ header .page-title h1 {
 }
 .weather-temp-wrapper {
    text-align: center;
+   width: 100%;
 }
-.weather-temp-wrapper .current-temp {
+/* .weather-temp-wrapper .current-temp {
    font-weight: 600;
    font-size: 1.6rem;
-}
+} */
 .weather-temp-wrapper .current-hi-txt,.current-lo-txt {
-   font-size: 0.7rem;
+   font-size: 0.9rem;
+   font-weight: 500;
 }
 .weather-summary {
    flex-grow: 1;
