@@ -21,8 +21,8 @@
       </section>
 
       <section id="dashboard-weather-container">
-         <div id="weather-header">
-            <h3>Current Weather - <span class="current-date-txt">April, Monday 21st, 2025</span></h3>
+         <div id="weather-header-wrapper">
+            <p class="weather-title">Current Weather - <span class="current-weather-date-txt">April, Monday 21st, 2025</span></p>
          </div>
 
          <div class="weather-days-container">
@@ -32,12 +32,12 @@
                <div class="weather-info-wrapper">
                   <div class="weather-icon-wrapper">
                      <img src="" alt="Weather Icon" class="weather-icon">
-                     <!-- <p class="weather-description"></p>  -->
-                      <p class="current-temp"></p>
+                     <p class="current-temp"></p>
+                     <p class="weather-description"></p>
                   </div>
                   
                   <div class="weather-temp-wrapper">
-                     
+                  
                      <p class="current-hi-txt">High: <span class="current-hi-temp">75°F</span></p>
                      <p class="current-lo-txt">Low: <span class="current-lo-temp">65°F</span></p>
                   </div>
@@ -174,19 +174,20 @@ function displayWeatherData(data) {
     console.error("Today's weather data not found.");
     return;
   }
-
+  console.log(todayIndex); // For debugging
   // Get today's forecast
   const currentWeather = data.daily.data[todayIndex];
-  document.querySelector('.current-date-txt').textContent = formatDate(currentWeather.day);
+  document.querySelector('.current-weather-date-txt').textContent = formatDate(currentWeather.day);
   document.querySelector('.current-temp').textContent = `${Math.round(currentWeather.temperature)}°F`;
   document.querySelector('.current-hi-temp').textContent = `${Math.round(currentWeather.temperature_max)}°F`;
   document.querySelector('.current-lo-temp').textContent = `${Math.round(currentWeather.temperature_min)}°F`;
-//   document.querySelector('.weather-description').textContent = formatWeatherText(currentWeather.weather);
+  document.querySelector('.weather-description').textContent = formatWeatherText(currentWeather.weather);
   document.querySelector('.weather-summary').textContent = currentWeather.summary;
   document.querySelector('.current-weather-card .weather-icon').src = getMappedIcon(currentWeather.icon);
 
   // Get the next 6 forecast days
   const upcomingDays = data.daily.data.slice(todayIndex + 1, todayIndex + 7);
+  console.log(upcomingDays); // For debugging
   const weatherDaysWrapper = document.querySelector('.weather-days-wrapper');
   weatherDaysWrapper.innerHTML = ''; // Clear previous content
 
