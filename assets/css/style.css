@@ -1211,17 +1211,11 @@ header .page-title h1 {
    }
  }
 
-/* .yard-check-card .card-column {
-  width: 48%;
-} */
 
-.yard-check-card .card-column h4 {
-  margin-bottom: 10px;
-}
 
-.yard-check-card .card-column p {
+/* .yard-check-card .card-column p {
   margin: 5px 0;
-}
+} */
 /*Hidding estimated profit text for now */
 .est-profit-txt {
    display: none;
@@ -1233,6 +1227,29 @@ header .page-title h1 {
 /*Hidding Time submitted for now */
 .time-submitted-txt {
    display: none;
+}
+.card-col-content-wrapper {
+   display: flex;
+   justify-content: space-evenly;
+   align-items: center;
+   flex-wrap: wrap;
+   gap: 10px;
+}
+.card-col-content-block {
+   display: flex;
+   justify-content: space-around;
+   align-items: center;
+   flex-direction: column;
+   gap: 5px;
+   width: 100%;
+   max-width: 150px;
+   height: 100%;
+   max-height: 150px;
+   min-height: 150px;
+   background-color: yellow;
+}
+.card-col-content-block p {
+   text-align: center;
 }
 
 .yard-check-card .button-wrapper {

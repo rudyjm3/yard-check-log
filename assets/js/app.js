@@ -282,22 +282,38 @@ function loadSubmittedYardChecks(startDate, endDate) {
             const formattedTime = `${hours}:${minutesStr} ${ampm}`;
 
             columnDiv.innerHTML = `
-              <h4>${checkTime} Submission</h4>
-              <p><strong>Total equipment:</strong> ${yardCheck.total_equipment}</p>
-              <p><strong>Equipment available:</strong> ${yardCheck.equipment_available}</p>
-              <p><strong>Equipment rented out:</strong> ${yardCheck.equipment_rented_out}</p>
-              ${
-                checkTime === 'PM'
-                  ? `<p class="est-profit-txt"><strong>Estimated profit:</strong> $<span class="profit-amount">${yardCheck.estimated_profit.toFixed(2)}</span></p>`
-                  : ''
-              }
-              <p><strong>Equipment out of service:</strong> ${yardCheck.equipment_out_of_service}</p>
-              <p class="profit-loss-txt"><strong>Profit loss:</strong> $<span class="loss-amount">${yardCheck.profit_loss.toFixed(2)}</span></p>
-              <p><strong>Submitted by:</strong> ${yardCheck.user_name}</p>
-              <p class="time-submitted-txt"><strong>Time submitted:</strong> ${formattedTime}</p>
-              <div class="button-wrapper">
-                <button onclick="viewYardCheckDetails(${yardCheck.id})">View Yard Check</button>
-                <button onclick="editYardCheck(${yardCheck.id})">Edit Yard Check</button>
+               <div class="card-col-title-wrapper">
+                  <p class="ampm-txt">${checkTime} Submission</p>
+                  <p class="user-name-txt"><strong>Submitted by:</strong> ${yardCheck.user_name}</p>
+                  <p class="time-submitted-txt"><strong>Time submitted:</strong> ${formattedTime}</p>
+               </div>
+               <div class="card-col-content-wrapper">
+                  <div class="card-col-content-block">
+                     <p><strong>Available:</strong><br> ${yardCheck.equipment_available}</p>
+                  </div>
+                  <div class="card-col-content-block">
+                     <p><strong>Rented out:</strong><br> ${yardCheck.equipment_rented_out}</p>
+                  </div>
+                  <div class="card-col-content-block">
+                     <p><strong>Out of service:</strong><br> ${yardCheck.equipment_out_of_service}</p>
+                  </div>
+                  <div class="card-col-content-block">
+                     <p><strong>Total equipment:</strong><br> ${yardCheck.total_equipment}</p>
+                  </div>
+               </div>
+              
+               ${
+                  checkTime === 'PM'
+                     ? `<p class="est-profit-txt"><strong>Estimated profit:</strong> $<span class="profit-amount">${yardCheck.estimated_profit.toFixed(2)}</span></p>`
+                     : ''
+               }
+              
+               <p class="profit-loss-txt"><strong>Profit loss:</strong> $<span class="loss-amount">${yardCheck.profit_loss.toFixed(2)}</span>
+               </p>
+              
+               <div class="button-wrapper">
+                  <button onclick="viewYardCheckDetails(${yardCheck.id})">View Yard Check</button>
+                  <button onclick="editYardCheck(${yardCheck.id})">Edit Yard Check</button>
               </div>
             `;
           } else {
