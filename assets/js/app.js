@@ -283,22 +283,26 @@ function loadSubmittedYardChecks(startDate, endDate) {
 
             columnDiv.innerHTML = `
                <div class="card-col-title-wrapper">
-                  <p class="ampm-txt">${checkTime} Submission</p>
-                  <p class="user-name-txt"><strong>Submitted by:</strong> ${yardCheck.user_name}</p>
-                  <p class="time-submitted-txt"><strong>Time submitted:</strong> ${formattedTime}</p>
+                  <p class="ampm-txt">${checkTime} Submission -</p>
+                  <p class="user-name-txt">Submitted by:<span class="user-name-txt-data"> ${yardCheck.user_name}</span></p>
+                  <p class="time-submitted-txt">Time submitted: <span class="time-submitted-txt-data">${formattedTime}</span></p>
                </div>
                <div class="card-col-content-wrapper">
                   <div class="card-col-content-block">
-                     <p><strong>Available:</strong><br> ${yardCheck.equipment_available}</p>
+                     <p>Available</p>
+                     <p class="available-num-data"> ${yardCheck.equipment_available}</p>
                   </div>
                   <div class="card-col-content-block">
-                     <p><strong>Rented out:</strong><br> ${yardCheck.equipment_rented_out}</p>
+                     <p>Rented out</p> 
+                     <p class="rented-out-num-data">${yardCheck.equipment_rented_out}</p>
                   </div>
                   <div class="card-col-content-block">
-                     <p><strong>Out of service:</strong><br> ${yardCheck.equipment_out_of_service}</p>
+                     <p>Out of service</p> 
+                     <p class="out-of-service-num-data">${yardCheck.equipment_out_of_service}</p>
                   </div>
                   <div class="card-col-content-block">
-                     <p><strong>Total equipment:</strong><br> ${yardCheck.total_equipment}</p>
+                     <p>Total equipment</p> 
+                     <p class="total-equipment-num-data">${yardCheck.total_equipment}</p>
                   </div>
                </div>
               

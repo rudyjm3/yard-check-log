@@ -114,10 +114,15 @@
          <!-- <button onclick="showAddYardCheckForm()">Add Yard Check</button> -->
             <!-- FILTER UI -->
             <div class="date-filter-section">
-               <label for="filter-start-date">Start Date: </label>
-               <input type="date" id="filter-start-date">
-               <label for="filter-end-date">End Date: </label>
-               <input type="date" id="filter-end-date">
+               <div class="form-control">
+                  <label for="filter-start-date">Start Date: </label>
+                  <input type="date" id="filter-start-date">
+               </div>
+               <div class="form-control">
+                  <label for="filter-end-date">End Date: </label>
+                  <input type="date" id="filter-end-date">
+               </div>
+               
                <button onclick="filterSubmittedYardChecks()">Filter</button>
             </div> 
 
