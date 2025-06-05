@@ -851,6 +851,7 @@ async function editYardCheck(id) {
     closeModal();
     showYardCheckForm();
     await populateYardCheckForm(data);
+    console.log('Yard Check Form populated with:', data);
   } catch (err) {
     console.error('Error:', err);
   }
@@ -873,12 +874,25 @@ async function populateYardCheckForm(yardCheck) {
 
   await populateEquipmentList();
 
-  yardCheck.equipment_statuses.forEach(status => {
-    const select = document.getElementById(`equipment-status-${status.unit_id}`);
-    if (select) {
-      select.value = status.equipment_status;
-    }
-  });
+   // yardCheck.equipment_statuses.forEach(status => {
+   //    const select = document.getElementById(`equipment-status-${status.unit_id}`);
+   //    if (select) {
+   //       select.value = status.equipment_status;
+   //    }
+   // });
+   yardCheck.equipment_statuses.forEach(status => {
+      const unitId = status.unit_id;
+      const savedStatus = status.equipment_status; // e.g. "Available"
+      const allRadios = document.getElementsByName(`equipment_status_${unitId}`);
+      console.log(allRadios, 'for unitId:', unitId, 'with savedStatus:', savedStatus);
+      // allRadios is a NodeList of three radio inputs for that unitId
+      allRadios.forEach(radio => {
+         if (radio.value === savedStatus) {
+            radio.checked = true;
+         }
+      });
+   });
+   
 }
 
 /* -------------------------
