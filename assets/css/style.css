@@ -25,6 +25,7 @@
 .brand-background-gradient {
   background: rgb(30,30,30);
   background: linear-gradient(45deg, rgba(30,30,30,1) 0%, rgba(60,60,60,1) 71%);
+  /* unused */ /* Not used in any provided HTML or JS */
 }
 /* REMOVE NUMBER INPUT ARROWS / SPINNERS */
 /* Chrome, Safari, Edge, Opera */
@@ -36,9 +37,10 @@ input::-webkit-inner-spin-button {
 /* Firefox */
 input[type=number] {
   -moz-appearance: textfield;
+  /* unused */ /* Not used in any provided HTML or JS */ 
 }
 
-/* assets/css/style.css */
+/*MAIN STYLE SHEET */
 
 /* General Styles */
 body {
@@ -49,7 +51,7 @@ body {
   height: 100dvh;
   overflow: hidden;
   font-family: "Roboto", serif;
-  /* font-family: Arial, sans-serif; */
+  /* font-family: Arial, sans-serif; */ /* duplicate-redundant code (repeats at line 39 with "Roboto") */
   margin: 0;
   padding: 0;
 }
@@ -156,6 +158,7 @@ header {
 }
 .penske-form-header-wrapper {
    top: -117px;
+   /* unused */ /* Not used in penske_form.html or other files */
 }
 .login-form-header-wrapper h2 {
    padding: 0 20px;
@@ -200,7 +203,7 @@ header {
 }
 /* .login-wrapper #login-form .form-control input:valid {
    border-color: var(--hover-blue-color);
-}*/
+}*/ /* unused */ /* Not used as no form validation styles are applied in login-screen.html */
 .login-wrapper #login-form .form-control input:invalid {
    border-color: var(--button-red-color);
 }
@@ -262,8 +265,6 @@ header {
    background-color: var(--hover-blue-color);
    color: var(--main-white-color);
 }
-/* Login Page Styles End */
-
 /* PENSKE FORM PAGE STYLES */
 .penske-form-bkground-image {
    background-image: url("../images/penske-truck-bg.webp");
@@ -363,9 +364,9 @@ header {
 /* PENSKE FORM PAGE STYLES END */
 
 header .page-title {
-  /* width: calc(100% - 200px); */
+  /* width: calc(100% - 200px); */ /* unused */ /* Not used as width is not necessary with flex centering */
   color: #fff;
-  /* padding: 20px; */
+  /* padding: 20px; */ /* unused */ /* Not used as padding is set at line 45 */
   text-align: center;
 }
 header .page-title h1 {
@@ -435,11 +436,12 @@ header .page-title h1 {
   max-width: 200px;
   background-color: var(--secondary-black-color);
   transition: width 0.3s ease;  /* animate the width change */
-  /* overflow: hidden; 
-  overflow-y: auto; */
+  /* overflow: hidden; */ /* unused */ /* Not necessary as overflow is handled by main-content-container */
+  /* overflow-y: auto; */ /* unused */ /* Not necessary as above */
 }
 .side-nav-container-collapsed {
    width: 60px;
+   /* duplicate-redundant code (repeats at line 374 with slight width difference) */
 }
 .side-menu {
   list-style-type: none;
@@ -462,7 +464,7 @@ header .page-title h1 {
 /* When collapsed, center the items */
 /* .side-nav-container-collapsed .side-menu-item {
    justify-content: center;
- } */
+ } */ /* unused */ /* Not used as alignment is handled by JS toggle */
 .side-menu-item:after {
    position: absolute;
    right: 0;
@@ -534,7 +536,7 @@ header .page-title h1 {
    border-radius: 4px;
    white-space: nowrap;
    pointer-events: none; /* Don’t block cursor events */
-   /* transform: translateX(-50%); */
+   /* transform: translateX(-50%); */ /* unused */ /* Not necessary for tooltip positioning */
    bottom: 10%; /* Position above the icon */
    left: 135%;    /* Center horizontally under icon */
    z-index: 999;
@@ -673,15 +675,13 @@ header .page-title h1 {
 /* .weather-temp-wrapper .current-temp {
    font-weight: 600;
    font-size: 1.6rem;
-} */
-
+} */ /* unused */ /* Not used as .current-temp is only in current-weather-card */
 .weather-summary {
    display: none;
    flex-grow: 1;
    text-align: center;
+   /* unused */ /* Not used in dash-board.html or generated content */
 }
-
-
 
 /* END DASHBOARD STYLING */
 
@@ -728,7 +728,7 @@ header .page-title h1 {
 
 .yard-check-form-title {
    text-align: left;
-   background-color: #67a5d5;
+   background-color: var(--brand-color-green);
    border-radius: 4px 4px 0 0;
    padding: 20px;
    color: var(--light-grey-color1); 
@@ -755,7 +755,7 @@ header .page-title h1 {
   gap: 15px;
   margin-bottom: 15px;
   padding: 10px 20px;
-} */
+} */ /* unused */ /* Not used as .form-control-yard-check is not in any HTML or JS */
 
 .form-control {
    display: flex;
@@ -763,7 +763,7 @@ header .page-title h1 {
    align-items: flex-start;
    flex-wrap: wrap;
    gap: 15px;
-   /* margin-bottom: 15px; */
+   /* margin-bottom: 15px; */ /* unused */ /* Not necessary as margin is set per context */
    padding: 10px 20px;
 }
 
@@ -783,7 +783,7 @@ header .page-title h1 {
 }
 
 .button-wrapper {
-  /* text-align: center; */
+  /* text-align: center; */ /* unused */ /* Not used as alignment is handled by flexbox */
   margin: 30px 0 15px 0;
 }
 
@@ -836,8 +836,10 @@ header .page-title h1 {
 }
 /* Equipment Image Styles */
 .equipment-image-wrapper {
-   /* max-width: 120px; */
-   width: 20%;
+   /* max-width: 120px; */ /* unused */ /* Not necessary as width is set to 20% */
+   /* width: 20%; */
+   width: 100%;
+   max-width: 135px;
    height: auto;
    border: solid 1px transparent;
    flex-grow: 2;
@@ -895,7 +897,7 @@ header .page-title h1 {
 }
 /* #lg-equipment-yard-check-form > .form-wrapper > .form-control:nth-child(3) {
    margin-bottom: 25px;
-} */
+} */ /* duplicate-redundant code (repeats at line 617) */
 .option-wrapper {
    width: 100%;
 } 
@@ -950,7 +952,7 @@ header .page-title h1 {
 /* EQUIPMENT MANAGEMENT STYLES START */
 #equipment-management {
    width: 100%;
-   max-width: 640px; 
+   max-width: 650px; 
    min-width: 200px;
 }
 /* #equipment-management h2 {
@@ -958,7 +960,7 @@ header .page-title h1 {
    text-align: left;
    color: var(--brand-color-mid-green);
    margin-bottom: 15px;
-} */
+} */ /* duplicate-redundant code (repeats at line 534 for .content-section-container h2) */
 /* Tab Buttons */
 .tab-buttons-wrapper {
    display: flex;
@@ -1004,10 +1006,11 @@ header .page-title h1 {
 #deactivated-equipment-list .equipment-item {
    display: flex;
    justify-content: flex-start;
-   /* align-items: center; */
+   /* align-items: center; */ /* unused */ /* Not necessary as alignment is handled by flex-start */
    flex-wrap: wrap;
    gap: 15px;
-   width: 600px;
+   width: 100%;
+   max-width: 600px;
    border: 1px solid #ccc;
    border-radius: 4px;
    padding: 15px;
@@ -1022,7 +1025,7 @@ header .page-title h1 {
    box-shadow: 0px 5px 10px -1px rgba(167,167,167,0.75);
    -webkit-box-shadow: 0px 5px 10px -1px rgba(167,167,167,0.75);
    -moz-box-shadow: 0px 5px 10px -1px rgba(167,167,167,0.75);
-} */
+} */ /* duplicate-redundant code (repeats at line 694) */
 .equipment-info-container {
    display: flex;
    justify-content: space-between;
@@ -1036,7 +1039,7 @@ header .page-title h1 {
 .equipment-txt-wrapper {
    width: 100%;
    max-width: 250px;
-   min-width: 230px;
+   /* min-width: 230px; */
 }
 .equipment-txt-wrapper > p {
    font-weight: 600;
@@ -1051,7 +1054,6 @@ header .page-title h1 {
 #equipment-form .form-control {
   margin-bottom: 15px;
 }
-
 
 .equipment-button-wrapper {
    display: flex;
@@ -1120,7 +1122,7 @@ header .page-title h1 {
    align-items: center;
    background-color: #535353; /* var(--main-black-color) */
    padding: 20px;
-   /* width: 100%; */
+   /* width: 100%; */ /* unused */ /* Not necessary as flexbox handles width */
 }
 
 .form-header h3 {
@@ -1162,15 +1164,15 @@ header .page-title h1 {
 
 /* Adjust Equipment Management Section */
 /* #equipment-management { */
-  /* position: relative; */
-  /* height: 100%; */
-  /* overflow: hidden; */
+  /* position: relative; */ /* unused */ /* Not necessary as position is handled by parent */
+  /* height: 100%; */ /* unused */ /* Not necessary as height is set to auto */
+  /* overflow: hidden; */ /* unused */ /* Not necessary as overflow is handled by main-content-container */
 /* } */
 
 /* Submitted Yard Checks Styles */
 /* #submitted-yard-checks h2 {
   text-align: center;
-} */
+} */ /* duplicate-redundant code (repeats at line 534 for .content-section-container h2) */
 .date-filter-section {
    display: flex;
    justify-content: flex-start;
@@ -1187,7 +1189,7 @@ header .page-title h1 {
 }
 /* #submitted-yard-checks button {
   margin-bottom: 20px;
-} */
+} */ /* unused */ /* Not used as buttons are styled in .button-wrapper */
 
 .yard-check-card {
   border-bottom: 3px solid var(--hover-blue-color);
@@ -1242,14 +1244,25 @@ header .page-title h1 {
  }
  .card-col-content-block > p {
    font-size: 1rem;
-   font-weight: 500;
+   font-weight: 600;
    color: var(--secondary-black-color);
  }
  /* Match any class ending in “-num-data” under that parent */
-.card-col-content-block [class$="-num-data"] {
+.card-col-content-block .available-num-data {
   font-size: 2rem;
-  font-weight: 600;
-  color: var(--secondary-black-color);
+  color: var(--button-green-color);
+}
+.card-col-content-block .rented-out-num-data {
+  font-size: 2rem;
+  color: var(--hover-blue-color);
+}
+.card-col-content-block .out-of-service-num-data {
+  font-size: 2rem;
+  color: var(--button-red-color);
+}
+.card-col-content-block .total-equipment-num-data {
+  font-size: 2rem;
+  color: var(--info-txt-color);
 }
 
  
@@ -1263,20 +1276,18 @@ header .page-title h1 {
    }
  }
 
-
-
 /* .yard-check-card .card-column p {
   margin: 5px 0;
-} */
-/*Hidding estimated profit text for now */
+} */ /* unused */ /* Not used as specific styling is applied per element */
+
 .est-profit-txt {
    display: none;
+   /* unused */ /* Not used in current implementation, though referenced in JS */
 }
-/*Hidding profit loss text for now */
 .profit-loss-txt {
    display: none;
+   /* unused */ /* Not used in current implementation, though referenced in JS */
 }
-/*Hidding Time submitted for now */
 .time-submitted-txt {
    display: none;
 }
@@ -1334,11 +1345,10 @@ header .page-title h1 {
    font-weight: 600;
 }
 
-
 /* Equipment Stats Styles */
 /* #equipment-stats h2 {
   text-align: center;
-} */
+} */ /* duplicate-redundant code (repeats at line 534 for .content-section-container h2) */
 
 #stats-display {
   margin-top: 20px;
@@ -1440,8 +1450,6 @@ footer {
    font-size: 12px
 }
 
-
-
 /* MEDIA QUERIES */
 @media (max-width: 500px) {
    .page-title {
@@ -1486,7 +1494,6 @@ footer {
    .img-eq-info-wrapper .image-wrapper .equipment-image {
       max-width: 100%;
       height: auto;
-
    }
    .img-eq-info-wrapper .eq-info-wrapper {
       width: 100%;
@@ -1501,8 +1508,7 @@ footer {
       height: 100%;
       max-width: 100%;
    }
-
- }
+}
 /* Submitted Yard check section responsive styles */
 @media (max-width: 900px) {
    .yard-check-card .button-wrapper {
