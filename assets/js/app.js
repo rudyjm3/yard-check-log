@@ -844,6 +844,13 @@ function closeModal() {
   document.getElementById('modal-container').style.display = 'none';
 }
 
+addEventListener('click', function(event) {
+  const modal = document.getElementsByClassName('modal');
+  if (event.target === modal[0]) {
+    closeModal();
+  }
+});
+
 async function editYardCheck(id) {
   try {
     const response = await fetch(`get_yard_check_details.php?id=${id}`);
@@ -861,7 +868,7 @@ async function populateYardCheckForm(yardCheck) {
   document.getElementById('user-name').value = yardCheck.user_name;
   document.getElementById('check-time').value = yardCheck.check_time;
   document.getElementById('check-date').value = yardCheck.date;
-
+console.log(yardCheck.user_name);
   // Hidden yard_check_id if not present
   if (!document.getElementById('yard-check-id')) {
     const input = document.createElement('input');
