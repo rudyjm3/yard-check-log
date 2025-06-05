@@ -821,29 +821,28 @@ function showYardCheckDetails(yardCheck) {
    }).join('');
  
    const modalContent = `
-     <div class="modal">
-       <div class="modal-content">
-         <span class="close-button" onclick="closeModal()">&times;</span>
-         <h2>Yard Check Details</h2>
-         <p><strong>Date:</strong> ${formattedDate}</p>
-         <p><strong>Time:</strong> ${yardCheck.check_time}</p>
-         <p><strong>Submitted by:</strong> ${yardCheck.user_name}</p>
-         <div>${equipmentStatuses}</div>
-         <button onclick="editYardCheck(${yardCheck.id})">Edit</button>
-         <button onclick="printYardCheck(${yardCheck.id})">Print</button>
-       </div>
-     </div>
+      <div class="modal">
+         <div class="modal-content">
+            <span class="close-button" onclick="closeModal()">&times;</span>
+            <h2>Yard Check Details</h2>
+            <p><strong>Date:</strong> ${formattedDate}</p>
+            <p><strong>Time:</strong> ${yardCheck.check_time}</p>
+            <p><strong>Submitted by:</strong> ${yardCheck.user_name}</p>
+            <div>${equipmentStatuses}</div>
+            <button onclick="editYardCheck(${yardCheck.id})">Edit</button>
+            <button onclick="printYardCheck(${yardCheck.id})">Print</button>
+         </div>
+      </div>
    `;
  
    modalContainer.innerHTML = modalContent;
    modalContainer.style.display = 'block';
- }
- 
+}
 
 function closeModal() {
   document.getElementById('modal-container').style.display = 'none';
 }
-
+// Close modal when clicking outside of it "view yard check"
 addEventListener('click', function(event) {
   const modal = document.getElementsByClassName('modal');
   if (event.target === modal[0]) {
