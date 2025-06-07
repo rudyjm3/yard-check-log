@@ -17,10 +17,10 @@ try {
 
     // Otherwise, if we want only active:
     if (isset($_GET['onlyActive']) && $_GET['onlyActive'] == 'true') {
-        $stmt = $conn->query("SELECT * FROM equipment WHERE is_active = 1");
+        $stmt = $conn->query("SELECT * FROM equipment WHERE is_active = 1  ORDER BY display_order ASC");
     } else {
         // Return all
-        $stmt = $conn->query("SELECT * FROM equipment");
+        $stmt = $conn->query("SELECT * FROM equipment ORDER BY display_order ASC");
     }
 
     $equipmentList = $stmt->fetchAll(PDO::FETCH_ASSOC);
