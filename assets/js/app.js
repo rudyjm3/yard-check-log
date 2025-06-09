@@ -591,6 +591,7 @@ function showActiveEquipmentTab() {
   document.getElementById('tab-deactivated-equipment').classList.remove('tab-active');
   document.getElementById('active-equipment-container').style.display = 'block';
   document.getElementById('deactivated-equipment-container').style.display = 'none';
+  initializeEquipmentSorting();
 }
 
 function showDeactivatedEquipmentTab() {
@@ -618,6 +619,9 @@ function loadEquipmentLists() {
           imageHTML = `<img src="${equipment.image_url}" alt="${equipment.equipment_name}" class="equipment-image">`;
         }
         const equipmentHTML = `
+          <div class="drag-handle">
+            <i class="fa-solid fa-grip-vertical"></i>
+          </div>
           <div class="equipment-image-wrapper">${imageHTML}</div>
           <div class="equipment-info-container">
             <div class="equipment-txt-wrapper">
@@ -1039,3 +1043,75 @@ document.getElementById('stats-date-range').addEventListener('change', function(
     document.getElementById('custom-date-range').style.display = 'none';
   }
 });
+
+function initializeEquipmentSorting() {
+    const activeList = document.getElementById('active-equipment-list');
+    if (!activeList) return;
+
+    new Sortable(activeList, {
+        animation: 150,
+        handle: '.drag-handle',
+        ghostClass: 'sortable-ghost',
+        dragClass: 'sortable-drag',
+        onEnd: function(evt) {
+            const items = Array.from(activeList.children);
+            const order = items.map((item, index) => {
+                const editButton = item.querySelector('.equipment-edit-button');
+                const onclick = editButton.getAttribute('onclick');
+                const match = onclick.match(/showEditEquipmentForm\((\d+)\)/);
+                
+                if (!match) {
+                    console.error('Could not extract ID from:', onclick);
+                    return null;
+                }
+                
+                return {
+                    id: parseInt(match[1], 10),
+                    position: index + 1
+                };
+            }).filter(item => item !== null);
+
+            if (order.length > 0) {
+                console.log('Saving order:', order);
+                saveEquipmentOrder(order);
+            } else {
+                console.error('No valid items to save');
+            }
+        }
+    });
+}
+
+function saveEquipmentOrder(order) {
+    fetch('reorder_equipment.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ order: order })
+    })
+    .then(async response => {
+        const text = await response.text();
+        console.log('Raw response:', text);
+        
+        try {
+            const data = JSON.parse(text);
+            if (!response.ok) {
+                throw new Error(data.message || `HTTP error! status: ${response.status}`);
+            }
+            return data;
+        } catch (e) {
+            throw new Error(`Parse error: ${e.message}\nRaw response: ${text}`);
+        }
+    })
+    .then(data => {
+        if (data.status === 'success') {
+            console.log('Order saved successfully');
+        } else {
+            console.error('Server error:', data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error saving order:', error);
+        alert('Failed to save equipment order. Please try again.');
+    });
+}

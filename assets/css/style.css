@@ -37,7 +37,7 @@ input::-webkit-inner-spin-button {
 /* Firefox */
 input[type=number] {
   -moz-appearance: textfield;
-  /* unused */ /* Not used in any provided HTML or JS */ 
+  /* unused */ /* Not Used in any provided HTML or JS */ 
 }
 
 /*MAIN STYLE SHEET */
@@ -1008,7 +1008,7 @@ header .page-title h1 {
    flex-wrap: wrap;
    gap: 15px;
    width: 100%;
-   max-width: 600px;
+   max-width: 610px;
    border: 1px solid #ccc;
    border-radius: 4px;
    padding: 15px;
@@ -1028,9 +1028,8 @@ header .page-title h1 {
    display: flex;
    justify-content: space-between;
    align-items: flex-start;
-   /* flex-grow: 2; */
    width: 100%;
-   max-width: 400px;
+   max-width: 380px;
 }
 .equipment-txt-wrapper {
    width: 100%;
@@ -1523,4 +1522,33 @@ footer {
       flex-direction: column;
       align-items: center;
    }
+}
+
+/* Draggable items styles */
+.drag-handle {
+    display: flex;
+    align-items: center;
+    padding: 0 5px;
+    color: #999;
+    cursor: grab;
+    font-size: 20px;
+}
+
+.drag-handle:active {
+    cursor: grabbing;
+}
+
+#active-equipment-list .equipment-item {
+    display: flex;
+    align-items: center;
+    cursor: default;
+}
+
+/* Update existing sortable styles */
+.sortable-ghost {
+    opacity: 0.4;
+}
+
+.sortable-drag {
+    opacity: 0.9;
 }

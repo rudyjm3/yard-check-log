@@ -1,5 +1,5 @@
 <?php
-// db_connectiom_info.php
+// db_connection_info.php
 
 
 // header("Cache-Control: no-cache, no-store, must-revalidate"); // Forces caches to always check for updates
