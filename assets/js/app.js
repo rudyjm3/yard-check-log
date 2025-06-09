@@ -10,6 +10,7 @@
 ------------------------- */
 let equipmentData = [];   // Will be populated from the server
 let currentMonday = null; // Tracks Monday for the displayed week
+let currentSortable = null;
 
 /* -------------------------
    2. HELPER FUNCTIONS
@@ -391,6 +392,11 @@ function filterSubmittedYardChecks() {
 
  // Show Yard Check Form
  function showYardCheckForm() {
+   if (currentSortable) {
+     currentSortable.destroy();
+     currentSortable = null;
+   }
+
    // clearYardCheckForm();
    document.getElementById('lg-equipment-yard-check-form').style.display = 'block';
    document.getElementById('equipment-management').style.display = 'none';
@@ -1048,7 +1054,13 @@ function initializeEquipmentSorting() {
     const activeList = document.getElementById('active-equipment-list');
     if (!activeList) return;
 
-    new Sortable(activeList, {
+    // Destroy existing instance if it exists
+    if (currentSortable) {
+        currentSortable.destroy();
+    }
+
+    // Create new instance
+    currentSortable = new Sortable(activeList, {
         animation: 150,
         handle: '.drag-handle',
         ghostClass: 'sortable-ghost',
@@ -1097,7 +1109,7 @@ function saveEquipmentOrder(order) {
             const data = JSON.parse(text);
             if (!response.ok) {
                 throw new Error(data.message || `HTTP error! status: ${response.status}`);
-            }
+    }
             return data;
         } catch (e) {
             throw new Error(`Parse error: ${e.message}\nRaw response: ${text}`);
