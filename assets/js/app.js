@@ -626,7 +626,7 @@ function loadEquipmentLists() {
         }
         const equipmentHTML = `
           <div class="drag-handle">
-            <i class="fa-solid fa-grip-vertical"></i>
+            <i class="fa-solid fa-grip-vertical" data-tooltip="Drag to reorder"></i>
           </div>
           <div class="equipment-image-wrapper">${imageHTML}</div>
           <div class="equipment-info-container">
@@ -1065,7 +1065,19 @@ function initializeEquipmentSorting() {
         handle: '.drag-handle',
         ghostClass: 'sortable-ghost',
         dragClass: 'sortable-drag',
+        // Add these new options
+        onStart: function(evt) {
+            document.body.style.userSelect = 'none';
+            document.body.style.webkitUserSelect = 'none';
+            document.body.style.mozUserSelect = 'none';
+            document.body.style.msUserSelect = 'none';
+        },
         onEnd: function(evt) {
+            document.body.style.userSelect = '';
+            document.body.style.webkitUserSelect = '';
+            document.body.style.mozUserSelect = '';
+            document.body.style.msUserSelect = '';
+            
             const items = Array.from(activeList.children);
             const order = items.map((item, index) => {
                 const editButton = item.querySelector('.equipment-edit-button');

@@ -994,7 +994,7 @@ header .page-title h1 {
 /* Tab Content */
 .tab-content {
    display: block;
-   width: 100%; /* We'll control actual visibility with inline styles or JS */
+   width: 100%; /* Control actual visibility with inline styles or JS */
 }
 #active-equipment-list {
    width: 100%;
@@ -1004,7 +1004,6 @@ header .page-title h1 {
 #deactivated-equipment-list .equipment-item {
    display: flex;
    justify-content: flex-start;
-   /* align-items: center; */ /* unused */ /* Not necessary as alignment is handled by flex-start */
    flex-wrap: wrap;
    gap: 15px;
    width: 100%;
@@ -1016,14 +1015,86 @@ header .page-title h1 {
    box-shadow: 0px 5px 10px -1px rgba(167,167,167,0.75);
    -webkit-box-shadow: 0px 5px 10px -1px rgba(167,167,167,0.75);
    -moz-box-shadow: 0px 5px 10px -1px rgba(167,167,167,0.75);
+   cursor: default;
    /* Adjust equipment-item to display images properly */
    overflow: hidden; /* Ensure content doesn't overflow */
 }
-/* .equipment-item {
-   box-shadow: 0px 5px 10px -1px rgba(167,167,167,0.75);
-   -webkit-box-shadow: 0px 5px 10px -1px rgba(167,167,167,0.75);
-   -moz-box-shadow: 0px 5px 10px -1px rgba(167,167,167,0.75);
-} */ /* duplicate-redundant code (repeats at line 694) */
+#active-equipment-list .equipment-item {
+   position: relative;
+   padding-left: 40px;
+}
+
+/* Draggable items styles */
+.drag-handle {
+   position: absolute;
+   top: 0;
+   left: 0;
+   height: 100%;
+   display: flex;
+   align-items: center;
+   padding: 0 8px;
+   color: #999;
+   cursor: grab;
+   font-size: 20px;
+   background-color: #eee;
+}
+
+.drag-handle:active {
+    cursor: grabbing;
+}
+.drag-handle i {
+   position: relative;
+}
+
+.drag-handle i::after {
+   content: "";
+   position: absolute;
+   opacity: 0;
+   visibility: hidden;
+   transition: opacity 0.2s ease;
+   background-color: rgba(0, 0, 0, 0.8);
+   color: #fff;
+   padding: 8px;
+   font-size: 0.8rem;
+   font-weight: 400;
+   font-family: 'Roboto', sans-serif;
+   border-radius: 4px;
+   white-space: nowrap;
+   pointer-events: none;
+   bottom: -33px;
+   left: 0;
+   z-index: 999;
+}
+
+.drag-handle i:hover::after {
+   content: attr(data-tooltip);
+   opacity: 1;
+   visibility: visible;
+}
+
+
+/* Sortable styles */
+.sortable-ghost {
+    opacity: 0.8;
+    filter: blur(3px);
+    background-color: var(--hover-blue-color) !important;
+    border-color: #8ec6f0;
+    transition: all 0.3s ease;
+}
+
+.sortable-drag {
+    opacity: 0.9;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+/* Hide drag handle in deactivated equipment list */
+#deactivated-equipment-list .drag-handle {
+    display: none;
+} 
+
 .equipment-info-container {
    display: flex;
    justify-content: space-between;
@@ -1522,33 +1593,4 @@ footer {
       flex-direction: column;
       align-items: center;
    }
-}
-
-/* Draggable items styles */
-.drag-handle {
-    display: flex;
-    align-items: center;
-    padding: 0 5px;
-    color: #999;
-    cursor: grab;
-    font-size: 20px;
-}
-
-.drag-handle:active {
-    cursor: grabbing;
-}
-
-#active-equipment-list .equipment-item {
-    display: flex;
-    align-items: center;
-    cursor: default;
-}
-
-/* Update existing sortable styles */
-.sortable-ghost {
-    opacity: 0.4;
-}
-
-.sortable-drag {
-    opacity: 0.9;
 }
