@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="assets/css/style.css?v=1.2">
   <!-- Font Awesome 6.5.2 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="assets/js/app.js" defer></script>
 </head>
 <body>
    <!-- <div class="bkground-image"></div> -->
@@ -277,6 +278,57 @@ document.addEventListener('DOMContentLoaded', fetchWeatherData);
 //   setRandomBackgroundImage(backgroundImages, 'bkground-image');
 // });
 
+// Descrepancy for yard checks not completed
+// Re-use your existing alert-card markup
+function displayDiscrepancyAlerts(discrepancies) {
+  const wrapper = document.querySelector('.alerts-card-wrapper');
+  discrepancies.forEach(({ type, date, expected, actual }) => {
+    const title = type === 'rented_out'
+      ? 'Rental Count Discrepancy'
+      : 'Service Status Discrepancy';
+
+    const itemLabel = type === 'rented_out'
+      ? 'rented out'
+      : 'out of service';
+
+    const card = document.createElement('div');
+    card.className = 'alert-card';
+    card.innerHTML = `
+      <p class="alert-title">${title}</p>
+      <p class="alert-description">
+        On <strong>${new Date(date).toLocaleDateString()}</strong>, AM shows 
+        <strong>${actual}</strong> ${itemLabel}, but previous PM had 
+        <strong>${expected}</strong>. Please verify.
+      </p>
+    `;
+    wrapper.appendChild(card);
+  });
+}
+
+// New loader for just the alerts
+function loadYardCheckAlerts(startDate, endDate) {
+  fetch(`get_submitted_yard_checks.php?start=${startDate}&end=${endDate}`)
+    .then(res => res.json())
+    .then(data => {
+      if (data.discrepancies.length) {
+        displayDiscrepancyAlerts(data.discrepancies);
+      }
+    })
+    .catch(console.error);
+}
+
+// On first visit, kick off an alerts fetch for this week
+document.addEventListener('DOMContentLoaded', () => {
+  const today = new Date();
+  // get Sunday of this week (or adjust to your store’s first day)
+  const first = new Date(today);
+  first.setDate(today.getDate() - today.getDay());
+  const last = new Date(first);
+  last.setDate(first.getDate() + 6);
+
+  const iso = d => d.toISOString().slice(0, 10);
+  loadYardCheckAlerts(iso(first), iso(last));
+});
 
 </script>
 </html>

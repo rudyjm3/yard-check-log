@@ -90,8 +90,49 @@ try {
         $result[] = $yardCheck;
     }
 
+    // 6a) Detect PM→next-day AM mismatches
+$discrepancies = [];
+for ($i = 0; $i < count($result) - 1; $i++) {
+    $cur = $result[$i];
+    $nxt = $result[$i + 1];
+
+    if ($cur['check_time'] === 'PM' && $nxt['check_time'] === 'AM') {
+        $pmDate = new DateTime($cur['date'] . ' ' . $cur['check_time']);
+        $amDate = new DateTime($nxt['date'] . ' ' . $nxt['check_time']);
+
+        if ($pmDate->diff($amDate)->days <= 1) {
+            // rented-out drop?
+            if ((int)$nxt['equipment_rented_out'] < (int)$cur['equipment_rented_out']) {
+                $discrepancies[] = [
+                    'type'     => 'rented_out',
+                    'date'     => $nxt['date'],
+                    'expected' => (int)$cur['equipment_rented_out'],
+                    'actual'   => (int)$nxt['equipment_rented_out'],
+                ];
+            }
+            // out-of-service drop?
+            if ((int)$nxt['equipment_out_of_service'] < (int)$cur['equipment_out_of_service']) {
+                $discrepancies[] = [
+                    'type'     => 'out_of_service',
+                    'date'     => $nxt['date'],
+                    'expected' => (int)$cur['equipment_out_of_service'],
+                    'actual'   => (int)$nxt['equipment_out_of_service'],
+                ];
+            }
+        }
+    }
+}
+
+// 6b) Return yard checks + discrepancies
+header('Content-Type: application/json');
+echo json_encode([
+  'yardChecks'    => $result,
+  'discrepancies' => $discrepancies
+]);
+exit;
+
     // 6. Output the final array as JSON
-    echo json_encode($result);
+   //  echo json_encode($result);
 
 } catch (PDOException $e) {
     // In case of error, send an error message as JSON
@@ -99,5 +140,6 @@ try {
         'status' => 'error',
         'message' => $e->getMessage()
     ]);
+    exit;
 }
 ?>

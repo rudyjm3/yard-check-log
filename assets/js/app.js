@@ -62,7 +62,213 @@ function getDatesInRange(startStr, endStr) {
   return dates;
 }
 
-/* SCROLL TO TOP BUTTON */
+/* -------------------
+WEATHER API 
+------------------- */
+// Fetch Weather Data from Meteosource API (RapidAPI)
+// 1. Gets today's date in YYYY-MM-DD format (to match API format)
+function getTodayDateString() {
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  const mm = String(today.getMonth() + 1).padStart(2, '0');
+  const dd = String(today.getDate()).padStart(2, '0');
+  return `${yyyy}-${mm}-${dd}`;
+}
+
+// 2. Formats a date string from API to readable form (like "Wednesday, April 30, 2025")
+function formatDate(dateString) {
+  const [year, month, day] = dateString.split('-');
+  const months = ["January", "February", "March", "April", "May", "June", 
+                  "July", "August", "September", "October", "November", "December"];
+  const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  const date = new Date(`${year}-${month}-${day}T00:00:00`);
+  const formattedDate = `${weekdays[date.getUTCDay()]}, ${months[parseInt(month) - 1]} ${parseInt(day)}, ${year}`;
+  return formattedDate;
+}
+
+// 3. Maps icon numbers to the correct file path in assets
+function getMappedIcon(iconNumber) {
+  return `assets/images/metrosource-weather-icons/set02/big/${iconNumber}.png`;
+}
+// Format weather text to be more readable
+function formatWeatherText(text) {
+  return text
+    .replace(/_/g, ' ')                    // replace underscores with spaces
+    .replace(/\b\w/g, char => char.toUpperCase()); // capitalize first letter of each word
+}
+
+// 4. Main function that processes and displays weather data
+function displayWeatherData(data) {
+  const todayString = getTodayDateString();
+
+  // Find the forecast object for today
+  const todayIndex = data.daily.data.findIndex(day => day.day === todayString);
+  if (todayIndex === -1) {
+    console.error("Today's weather data not found.");
+    return;
+  }
+  console.log(todayIndex); // For debugging
+  // Get today's forecast
+  const currentWeather = data.daily.data[todayIndex];
+  document.querySelector('.current-weather-date-txt').textContent = formatDate(currentWeather.day);
+  document.querySelector('.current-temp').textContent = `${Math.round(currentWeather.temperature)}°F`;
+  document.querySelector('.current-hi-temp').textContent = `${Math.round(currentWeather.temperature_max)}°F`;
+  document.querySelector('.current-lo-temp').textContent = `${Math.round(currentWeather.temperature_min)}°F`;
+  document.querySelector('.weather-description').textContent = formatWeatherText(currentWeather.weather);
+  document.querySelector('.weather-summary').textContent = currentWeather.summary;
+  document.querySelector('.current-weather-card .weather-icon').src = getMappedIcon(currentWeather.icon);
+
+  // Get the next 6 forecast days
+  const upcomingDays = data.daily.data.slice(todayIndex + 1, todayIndex + 7);
+  console.log(upcomingDays); // For debugging
+  const weatherDaysWrapper = document.querySelector('.weather-days-wrapper');
+  weatherDaysWrapper.innerHTML = ''; // Clear previous content
+
+  upcomingDays.forEach(day => {
+    const [year, month, dateNum] = day.day.split('-').map(Number);
+    const dateObj = new Date(Date.UTC(year, month - 1, dateNum));
+
+    const cardHTML = `
+      <div class="weather-days-card">
+        <div class="weather-day-date">
+          <p class="weather-day">${dateObj.toLocaleDateString('en-US', { weekday: 'short' })}</p>
+          <p class="weather-day-num">${dateObj.getUTCDate()}</p>
+        </div>
+        <div class="weather-info-wrapper">
+          <div class="weather-icon-wrapper">
+            <img src="${getMappedIcon(day.icon)}" alt="Weather Icon" class="weather-icon"> 
+          </div>
+          <div class="weather-temps-wrapper">
+            <p class="hi-temp">${Math.round(day.temperature_max)}°F</p>
+            <p class="lo-temp">${Math.round(day.temperature_min)}°F</p>
+          </div>
+        </div>
+      </div>
+    `;
+    weatherDaysWrapper.insertAdjacentHTML('beforeend', cardHTML);
+  });
+}
+
+// 5. Fetches the weather data from the API and kicks off the display
+async function fetchWeatherData() {
+  const url = 'https://ai-weather-by-meteosource.p.rapidapi.com/daily?place_id=sevierville&language=en&units=us';
+  const options = {
+    method: 'GET',
+    headers: {
+      'x-rapidapi-key': '0f232f78d2msh80bdc35b786d01dp1a92dcjsn0ab324d9264b',
+      'x-rapidapi-host': 'ai-weather-by-meteosource.p.rapidapi.com'
+    }
+  };
+
+  try {
+    const response = await fetch(url, options);
+    const data = await response.json();
+    console.log(data); // For debugging
+    displayWeatherData(data);
+  } catch (error) {
+    console.error('Error fetching weather data:', error);
+  }
+}
+
+// 6. Run everything after the DOM is ready
+document.addEventListener('DOMContentLoaded', fetchWeatherData);
+
+//    function setRandomBackgroundImage(imageArray, className) {
+   
+//   if (!Array.isArray(imageArray) || imageArray.length === 0) {
+//     console.error("Error: imageArray must be a non-empty array.");
+//     return;
+//   }
+
+//   const randomIndex = Math.floor(Math.random() * imageArray.length);
+//   const randomImage = imageArray[randomIndex];
+//   const elements = document.getElementsByClassName(className);
+
+//   if (elements.length > 0) {
+//     for (let i = 0; i < elements.length; i++) {
+//       const element = elements[i];
+//       element.style.backgroundImage = `url('${randomImage}')`;
+//       // Optionally set background size, repeat, etc.
+//       // element.style.backgroundSize = 'cover';
+//       // element.style.backgroundRepeat = 'no-repeat';
+//       // element.style.backgroundPosition = 'center';
+//     }
+//   } else {
+//     console.warn(`Warning: No elements found with class name '${className}'.`);
+//   }
+// }
+
+// //Image Array
+// const backgroundImages = [
+//   "assets/images/bulldozer-2195329_1920.jpg",
+//   "assets/images/skyscraper-1482844_1920.jpg",
+//   "assets/images/floor-plan-1857175_1920.jpg",
+//   "assets/images/Rental_Brand_Demo.avif",
+// ];
+
+// document.addEventListener('DOMContentLoaded', function() {
+//   setRandomBackgroundImage(backgroundImages, 'bkground-image');
+// });
+
+// Descrepancy for yard checks not completed
+// Re-use your existing alert-card markup
+
+/* ---------------------
+YARDCHECK DISCREPANCY ALERTS
+--------------------- */
+function displayDiscrepancyAlerts(discrepancies) {
+  const wrapper = document.querySelector('.alerts-card-wrapper');
+  discrepancies.forEach(({ type, date, expected, actual }) => {
+    const title = type === 'rented_out'
+      ? 'Rental Count Discrepancy'
+      : 'Service Status Discrepancy';
+
+    const itemLabel = type === 'rented_out'
+      ? 'rented out'
+      : 'out of service';
+
+    const card = document.createElement('div');
+    card.className = 'alert-card';
+    card.innerHTML = `
+      <p class="alert-title">${title}</p>
+      <p class="alert-description">
+        On <strong>${new Date(date).toLocaleDateString()}</strong>, AM shows 
+        <strong>${actual}</strong> ${itemLabel}, but previous PM had 
+        <strong>${expected}</strong>. Please verify.
+      </p>
+    `;
+    wrapper.appendChild(card);
+  });
+}
+
+// New loader for just the alerts
+function loadYardCheckAlerts(startDate, endDate) {
+  fetch(`get_submitted_yard_checks.php?start=${startDate}&end=${endDate}`)
+    .then(res => res.json())
+    .then(data => {
+      if (data.discrepancies.length) {
+        displayDiscrepancyAlerts(data.discrepancies);
+      }
+    })
+    .catch(console.error);
+}
+
+// On first visit, kick off an alerts fetch for this week
+document.addEventListener('DOMContentLoaded', () => {
+  const today = new Date();
+  // get Sunday of this week (or adjust to your store’s first day)
+  const first = new Date(today);
+  first.setDate(today.getDate() - today.getDay());
+  const last = new Date(first);
+  last.setDate(first.getDate() + 6);
+
+  const iso = d => d.toISOString().slice(0, 10);
+  loadYardCheckAlerts(iso(first), iso(last));
+});
+
+/* ---------------------
+SCROLL TO TOP BUTTON 
+-------------------- */
 
 const container = document.getElementById('main-content-container');
 const scrollToTopButton = document.getElementById('scrollToTopButton');
@@ -205,7 +411,6 @@ function showSubmittedYardChecks() {
  * else partial placeholders for missing AM/PM.
  */
 function loadSubmittedYardChecks(startDate, endDate) {
-   // debugger;
   let url = 'get_submitted_yard_checks.php';
   if (startDate && endDate) {
     url += `?start_date=${startDate}&end_date=${endDate}`;
@@ -213,9 +418,12 @@ function loadSubmittedYardChecks(startDate, endDate) {
 
   fetch(url)
     .then(resp => resp.json())
-    .then(data => {
+    .then(response => {
       const yardChecksListDiv = document.getElementById('yard-checks-list');
       yardChecksListDiv.innerHTML = '';
+
+      // Get the yard checks array from the response
+      const data = response.yardChecks;
 
       if (!data || data.length === 0) {
         const displayStart = formatDateForDisplay(startDate);
@@ -231,7 +439,14 @@ function loadSubmittedYardChecks(startDate, endDate) {
         return;
       }
 
-      // We have partial or full data => group by date+check_time
+      // Handle discrepancies if needed
+      const discrepancies = response.discrepancies;
+      if (discrepancies && discrepancies.length > 0) {
+        console.log('Discrepancies found:', discrepancies);
+        // You can handle discrepancies here if needed
+      }
+
+      // Rest of the existing function remains the same
       const yardChecksByDate = {};
       data.forEach(item => {
         if (!yardChecksByDate[item.date]) {

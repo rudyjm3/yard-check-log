@@ -39,8 +39,19 @@ input[type=number] {
   -moz-appearance: textfield;
   /* unused */ /* Not Used in any provided HTML or JS */ 
 }
-
-/*MAIN STYLE SHEET */
+button {
+   color: var(--brand-color-ivory);
+   background-color: var(--brand-color-green);
+   border: none;
+   cursor: pointer;
+   outline: none;
+   width: 100%;
+   height: 50px;
+   font-size: 1.2rem;
+   font-weight: 500;
+   border-radius: 4px;
+   transition: all 0.3s ease-in-out;
+}
 
 /* General Styles */
 body {
@@ -54,6 +65,12 @@ body {
   /* font-family: Arial, sans-serif; */ /* duplicate-redundant code (repeats at line 39 with "Roboto") */
   margin: 0;
   padding: 0;
+  background-image: url("../images/luke-chesser-3rWagdKBF7U-unsplash.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: fixed;
+  /* unused */ /* Not used in any provided HTML or JS */ 
 }
 header {
    display: flex;
@@ -65,7 +82,7 @@ header {
 }
 /* Glassmorphism Styles */
 .glassmorphism {
-   background: rgba(255, 255, 255, 0.1);
+   background-color: rgba(255, 255, 255, 0.1);
    backdrop-filter: blur(10px);
    border-radius: 10px;
    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
@@ -114,7 +131,9 @@ header {
 }
 .logo-container {
    width: 100%;
-   margin-bottom: 40px;
+   max-width: 225px;
+   height: auto;
+   /* margin-bottom: 40px; */
 }
 .logo-wrapper {
    display: flex;
@@ -372,12 +391,31 @@ header .page-title {
 header .page-title h1 {
    font-size: 1.5rem;
 }
+#overlay {
+  position: fixed;
+  display: none;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.5);
+  z-index: 2;
+  cursor: pointer;
+}
 #main-content-section {
   display: flex;
   justify-content: flex-start;
   width: 100%;
   height: 100%;
+  
+  /* background-image: url("../images/content_20hub_b3acc06c-cbe6-45c9-b30b-c924ec633d2f.webp");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover; */
   overflow: hidden;
+  /* filter: brightness(0.7); */
 }
 
 /* Scroll-to-top button styling */
@@ -432,17 +470,18 @@ header .page-title h1 {
 }
 #side-nav-container {
   position: relative;
+  left: 15px;
+  border-radius: 8px;
+  padding: 10px;
+
   width: 100%;
   max-width: 200px;
   background-color: var(--secondary-black-color);
   transition: width 0.3s ease;  /* animate the width change */
-  /* overflow: hidden; */ /* unused */ /* Not necessary as overflow is handled by main-content-container */
-  /* overflow-y: auto; */ /* unused */ /* Not necessary as above */
+  /* overflow: hidden; /* unused */ /* Not necessary as overflow is handled by main-content-container */
+  /* overflow-y: auto; /* unused */ /* Not necessary as above */
 }
-.side-nav-container-collapsed {
-   width: 60px;
-   /* duplicate-redundant code (repeats at line 374 with slight width difference) */
-}
+
 .side-menu {
   list-style-type: none;
   padding: 0;
@@ -450,16 +489,17 @@ header .page-title h1 {
 }
 
 .side-menu-item {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  position: relative;
-  padding: 15px;
-  height: 70px;
-  line-height: 1.5;
-  color: var(--main-white-color);
-  transition: justify-content 0.3s ease; /* so it can animate gracefully */
-  cursor: pointer;
+   display: flex;
+   justify-content: flex-start;
+   align-items: center;
+   gap: 10px;
+   position: relative;
+   padding: 8px;
+   height: 70px;
+   line-height: 1.5;
+   color: var(--main-white-color);
+   transition: all 0.3s ease; /* so it can animate gracefully */
+   cursor: pointer;
 }
 /* When collapsed, center the items */
 /* .side-nav-container-collapsed .side-menu-item {
@@ -498,9 +538,14 @@ header .page-title h1 {
 /* The text elements */
 .side-menu-txt {
    display: inline-block;
-   margin-left: 10px;
+   /* margin-left: 10px; */
+   margin-left: 0;
    transition: opacity 0.3s ease; /* fade in/out */
    opacity: 1;
+}
+.side-nav-container-collapsed {
+   border-radius: 50px !important;
+   transition: all 0.3s ease-in-out; /* so it can animate gracefully */
 }
 .side-nav-container-collapsed .side-menu-txt {
    opacity: 0;
@@ -509,7 +554,8 @@ header .page-title h1 {
 
 .side-menu-item-icon-wrapper {
   font-size: 22px;
-  padding-right: 15px;
+  /* padding-right: 15px; */
+  padding-right: 0;
   transition: padding-right 0.3s ease;
 }
 .side-nav-container-collapsed .side-menu-item-icon-wrapper {
@@ -556,7 +602,7 @@ header .page-title h1 {
    justify-content: center;
    align-items: flex-start;
    width: 100%;
-   background-color: var(--light-grey-color1);
+   /* background-color: var(--light-grey-color1); */
    padding: 20px;
    overflow-y: scroll;
    overflow-x: hidden;
@@ -713,7 +759,7 @@ header .page-title h1 {
    min-width: 300px;
    padding: 20px;
    border: 1px solid var(--light-grey-color1);
-   border-radius: 4px;
+   border-radius: 8px;
    box-shadow: 0px 5px 10px -1px rgba(167, 167, 167, 0.75);
    -webkit-box-shadow: 0px 5px 10px -1px rgba(167, 167, 167, 0.75);
    -moz-box-shadow: 0px 5px 10px -1px rgba(167, 167, 167, 0.75);background-color: var(--main-white-color);
@@ -729,7 +775,7 @@ header .page-title h1 {
 .yard-check-form-title {
    text-align: left;
    background-color: var(--brand-color-green);
-   border-radius: 4px 4px 0 0;
+   border-radius: 8px 8px 0 0;
    padding: 20px;
    color: var(--light-grey-color1); 
    font-size: 1.5rem;

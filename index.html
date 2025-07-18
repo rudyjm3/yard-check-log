@@ -19,15 +19,17 @@
 <body>   
    
    <header>
-      <!-- <div class="logo-container">
-         <img src="assets\images\logo\fleethub-logo.webp" alt="" class="logo-image">
-      </div> -->
-      <div class="page-title">
-         <h1>EquipFlow</h1>
+      <div class="logo-container">
+         <img src="assets\images\logo\equipflow-logo-full_b.svg" alt="Logo and tagline" class="logo-image">
       </div>
+      <!-- <div class="page-title">
+         <h1>EquipFlow</h1>
+      </div> -->
    </header>
 
-
+   <div id="overlay">
+  <!-- <div id="text">Overlay Text</div> -->
+   </div>
    <section id="main-content-section">
       <!-- Side Menu Start -->
       <nav id="side-nav-container" class="side-nav-container-collapsed">
@@ -67,6 +69,124 @@
 
     <!-- Container that holds all of the different content containers related to menu items-->
       <main id="main-content-container">
+         <!-- Dashboard Section -->
+         <div id="dashboard-container">
+            <section id="dashboard-header-container">
+               <div class="title-wrapper">
+                  <h1>Dash Board</h1> 
+               </div> 
+            </section>
+
+            <section id="dashboard-weather-container">
+               <div id="weather-header-wrapper">
+                  <p class="weather-title">Current Weather - <span class="current-weather-date-txt">April, Monday 21st, 2025</span></p>
+               </div>
+
+               <div class="weather-days-container">
+                  <!-- Current Weather Card -->
+                  <div class="current-weather-card">
+                     <p class="current-day">Today</p>
+                     <div class="weather-info-wrapper">
+                        <div class="weather-icon-wrapper">
+                           <img src="" alt="Weather Icon" class="weather-icon">
+                           <p class="current-temp"></p>
+                           <p class="weather-description"></p>
+                        </div>
+                        
+                        <div class="weather-temp-wrapper">
+                        
+                           <p class="current-hi-txt">High: <span class="current-hi-temp">75°F</span></p>
+                           <p class="current-lo-txt">Low: <span class="current-lo-temp">65°F</span></p>
+                        </div>
+                        <p class="weather-summary"></p>
+                     </div>
+                  </div>
+                  <!-- Upcoming Weather Days -->
+                  <div class="weather-days-wrapper">
+                     <!-- JavaScript will dynamically populate these -->
+                  </div>
+               </div>
+            </section>
+
+            <section id="alerts-container">
+               <div class="alerts-header-wrapper">
+                  <h3>Alerts</h3> 
+               </div>
+               <div class="alerts-card-wrapper">
+                  <div class="alert-card">
+                     <p class="alert-title">Penske Hiker</p>
+                     <p class="alert-description">There are <span>3</span> Penske hiker submissions to confirm.</p>
+                  </div>
+                  <div class="alert-card">
+                     <p class="alert-title">Maintenance Alert</p>
+                     <p class="alert-description">Monthly Pickup Maintenance Inspection Due</p>
+                  </div>
+                  <div class="alert-card">
+                     <p class="alert-title">Rental Markdown</p>
+                     <p class="alert-description">There are <span>5</span> markdown submissions to review.</p>
+                  </div>
+                  <div class="alert-card">
+                     <p class="alert-title">Yard Checks</p>
+                     <p class="alert-description">There are <span>2</span> missing yard check submissions.</p> 
+                     <div class="alert-button-wrapper">
+                        <button class="alert-btn-yardcheck" onclick="showSubmittedYardChecks()">View submitted yardchecks</button>
+                     </div>
+                  </div>
+
+               </div>
+
+            </section>
+
+            <section id="main-dashboard-content-container">
+               <div class="dashboard-col-1-wrapper">
+                  <div class="wrapper">
+                     <button>Start a Yardcheck</button>
+                     <button>Edit a Yardcheck</button>
+                  </div>
+                  <div class="wrapper">
+                     <button>Penske Hiker Check-in</button>
+                     <button>Associate confirm Penske Check-in/out</button>   
+                  </div>     
+               </div>
+
+               <div class="dashboard-col-2-wrapper">
+                  <h3>Popular LE This Week</h3>
+                  <div class="popular-le-card-wrapper">
+                     <div class="popular-le-card">
+                        <div class="le-img-wrapper">
+                           <img src="" alt="">
+                        </div>
+                        <div class="le-info-wrapper">
+                           <p class="le-name">LE Name</p>
+                           <p class="le-days-rented">6</p>
+                        </div>
+                     </div>
+                     <div class="popular-le-card">
+                        <div class="le-img-wrapper">
+                           <img src="" alt="">
+                        </div>
+                        <div class="le-info-wrapper">
+                           <p class="le-name">LE Name</p>
+                           <p class="le-days-rented">6</p>
+                        </div>
+                     </div>
+                     <div class="popular-le-card">
+                        <div class="le-img-wrapper">
+                           <img src="" alt="">
+                        </div>
+                        <div class="le-info-wrapper">
+                           <p class="le-name">LE Name</p>
+                           <p class="le-days-rented">6</p>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </section>
+         <!-- End Main Dashboard Section -->
+               
+   <!-- </div> -->
+         <!-- End Dashboard Section -->
+
          <!-- Yard Check Form -->
          <form id="lg-equipment-yard-check-form" class="content-section-container" style="display: none;">
          <div class="form-title-wrapper">
