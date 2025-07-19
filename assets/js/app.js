@@ -173,42 +173,6 @@ async function fetchWeatherData() {
 // 6. Run everything after the DOM is ready
 document.addEventListener('DOMContentLoaded', fetchWeatherData);
 
-//    function setRandomBackgroundImage(imageArray, className) {
-   
-//   if (!Array.isArray(imageArray) || imageArray.length === 0) {
-//     console.error("Error: imageArray must be a non-empty array.");
-//     return;
-//   }
-
-//   const randomIndex = Math.floor(Math.random() * imageArray.length);
-//   const randomImage = imageArray[randomIndex];
-//   const elements = document.getElementsByClassName(className);
-
-//   if (elements.length > 0) {
-//     for (let i = 0; i < elements.length; i++) {
-//       const element = elements[i];
-//       element.style.backgroundImage = `url('${randomImage}')`;
-//       // Optionally set background size, repeat, etc.
-//       // element.style.backgroundSize = 'cover';
-//       // element.style.backgroundRepeat = 'no-repeat';
-//       // element.style.backgroundPosition = 'center';
-//     }
-//   } else {
-//     console.warn(`Warning: No elements found with class name '${className}'.`);
-//   }
-// }
-
-// //Image Array
-// const backgroundImages = [
-//   "assets/images/bulldozer-2195329_1920.jpg",
-//   "assets/images/skyscraper-1482844_1920.jpg",
-//   "assets/images/floor-plan-1857175_1920.jpg",
-//   "assets/images/Rental_Brand_Demo.avif",
-// ];
-
-// document.addEventListener('DOMContentLoaded', function() {
-//   setRandomBackgroundImage(backgroundImages, 'bkground-image');
-// });
 
 // Descrepancy for yard checks not completed
 // Re-use your existing alert-card markup
@@ -376,7 +340,7 @@ function setActiveMenuItem() {
  * Show "Submitted Yard Checks" for the current local Monday→Sunday.
  */
 function showSubmittedYardChecks() {
-   // debugger;
+  document.getElementById('dashboard-container').style.display = 'none';
   document.getElementById('lg-equipment-yard-check-form').style.display = 'none';
   document.getElementById('equipment-management').style.display = 'none';
   document.getElementById('equipment-stats').style.display = 'none';
@@ -607,6 +571,7 @@ function filterSubmittedYardChecks() {
 
  // Show Yard Check Form
  function showYardCheckForm() {
+   document.getElementById('dashboard-container').style.display = 'none';
    if (currentSortable) {
      currentSortable.destroy();
      currentSortable = null;
@@ -797,6 +762,7 @@ function closeMessage() {
 ------------------------- */
 
 function showEquipmentManagement() {
+  document.getElementById('dashboard-container').style.display = 'none';
   document.getElementById('lg-equipment-yard-check-form').style.display = 'none';
   document.getElementById('equipment-management').style.display = 'block';
   document.getElementById('submitted-yard-checks').style.display = 'none';
@@ -1131,6 +1097,7 @@ console.log(yardCheck.user_name);
 ------------------------- */
 
 function showEquipmentStats() {
+  document.getElementById('dashboard-container').style.display = 'none';
   document.getElementById('lg-equipment-yard-check-form').style.display = 'none';
   document.getElementById('equipment-management').style.display = 'none';
   document.getElementById('submitted-yard-checks').style.display = 'none';
@@ -1354,3 +1321,23 @@ function saveEquipmentOrder(order) {
         alert('Failed to save equipment order. Please try again.');
     });
 }
+
+// -------------------------
+// DASHBOARD
+// -------------------------
+
+function showDashboard() {
+  document.getElementById('dashboard-container').style.display = 'block';
+  document.getElementById('lg-equipment-yard-check-form').style.display = 'none';
+  document.getElementById('equipment-management').style.display = 'none';
+  document.getElementById('equipment-stats').style.display = 'none';
+  document.getElementById('submitted-yard-checks').style.display = 'none';
+  setActiveMenuItem();
+}
+
+// Update the DOMContentLoaded event listener to show dashboard by default
+document.addEventListener('DOMContentLoaded', () => {
+  displayCurrentDateTime();
+  checkMissingYardChecks();
+  showDashboard(); // Make dashboard visible by default
+});

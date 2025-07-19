@@ -39,30 +39,36 @@
          </button>
 
          <ul class="side-menu">
-         <li class="side-menu-item" onclick="showYardCheckForm()">
-            <span class="side-menu-item-icon-wrapper" data-tooltip="Yard Check">
-               <i class="fa-solid fa-clipboard-check"></i>
+            <li class="side-menu-item" onclick="showDashboard()">
+            <span class="side-menu-item-icon-wrapper" data-tooltip="Dashboard">
+               <i class="fa-solid fa-house"></i>
             </span>
-            <p class="side-menu-txt">Yard Check</p>
-         </li>
-         <li class="side-menu-item" onclick="showSubmittedYardChecks()">
-            <span class="side-menu-item-icon-wrapper" data-tooltip="View Submitted Yard Checks">
-               <i class="fa-regular fa-calendar-check"></i>
-            </span>
-            <p class="side-menu-txt">View Submitted Yard Checks</p>
-         </li>
-         <li class="side-menu-item" onclick="showEquipmentStats()">
-            <span class="side-menu-item-icon-wrapper" data-tooltip="Large Equipment Stats">
-               <i class="fa-solid fa-chart-bar"></i>
-            </span>
-            <p class="side-menu-txt">Large Equipment Stats</p>
-         </li>
-         <li class="side-menu-item" onclick="showEquipmentManagement()">
-            <span class="side-menu-item-icon-wrapper" data-tooltip="Manage Assets">
-               <i class="fa-solid fa-gear"></i>
-            </span>
-            <p class="side-menu-txt">Manage Assets</p>
-         </li>
+            <p class="side-menu-txt">Dashboard</p>
+            </li>
+            <li class="side-menu-item" onclick="showYardCheckForm()">
+               <span class="side-menu-item-icon-wrapper" data-tooltip="Yard Check">
+                  <i class="fa-solid fa-clipboard-check"></i>
+               </span>
+               <p class="side-menu-txt">Yard Check</p>
+            </li>
+            <li class="side-menu-item" onclick="showSubmittedYardChecks()">
+               <span class="side-menu-item-icon-wrapper" data-tooltip="View Submitted Yard Checks">
+                  <i class="fa-regular fa-calendar-check"></i>
+               </span>
+               <p class="side-menu-txt">View Submitted Yard Checks</p>
+            </li>
+            <li class="side-menu-item" onclick="showEquipmentStats()">
+               <span class="side-menu-item-icon-wrapper" data-tooltip="Large Equipment Stats">
+                  <i class="fa-solid fa-chart-bar"></i>
+               </span>
+               <p class="side-menu-txt">Large Equipment Stats</p>
+            </li>
+            <li class="side-menu-item" onclick="showEquipmentManagement()">
+               <span class="side-menu-item-icon-wrapper" data-tooltip="Manage Assets">
+                  <i class="fa-solid fa-gear"></i>
+               </span>
+               <p class="side-menu-txt">Manage Assets</p>
+            </li>
          </ul>
       </nav>
     <!-- Side Menu End -->
@@ -70,7 +76,7 @@
     <!-- Container that holds all of the different content containers related to menu items-->
       <main id="main-content-container">
          <!-- Dashboard Section -->
-         <div id="dashboard-container">
+         <div id="dashboard-container" class="content-section-container">
             <section id="dashboard-header-container">
                <div class="title-wrapper">
                   <h1>Dash Board</h1> 
@@ -182,9 +188,8 @@
                   </div>
                </div>
             </section>
-         <!-- End Main Dashboard Section -->
-               
-   <!-- </div> -->
+            <!-- End Main Dashboard Section -->     
+         </div>   
          <!-- End Dashboard Section -->
 
          <!-- Yard Check Form -->
