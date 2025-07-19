@@ -206,15 +206,50 @@ function displayDiscrepancyAlerts(discrepancies) {
 }
 
 // New loader for just the alerts
+// function loadYardCheckAlerts(startDate, endDate) {
+//   fetch(`get_submitted_yard_checks.php?start=${startDate}&end=${endDate}`)
+//     .then(res => res.json())
+//     .then(data => {
+//       if (data.discrepancies && data.discrepancies.length) {
+//         displayDiscrepancyAlerts(data.discrepancies);
+//       }
+//     })
+//     .catch(error => {
+//       console.error('Error loading yard check alerts:', error);
+//       const wrapper = document.querySelector('.alerts-card-wrapper');
+//       if (wrapper) {
+//         wrapper.innerHTML = '<div class="alert-card"><p class="alert-description">Unable to load alerts at this time.</p></div>';
+//       }
+//     });
+// }
 function loadYardCheckAlerts(startDate, endDate) {
   fetch(`get_submitted_yard_checks.php?start=${startDate}&end=${endDate}`)
-    .then(res => res.json())
+    .then(res => {
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.status}`);
+      }
+      return res.json();
+    })
     .then(data => {
-      if (data.discrepancies.length) {
+      if (data.status === 'error') {
+        console.error('Server error:', data.message);
+        const wrapper = document.querySelector('.alerts-card-wrapper');
+        if (wrapper) {
+          wrapper.innerHTML = `<div class="alert-card"><p class="alert-description">Error: ${data.message}</p></div>`;
+        }
+        return;
+      }
+      if (data.discrepancies && data.discrepancies.length) {
         displayDiscrepancyAlerts(data.discrepancies);
       }
     })
-    .catch(console.error);
+    .catch(error => {
+      console.error('Error loading yard check alerts:', error);
+      const wrapper = document.querySelector('.alerts-card-wrapper');
+      if (wrapper) {
+        wrapper.innerHTML = '<div class="alert-card"><p class="alert-description">Unable to load alerts at this time. Please try again later.</p></div>';
+      }
+    });
 }
 
 // On first visit, kick off an alerts fetch for this week
@@ -1338,6 +1373,6 @@ function showDashboard() {
 // Update the DOMContentLoaded event listener to show dashboard by default
 document.addEventListener('DOMContentLoaded', () => {
   displayCurrentDateTime();
-  checkMissingYardChecks();
+//   checkMissingYardChecks();
   showDashboard(); // Make dashboard visible by default
 });

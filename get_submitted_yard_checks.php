@@ -5,13 +5,16 @@
 // header("Pragma: no-cache"); // HTTP 1.0 compatibility
 // header("Expires: 0"); // Ensures the content is always considered expired
 
-// Enable error reporting
+// Enable error reporting for development (disable in production)
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 // Include DB connection
 include 'db_connection_info.php';
+
+// Set JSON header
+header('Content-Type: application/json');
 
 // Read optional query parameters for date filtering
 $startDate = isset($_GET['start_date']) ? $_GET['start_date'] : null;
@@ -28,7 +31,7 @@ try {
             ORDER BY date DESC, check_time ASC
         ");
         $stmt->bindParam(':startDate', $startDate);
-        $stmt->bindParam(':endDate',   $endDate);
+        $stmt->bindParam(':endDate', $endDate);
         $stmt->execute();
     } else {
         // No date filter => fetch all yard checks
@@ -91,55 +94,54 @@ try {
     }
 
     // 6a) Detect PM→next-day AM mismatches
-$discrepancies = [];
-for ($i = 0; $i < count($result) - 1; $i++) {
-    $cur = $result[$i];
-    $nxt = $result[$i + 1];
+    $discrepancies = [];
+    for ($i = 0; $i < count($result) - 1; $i++) {
+        $cur = $result[$i];
+        $nxt = $result[$i + 1];
 
-    if ($cur['check_time'] === 'PM' && $nxt['check_time'] === 'AM') {
-        $pmDate = new DateTime($cur['date'] . ' ' . $cur['check_time']);
-        $amDate = new DateTime($nxt['date'] . ' ' . $nxt['check_time']);
+        if ($cur['check_time'] === 'PM' && $nxt['check_time'] === 'AM') {
+            // Map AM/PM to specific times for DateTime
+            $pmTime = $cur['check_time'] === 'PM' ? '12:00:00' : '00:00:00';
+            $amTime = $nxt['check_time'] === 'AM' ? '00:00:00' : '12:00:00';
 
-        if ($pmDate->diff($amDate)->days <= 1) {
-            // rented-out drop?
-            if ((int)$nxt['equipment_rented_out'] < (int)$cur['equipment_rented_out']) {
-                $discrepancies[] = [
-                    'type'     => 'rented_out',
-                    'date'     => $nxt['date'],
-                    'expected' => (int)$cur['equipment_rented_out'],
-                    'actual'   => (int)$nxt['equipment_rented_out'],
-                ];
-            }
-            // out-of-service drop?
-            if ((int)$nxt['equipment_out_of_service'] < (int)$cur['equipment_out_of_service']) {
-                $discrepancies[] = [
-                    'type'     => 'out_of_service',
-                    'date'     => $nxt['date'],
-                    'expected' => (int)$cur['equipment_out_of_service'],
-                    'actual'   => (int)$nxt['equipment_out_of_service'],
-                ];
+            $pmDate = new DateTime($cur['date'] . ' ' . $pmTime);
+            $amDate = new DateTime($nxt['date'] . ' ' . $amTime);
+
+            if ($pmDate->diff($amDate)->days <= 1) {
+                // rented-out drop?
+                if ((int)$nxt['equipment_rented_out'] < (int)$cur['equipment_rented_out']) {
+                    $discrepancies[] = [
+                        'type'     => 'rented_out',
+                        'date'     => $nxt['date'],
+                        'expected' => (int)$cur['equipment_rented_out'],
+                        'actual'   => (int)$nxt['equipment_rented_out'],
+                    ];
+                }
+                // out-of-service drop?
+                if ((int)$nxt['equipment_out_of_service'] < (int)$cur['equipment_out_of_service']) {
+                    $discrepancies[] = [
+                        'type'     => 'out_of_service',
+                        'date'     => $nxt['date'],
+                        'expected' => (int)$cur['equipment_out_of_service'],
+                        'actual'   => (int)$nxt['equipment_out_of_service'],
+                    ];
+                }
             }
         }
     }
-}
 
-// 6b) Return yard checks + discrepancies
-header('Content-Type: application/json');
-echo json_encode([
-  'yardChecks'    => $result,
-  'discrepancies' => $discrepancies
-]);
-exit;
+    // 6b) Return yard checks + discrepancies
+    echo json_encode([
+        'yardChecks'    => $result,
+        'discrepancies' => $discrepancies
+    ]);
 
-    // 6. Output the final array as JSON
-   //  echo json_encode($result);
-
-} catch (PDOException $e) {
-    // In case of error, send an error message as JSON
+} catch (Exception $e) {
+    // Return error as JSON
     echo json_encode([
         'status' => 'error',
-        'message' => $e->getMessage()
+        'message' => 'Server error: ' . $e->getMessage()
     ]);
-    exit;
 }
+exit;
 ?>
