@@ -206,22 +206,6 @@ function displayDiscrepancyAlerts(discrepancies) {
 }
 
 // New loader for just the alerts
-// function loadYardCheckAlerts(startDate, endDate) {
-//   fetch(`get_submitted_yard_checks.php?start=${startDate}&end=${endDate}`)
-//     .then(res => res.json())
-//     .then(data => {
-//       if (data.discrepancies && data.discrepancies.length) {
-//         displayDiscrepancyAlerts(data.discrepancies);
-//       }
-//     })
-//     .catch(error => {
-//       console.error('Error loading yard check alerts:', error);
-//       const wrapper = document.querySelector('.alerts-card-wrapper');
-//       if (wrapper) {
-//         wrapper.innerHTML = '<div class="alert-card"><p class="alert-description">Unable to load alerts at this time.</p></div>';
-//       }
-//     });
-// }
 function loadYardCheckAlerts(startDate, endDate) {
   fetch(`get_submitted_yard_checks.php?start=${startDate}&end=${endDate}`)
     .then(res => {
