@@ -98,17 +98,21 @@ function formatWeatherText(text) {
 }
 
 // 4. Main function that processes and displays weather data
+
+// 4.
 function displayWeatherData(data) {
   const todayString = getTodayDateString();
+  console.log("Today String:", todayString); // Debug today’s date
 
   // Find the forecast object for today
   const todayIndex = data.daily.data.findIndex(day => day.day === todayString);
   if (todayIndex === -1) {
-    console.error("Today's weather data not found.");
+    console.error("Today's weather data not found. Data:", data.daily.data);
     return;
   }
-  console.log(todayIndex); // For debugging
-  // Get today's forecast
+  console.log("Today Index:", todayIndex, "Data at Index:", data.daily.data[todayIndex]); // Debug index and data
+
+  // Get today's forecast for current-weather-card
   const currentWeather = data.daily.data[todayIndex];
   document.querySelector('.current-weather-date-txt').textContent = formatDate(currentWeather.day);
   document.querySelector('.current-temp').textContent = `${Math.round(currentWeather.temperature)}°F`;
@@ -118,35 +122,43 @@ function displayWeatherData(data) {
   document.querySelector('.weather-summary').textContent = currentWeather.summary;
   document.querySelector('.current-weather-card .weather-icon').src = getMappedIcon(currentWeather.icon);
 
-  // Get the next 6 forecast days
+  // Get the next 6 forecast days, explicitly excluding today
   const upcomingDays = data.daily.data.slice(todayIndex + 1, todayIndex + 7);
-  console.log(upcomingDays); // For debugging
+  console.log("Upcoming Days Raw:", upcomingDays.map(day => day.day)); // Debug raw days
   const weatherDaysWrapper = document.querySelector('.weather-days-wrapper');
   weatherDaysWrapper.innerHTML = ''; // Clear previous content
 
-  upcomingDays.forEach(day => {
-    const [year, month, dateNum] = day.day.split('-').map(Number);
-    const dateObj = new Date(Date.UTC(year, month - 1, dateNum));
+  // Limit to 6 days and use proper date formatting
+  if (upcomingDays.length >= 6) {
+    upcomingDays.slice(0, 6).forEach(day => {
+      const dateObj = new Date(day.day + 'T00:00:00'); // Ensure local date parsing
+      const options = { weekday: 'short', day: 'numeric', timeZone: 'America/New_York' };
+      const formattedDate = dateObj.toLocaleDateString('en-US', options);
 
-    const cardHTML = `
-      <div class="weather-days-card">
-        <div class="weather-day-date">
-          <p class="weather-day">${dateObj.toLocaleDateString('en-US', { weekday: 'short' })}</p>
-          <p class="weather-day-num">${dateObj.getUTCDate()}</p>
-        </div>
-        <div class="weather-info-wrapper">
-          <div class="weather-icon-wrapper">
-            <img src="${getMappedIcon(day.icon)}" alt="Weather Icon" class="weather-icon"> 
+      console.log("Processing Day:", day.day, "Formatted as:", formattedDate); // Debug each day
+
+      const cardHTML = `
+        <div class="weather-days-card">
+          <div class="weather-day-date">
+            <p class="weather-day"><span class="date">${formattedDate}</span></p>
           </div>
-          <div class="weather-temps-wrapper">
-            <p class="hi-temp">${Math.round(day.temperature_max)}°F</p>
-            <p class="lo-temp">${Math.round(day.temperature_min)}°F</p>
+          <div class="weather-info-wrapper">
+            <div class="weather-icon-wrapper">
+              <img src="${getMappedIcon(day.icon)}" alt="Weather Icon" class="weather-icon"> 
+            </div>
+            <div class="weather-temps-wrapper">
+              <p class="hi-temp">${Math.round(day.temperature_max)}°F</p>
+              <p class="lo-temp">${Math.round(day.temperature_min)}°F</p>
+            </div>
           </div>
         </div>
-      </div>
-    `;
-    weatherDaysWrapper.insertAdjacentHTML('beforeend', cardHTML);
-  });
+      `;
+      weatherDaysWrapper.insertAdjacentHTML('beforeend', cardHTML);
+    });
+  } else {
+    weatherDaysWrapper.innerHTML = '<p>Insufficient forecast data for the next 6 days.</p>';
+    console.warn("Insufficient days:", upcomingDays.length);
+  }
 }
 
 // 5. Fetches the weather data from the API and kicks off the display
@@ -175,38 +187,156 @@ document.addEventListener('DOMContentLoaded', fetchWeatherData);
 
 
 // Descrepancy for yard checks not completed
-// Re-use your existing alert-card markup
 
 /* ---------------------
 YARDCHECK DISCREPANCY ALERTS
 --------------------- */
-function displayDiscrepancyAlerts(discrepancies) {
+// function displayDiscrepancyAlerts(discrepancies) {
+//   const wrapper = document.querySelector('.alerts-card-wrapper');
+//   discrepancies.forEach(({ type, date, expected, actual }) => {
+//     const title = type === 'rented_out'
+//       ? 'Rental Count Discrepancy'
+//       : 'Service Status Discrepancy';
+
+//     const itemLabel = type === 'rented_out'
+//       ? 'rented out'
+//       : 'out of service';
+
+//     const card = document.createElement('div');
+//     card.className = 'alert-card';
+//     card.innerHTML = `
+//       <p class="alert-title">${title}</p>
+//       <p class="alert-description">
+//         On <strong>${new Date(date).toLocaleDateString()}</strong>, AM shows 
+//         <strong>${actual}</strong> ${itemLabel}, but previous PM had 
+//         <strong>${expected}</strong>. Please verify.
+//       </p>
+//     `;
+//     wrapper.appendChild(card);
+//   });
+// }
+
+// // New loader for just the alerts
+// function loadYardCheckAlerts(startDate, endDate) {
+//   fetch(`get_submitted_yard_checks.php?start=${startDate}&end=${endDate}`)
+//     .then(res => {
+//       if (!res.ok) {
+//         throw new Error(`HTTP error! Status: ${res.status}`);
+//       }
+//       return res.json();
+//     })
+//     .then(data => {
+//       if (data.status === 'error') {
+//         console.error('Server error:', data.message);
+//         const wrapper = document.querySelector('.alerts-card-wrapper');
+//         if (wrapper) {
+//           wrapper.innerHTML = `<div class="alert-card"><p class="alert-description">Error: ${data.message}</p></div>`;
+//         }
+//         return;
+//       }
+//       if (data.discrepancies && data.discrepancies.length) {
+//         displayDiscrepancyAlerts(data.discrepancies);
+//       }
+//     })
+//     .catch(error => {
+//       console.error('Error loading yard check alerts:', error);
+//       const wrapper = document.querySelector('.alerts-card-wrapper');
+//       if (wrapper) {
+//         wrapper.innerHTML = '<div class="alert-card"><p class="alert-description">Unable to load alerts at this time. Please try again later.</p></div>';
+//       }
+//     });
+// }
+
+// // On first visit, kick off an alerts fetch for this week
+// document.addEventListener('DOMContentLoaded', () => {
+//   const today = new Date();
+//   // get Sunday of this week (or adjust to your store’s first day)
+//   const first = new Date(today);
+//   first.setDate(today.getDate() - today.getDay());
+//   const last = new Date(first);
+//   last.setDate(first.getDate() + 6);
+
+//   const iso = d => d.toISOString().slice(0, 10);
+//   loadYardCheckAlerts(iso(first), iso(last));
+// });
+
+// 2 updated discrepcys 
+/* assets/js/app.js */
+
+/* -------------------------
+// ... (Previous code unchanged until YARDCHECK DISCREPANCY ALERTS)
+------------------------- */
+
+/* ---------------------
+YARDCHECK DISCREPANCY AND MISSING SUBMISSION ALERTS
+--------------------- */
+function displayDiscrepancyAlerts(discrepancies, missingSubmissions) {
   const wrapper = document.querySelector('.alerts-card-wrapper');
-  discrepancies.forEach(({ type, date, expected, actual }) => {
-    const title = type === 'rented_out'
-      ? 'Rental Count Discrepancy'
-      : 'Service Status Discrepancy';
+  if (!wrapper) {
+    console.error('Error: .alerts-card-wrapper not found in DOM');
+    return;
+  }
+  wrapper.innerHTML = ''; // Clear previous alerts
 
-    const itemLabel = type === 'rented_out'
-      ? 'rented out'
-      : 'out of service';
+  console.log('Discrepancies:', JSON.stringify(discrepancies, null, 2));
+  console.log('Missing Submissions:', JSON.stringify(missingSubmissions, null, 2));
 
-    const card = document.createElement('div');
-    card.className = 'alert-card';
-    card.innerHTML = `
-      <p class="alert-title">${title}</p>
-      <p class="alert-description">
-        On <strong>${new Date(date).toLocaleDateString()}</strong>, AM shows 
-        <strong>${actual}</strong> ${itemLabel}, but previous PM had 
-        <strong>${expected}</strong>. Please verify.
-      </p>
-    `;
-    wrapper.appendChild(card);
-  });
+  // Display missing submission alerts
+  if (missingSubmissions && missingSubmissions.length) {
+    missingSubmissions.forEach(({ type, message, date }) => {
+      let title;
+      if (type === 'week') {
+        title = 'Missing Week Yard Checks';
+      } else if (type === 'day') {
+        title = 'Missing Daily Yard Check';
+      } else {
+        title = `Missing ${type.toUpperCase()} Yard Check`;
+      }
+
+      const card = document.createElement('div');
+      card.className = 'alert-card';
+      card.innerHTML = `
+        <p class="alert-title">${title}</p>
+        <p class="alert-description">${message}</p>
+      `;
+      wrapper.appendChild(card);
+    });
+  } else {
+    console.warn('No missing submissions found or missingSubmissions is undefined');
+  }
+
+  // Display discrepancy alerts
+  if (discrepancies && discrepancies.length) {
+    discrepancies.forEach(({ type, date, expected, actual, note }) => {
+      const title = type === 'rented_out'
+        ? 'Rental Count Discrepancy'
+        : 'Service Status Discrepancy';
+
+      const itemLabel = type === 'rented_out'
+        ? 'rented out'
+        : 'out of service';
+
+      const noteText = note ? ` (${note})` : '';
+      const card = document.createElement('div');
+      card.className = 'alert-card';
+      card.innerHTML = `
+        <p class="alert-title">${title}</p>
+        <p class="alert-description">
+          On <strong>${new Date(date).toLocaleDateString()}</strong>, AM shows 
+          <strong>${actual}</strong> ${itemLabel}, but previous PM had 
+          <strong>${expected}</strong>.${noteText} Please verify.
+        </p>
+      `;
+      wrapper.appendChild(card);
+    });
+  } else {
+    console.warn('No discrepancies found');
+  }
 }
 
 // New loader for just the alerts
 function loadYardCheckAlerts(startDate, endDate) {
+  console.log(`Fetching alerts for ${startDate} to ${endDate} at ${new Date().toLocaleString('en-US', { timeZone: 'America/New_York' })}`);
   fetch(`get_submitted_yard_checks.php?start=${startDate}&end=${endDate}`)
     .then(res => {
       if (!res.ok) {
@@ -215,6 +345,7 @@ function loadYardCheckAlerts(startDate, endDate) {
       return res.json();
     })
     .then(data => {
+      console.log('Received data:', JSON.stringify(data, null, 2));
       if (data.status === 'error') {
         console.error('Server error:', data.message);
         const wrapper = document.querySelector('.alerts-card-wrapper');
@@ -223,9 +354,7 @@ function loadYardCheckAlerts(startDate, endDate) {
         }
         return;
       }
-      if (data.discrepancies && data.discrepancies.length) {
-        displayDiscrepancyAlerts(data.discrepancies);
-      }
+      displayDiscrepancyAlerts(data.discrepancies || [], data.missingSubmissions || []);
     })
     .catch(error => {
       console.error('Error loading yard check alerts:', error);
@@ -236,18 +365,61 @@ function loadYardCheckAlerts(startDate, endDate) {
     });
 }
 
-// On first visit, kick off an alerts fetch for this week
-document.addEventListener('DOMContentLoaded', () => {
-  const today = new Date();
-  // get Sunday of this week (or adjust to your store’s first day)
-  const first = new Date(today);
-  first.setDate(today.getDate() - today.getDay());
-  const last = new Date(first);
-  last.setDate(first.getDate() + 6);
+function showSubmittedYardChecks() {
+  document.getElementById('dashboard-container').style.display = 'none';
+  document.getElementById('lg-equipment-yard-check-form').style.display = 'none';
+  document.getElementById('equipment-management').style.display = 'none';
+  document.getElementById('equipment-stats').style.display = 'none';
+  document.getElementById('submitted-yard-checks').style.display = 'block';
 
-  const iso = d => d.toISOString().slice(0, 10);
-  loadYardCheckAlerts(iso(first), iso(last));
+  const now = new Date();
+  now.setHours(0,0,0,0);
+
+  const dayOfWeek = now.getDay();
+  const offset = (dayOfWeek + 6) % 7; // Offset to previous Monday
+  console.log('showSubmittedYardChecks => dayOfWeek=', dayOfWeek, ' offset=', offset);
+
+  const currentMonday = new Date(now);
+  currentMonday.setDate(now.getDate() - offset);
+
+  const sunday = new Date(currentMonday);
+  sunday.setDate(currentMonday.getDate() + 6);
+
+  const startDate = formatAsYyyyMmDd(currentMonday);
+  const endDate = formatAsYyyyMmDd(sunday);
+
+  loadSubmittedYardChecks(startDate, endDate);
+  loadYardCheckAlerts(startDate, endDate); // Refresh alerts
+
+  setActiveMenuItem();
+}
+
+/* -------------------------
+// ... (Other functions unchanged until DOMContentLoaded)
+------------------------- */
+
+// Update DOMContentLoaded to ensure alerts load
+document.addEventListener('DOMContentLoaded', () => {
+  console.log('DOMContentLoaded triggered at', new Date().toLocaleString('en-US', { timeZone: 'America/New_York' }));
+  displayCurrentDateTime();
+  showDashboard();
+  const today = new Date();
+  today.setHours(0,0,0,0); // Normalize to midnight
+  const dayOfWeek = today.getDay(); // 0 = Sunday, 6 = Saturday
+  const offset = (dayOfWeek + 6) % 7; // Offset to previous Monday
+  const first = new Date(today);
+  first.setDate(today.getDate() - offset); // Monday of current week
+  const last = new Date(first);
+  last.setDate(first.getDate() + 6); // Sunday of current week
+  const startDate = first.toISOString().slice(0, 10);
+  const endDate = last.toISOString().slice(0, 10);
+  console.log('Loading alerts for week:', startDate, 'to', endDate);
+  loadYardCheckAlerts(startDate, endDate);
 });
+
+/* -------------------------
+// ... (Rest of the code unchanged)
+------------------------- */
 
 /* ---------------------
 SCROLL TO TOP BUTTON 
