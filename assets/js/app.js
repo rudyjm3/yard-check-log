@@ -138,7 +138,7 @@ function displayWeatherData(data) {
       console.log("Processing Day:", day.day, "Formatted as:", formattedDate); // Debug each day
 
       const cardHTML = `
-        <div class="weather-days-card">
+        <div class="weather-days-card glassmorphism-white">
           <div class="weather-day-date">
             <p class="weather-day"><span class="date">${formattedDate}</span></p>
           </div>

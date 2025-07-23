@@ -49,6 +49,7 @@ button {
    height: 50px;
    font-size: 1.2rem;
    font-weight: 500;
+   padding: 10px;
    border-radius: 4px;
    transition: all 0.3s ease-in-out;
 }
@@ -235,8 +236,9 @@ header {
    display: flex;
    justify-content: center;
    align-items: center;
-   margin-top: 10px;
+   margin: 15px 0px;
    padding: 15px;
+   gap: 15px;
 }
 #associate-login-btn {
    width: 100%;
@@ -617,15 +619,18 @@ header .page-title h1 {
 #dashboard-header-container .title-wrapper {
    width: 100%;
 }
-#dashboard-header-container .title-wrapper h1 {
+#dashboard-header-container .title-wrapper, h2 {
+   width: 100%;
+   text-align: left;
    color: var(--brand-color-green);
 }
-/* Weather section styling */
+
+/* WEATHER STYLING START */
 #weather-header-wrapper {
    margin-bottom: 10px;
 }
 #weather-header-wrapper .weather-title {
-   color: var(--secondary-black-color);
+   color: var(--light-grey-color1);
    font-weight: 600;
 }
 #weather-header-wrapper .weather-title .current-weather-date-txt {
@@ -645,6 +650,7 @@ header .page-title h1 {
    align-items: center;
    gap: 10px;
    flex-wrap: wrap;
+   color: var(--light-grey-color1);
 }
 /* Current weather card styling */
 .current-weather-card {
@@ -686,6 +692,7 @@ header .page-title h1 {
 .current-weather-card .weather-temp-wrapper .current-hi-txt,.current-lo-txt {
    font-size: 0.9rem;
    font-weight: 500;
+   color: var(--brand-color-ivory);
 }
 .current-weather-card .weather-icon-wrapper .weather-description {
    flex-grow: 1;
@@ -707,9 +714,16 @@ header .page-title h1 {
    border: 1px solid var(--light-grey-color2);
    border-radius: 4px;
 }
+.weather-days-wrapper .weather-days-card {
+   flex-wrap: nowrap;
+}
 .weather-days-wrapper .weather-days-card .weather-day-date {
    display: flex;
    justify-content: space-evenly;
+}
+.date {
+   font-weight: 500;
+   color: var(--brand-color-green);
 }
 .weather-days-card .weather-icon-wrapper .weather-icon {
    width: 100%;
@@ -730,6 +744,7 @@ header .page-title h1 {
    text-align: center;
    /* unused */ /* Not used in dash-board.html or generated content */
 }
+
 /* Alerts section styling */
 .alert-card {
    border: 1px solid var(--light-grey-color1);
@@ -756,10 +771,10 @@ header .page-title h1 {
    box-shadow: rgba(167, 167, 167, 0.75) 0px 5px 10px -1px;
 }
 /* Header styling for each section */
-.content-section-container h2 {
+.content-section-container > h2 {
    width: 100%;
    text-align: left;
-   color: var(--brand-color-mid-green);
+   color: var(--brand-color-green);
    margin-bottom: 15px;
 }
 #submitted-yard-checks {

@@ -79,18 +79,18 @@
          <div id="dashboard-container" class="content-section-container">
             <section id="dashboard-header-container">
                <div class="title-wrapper">
-                  <h1>Dash Board</h1> 
+                  <h2>Dash Board</h2> 
                </div> 
             </section>
 
-            <section id="dashboard-weather-container">
+            <section id="dashboard-weather-container" class="glassmorphism-black">
                <div id="weather-header-wrapper">
                   <p class="weather-title">Current Weather - <span class="current-weather-date-txt">April, Monday 21st, 2025</span></p>
                </div>
 
                <div class="weather-days-container">
                   <!-- Current Weather Card -->
-                  <div class="current-weather-card">
+                  <div class="current-weather-card glassmorphism-white">
                      <p class="current-day">Today</p>
                      <div class="weather-info-wrapper">
                         <div class="weather-icon-wrapper">
@@ -145,11 +145,11 @@
 
             <section id="main-dashboard-content-container">
                <div class="dashboard-col-1-wrapper">
-                  <div class="wrapper">
-                     <button>Start a Yardcheck</button>
-                     <button>Edit a Yardcheck</button>
+                  <div class="btn-wrapper">
+                     <button onclick="showYardCheckForm()">Start a Yardcheck</button>
+                     <button onclick="showSubmittedYardChecks()">Edit a Yardcheck</button>
                   </div>
-                  <div class="wrapper">
+                  <div class="btn-wrapper">
                      <button>Penske Hiker Check-in</button>
                      <button>Associate confirm Penske Check-in/out</button>   
                   </div>     
