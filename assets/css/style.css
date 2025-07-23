@@ -477,10 +477,9 @@ header .page-title h1 {
   left: 15px;
   border-radius: 8px;
   padding: 10px;
-
   width: 100%;
   max-width: 200px;
-  background-color: var(--secondary-black-color);
+  /* background-color: var(--secondary-black-color); */
   transition: width 0.3s ease;  /* animate the width change */
   /* overflow: hidden; /* unused */ /* Not necessary as overflow is handled by main-content-container */
   /* overflow-y: auto; /* unused */ /* Not necessary as above */
@@ -498,7 +497,7 @@ header .page-title h1 {
    align-items: center;
    gap: 10px;
    position: relative;
-   padding: 8px;
+   padding: 5px;
    height: 70px;
    line-height: 1.5;
    color: var(--main-white-color);
@@ -745,9 +744,14 @@ header .page-title h1 {
    /* unused */ /* Not used in dash-board.html or generated content */
 }
 
-/* Alerts section styling */
+/* ALERTS SECTION STYLING  */
+.alerts-header-wrapper > h3 {
+   color: var(--brand-color-green);
+   font-weight: 600;
+   margin-bottom: 10px;
+}
 .alert-card {
-   border: 1px solid var(--light-grey-color1);
+   /* border: 1px solid var(--light-grey-color1); */
    border-radius: 4px;
    padding: 10px;
    margin-bottom: 10px;
