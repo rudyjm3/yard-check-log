@@ -457,22 +457,45 @@ header .page-title h1 {
    justify-content: center;
    align-items: center ;
    color: #fff;
-   position: absolute;
+   position: relative;
+   top: 0;
+   left: calc(100% - 34px);
+   /* position: absolute;
    top: 50%;
-   right: -18px;
+   right: -18px; */
    width: 36px;
    height: 36px;
-   border-radius: 50px;
+   /* border-radius: 50px;
    border: 4px solid var(--light-grey-color1);
-   background-color: var(--hover-blue-color);
-   cursor: pointer;
+   background-color: var(--hover-blue-color); */
+   background-color: transparent;
+   cursor:e-resize;
    z-index: 10;
+   transition: all 0.3s ease-in-out;
+   
+}
+.side-menu-btn-open-state {
+   animation: side-menu-btn-animation 0.3s ease-in-out forwards;
+}
+@keyframes side-menu-btn-animation {
+   from {
+      rotate: 0deg;
+      /* width: 0%; */
+   }
+   to {
+      rotate: 90deg;
+      /* width: 100%; */
+   }
 }
 /* Apply this style to collapse the side menu */
 .side-nav-container-collapsed {
    width: 55px !important;
 }
 #side-nav-container {
+   display: flex;
+   justify-content: flex-start;
+   align-items: flex-start;
+   flex-direction: column; 
   position: relative;
   left: 15px;
   border-radius: 8px;
@@ -480,7 +503,7 @@ header .page-title h1 {
   width: 100%;
   max-width: 200px;
   /* background-color: var(--secondary-black-color); */
-  transition: width 0.3s ease;  /* animate the width change */
+  transition: width 0.3s ease-in-out;  /* animate the width change */
   /* overflow: hidden; /* unused */ /* Not necessary as overflow is handled by main-content-container */
   /* overflow-y: auto; /* unused */ /* Not necessary as above */
 }
@@ -517,26 +540,28 @@ header .page-title h1 {
    height: 3px;
    background-color: #8ec6f0;
 }
-.side-menu-item:hover {
-   background-color: var(--hover-blue-color);
+.side-menu-item:hover > span > i {
+   /* background-color: var(--hover-blue-color); */
+   color: var(--brand-color-light-green);
 }
 /* Menu item underline border styling */
-.side-menu-item:hover:after {
+/* .side-menu-item:hover:after {
    width: 100%;
    animation: side-menu-item-animation 0.3s ease-in-out forwards;
-}
+} */
 .side-menu-item-active {
-   background-color: var(--hover-blue-color);
+   /* background-color: var(--hover-blue-color); */
+   color: var(--brand-color-green);
 }
 /* Menu item underline border animation */
-@keyframes side-menu-item-animation {
+/* @keyframes side-menu-item-animation {
    from {
       width: 0%;
    }
    to {
-      width: 100%;
+      width: 50%;
    }
-}
+} */
 
 /* The text elements */
 .side-menu-txt {
@@ -569,6 +594,9 @@ header .page-title h1 {
    /* Ensure position relative so tooltip is placed correctly */
    position: relative;
    display: inline-block; /* So we can position the tooltip via ::after */
+ }
+ .side-menu-item:nth-child(2) > .side-menu-item-icon-wrapper {
+   padding-left: 3px;
  }
  
  /* Base tooltip (hidden by default) */
@@ -616,7 +644,7 @@ header .page-title h1 {
    padding: 20px;
    margin-bottom: 20px;
 }
-#dashboard-containe {
+#dashboard-container {
    display: flex;
    justify-content: space-between;
    align-items: center;
@@ -777,6 +805,18 @@ header .page-title h1 {
    justify-content: space-between;
    align-items: center; 
 } */
+
+/* ---- DASHBOARD MAIN CONTENT STYLING ---- */
+
+.dashboard-main-content {
+   display: flex;
+   justify-content: space-between;
+   align-items: flex-start;
+   width: 100%;
+   height: auto;
+   flex-wrap: wrap;
+   gap: 20px;
+}
 /* END DASHBOARD STYLING */
 
 #submitted-yard-checks,#equipment-stats,#equipment-management {

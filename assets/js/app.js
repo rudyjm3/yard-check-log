@@ -501,12 +501,18 @@ document.addEventListener('DOMContentLoaded', () => {
 function sideMenuCollapse() {
   const navContainer = document.getElementById('side-nav-container');
   const collapseBtn = document.getElementById('menu-collapse-btn');
+  const menuIcon = document.getElementsByClassName('menu-collapse-icon')[0];
 
   navContainer.classList.toggle('side-nav-container-collapsed');
+//   if (navContainer.classList.contains('side-nav-container-collapsed')) {
+//     collapseBtn.innerHTML = '<i class="fa-solid fa-angle-right"></i>';
+//   } else {
+//     collapseBtn.innerHTML = '<i class="fa-solid fa-angle-left"></i>';
+//   }
   if (navContainer.classList.contains('side-nav-container-collapsed')) {
-    collapseBtn.innerHTML = '<i class="fa-solid fa-angle-right"></i>';
+    menuIcon.classList.remove('side-menu-btn-open-state');
   } else {
-    collapseBtn.innerHTML = '<i class="fa-solid fa-angle-left"></i>';
+    menuIcon.classList.add('side-menu-btn-open-state');
   }
 }
 

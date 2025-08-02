@@ -34,8 +34,7 @@
       <!-- Side Menu Start -->
       <nav id="side-nav-container" class="side-nav-container-collapsed glassmorphism-black">
          <button id="menu-collapse-btn" onclick="sideMenuCollapse()">
-            <i class="fa-solid fa-angle-right" id="collapse-icon"></i>
-            <!-- <i class="fa-solid fa-angle-right" id="expand-icon"></i> -->
+            <span class="menu-collapse-icon"><i class="fa-solid fa-ellipsis-vertical"></i></span>
          </button>
 
          <ul class="side-menu">
@@ -143,13 +142,14 @@
 
             </section>
 
-            <section id="main-dashboard-content-container">
+            <section id="main-dashboard-content-container" class=""glassmorphism-black">
                <div class="dashboard-col-1-wrapper">
                   <div class="btn-wrapper">
                      <button onclick="showYardCheckForm()">Start a Yardcheck</button>
                      <button onclick="showSubmittedYardChecks()">Edit a Yardcheck</button>
                   </div>
-                  <div class="btn-wrapper">
+                  <div class="btn-wrapper" style="display: none;">
+                     <button>Associate confirm Penske Check-in/out</button
                      <button>Penske Hiker Check-in</button>
                      <button>Associate confirm Penske Check-in/out</button>   
                   </div>     
