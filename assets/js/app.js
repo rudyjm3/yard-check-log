@@ -98,8 +98,6 @@ function formatWeatherText(text) {
 }
 
 // 4. Main function that processes and displays weather data
-
-// 4.
 function displayWeatherData(data) {
   const todayString = getTodayDateString();
   console.log("Today String:", todayString); // Debug today’s date
@@ -185,87 +183,6 @@ async function fetchWeatherData() {
 // 6. Run everything after the DOM is ready
 document.addEventListener('DOMContentLoaded', fetchWeatherData);
 
-
-// Descrepancy for yard checks not completed
-
-/* ---------------------
-YARDCHECK DISCREPANCY ALERTS
---------------------- */
-// function displayDiscrepancyAlerts(discrepancies) {
-//   const wrapper = document.querySelector('.alerts-card-wrapper');
-//   discrepancies.forEach(({ type, date, expected, actual }) => {
-//     const title = type === 'rented_out'
-//       ? 'Rental Count Discrepancy'
-//       : 'Service Status Discrepancy';
-
-//     const itemLabel = type === 'rented_out'
-//       ? 'rented out'
-//       : 'out of service';
-
-//     const card = document.createElement('div');
-//     card.className = 'alert-card';
-//     card.innerHTML = `
-//       <p class="alert-title">${title}</p>
-//       <p class="alert-description">
-//         On <strong>${new Date(date).toLocaleDateString()}</strong>, AM shows 
-//         <strong>${actual}</strong> ${itemLabel}, but previous PM had 
-//         <strong>${expected}</strong>. Please verify.
-//       </p>
-//     `;
-//     wrapper.appendChild(card);
-//   });
-// }
-
-// // New loader for just the alerts
-// function loadYardCheckAlerts(startDate, endDate) {
-//   fetch(`get_submitted_yard_checks.php?start=${startDate}&end=${endDate}`)
-//     .then(res => {
-//       if (!res.ok) {
-//         throw new Error(`HTTP error! Status: ${res.status}`);
-//       }
-//       return res.json();
-//     })
-//     .then(data => {
-//       if (data.status === 'error') {
-//         console.error('Server error:', data.message);
-//         const wrapper = document.querySelector('.alerts-card-wrapper');
-//         if (wrapper) {
-//           wrapper.innerHTML = `<div class="alert-card"><p class="alert-description">Error: ${data.message}</p></div>`;
-//         }
-//         return;
-//       }
-//       if (data.discrepancies && data.discrepancies.length) {
-//         displayDiscrepancyAlerts(data.discrepancies);
-//       }
-//     })
-//     .catch(error => {
-//       console.error('Error loading yard check alerts:', error);
-//       const wrapper = document.querySelector('.alerts-card-wrapper');
-//       if (wrapper) {
-//         wrapper.innerHTML = '<div class="alert-card"><p class="alert-description">Unable to load alerts at this time. Please try again later.</p></div>';
-//       }
-//     });
-// }
-
-// // On first visit, kick off an alerts fetch for this week
-// document.addEventListener('DOMContentLoaded', () => {
-//   const today = new Date();
-//   // get Sunday of this week (or adjust to your store’s first day)
-//   const first = new Date(today);
-//   first.setDate(today.getDate() - today.getDay());
-//   const last = new Date(first);
-//   last.setDate(first.getDate() + 6);
-
-//   const iso = d => d.toISOString().slice(0, 10);
-//   loadYardCheckAlerts(iso(first), iso(last));
-// });
-
-// 2 updated discrepcys 
-/* assets/js/app.js */
-
-/* -------------------------
-// ... (Previous code unchanged until YARDCHECK DISCREPANCY ALERTS)
-------------------------- */
 
 /* ---------------------
 YARDCHECK DISCREPANCY AND MISSING SUBMISSION ALERTS
