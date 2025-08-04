@@ -13,7 +13,7 @@
   --hover-blue-color: #4aa5eb;
   --button-green-color: #08af16;
   --button-green-hover-color: #0ce21d;
-  --button-red-color: #c11616;
+  --button-red-color: #b53737;
   
   /* Brand Colors */
   --brand-color-green: #76B39D;
@@ -47,11 +47,15 @@ button {
    outline: none;
    width: 100%;
    height: 50px;
-   font-size: 1.2rem;
+   font-size: 1rem;
    font-weight: 500;
    padding: 10px;
    border-radius: 4px;
    transition: all 0.3s ease-in-out;
+}
+button:hover {
+   background-color: var(--brand-color-light-green);
+   color: var(--main-white-color);
 }
 
 /* General Styles */
@@ -460,19 +464,15 @@ header .page-title h1 {
    position: relative;
    top: 0;
    left: calc(100% - 34px);
-   /* position: absolute;
-   top: 50%;
-   right: -18px; */
    width: 36px;
    height: 36px;
-   /* border-radius: 50px;
-   border: 4px solid var(--light-grey-color1);
-   background-color: var(--hover-blue-color); */
    background-color: transparent;
    cursor:e-resize;
    z-index: 10;
    transition: all 0.3s ease-in-out;
-   
+}
+#menu-collapse-btn:hover {
+   color: var(--brand-color-light-green);
 }
 .side-menu-btn-open-state {
    animation: side-menu-btn-animation 0.3s ease-in-out forwards;
@@ -506,6 +506,7 @@ header .page-title h1 {
   transition: width 0.3s ease-in-out;  /* animate the width change */
   /* overflow: hidden; /* unused */ /* Not necessary as overflow is handled by main-content-container */
   /* overflow-y: auto; /* unused */ /* Not necessary as above */
+  z-index: 10;
 }
 
 .side-menu {
@@ -531,7 +532,7 @@ header .page-title h1 {
 /* .side-nav-container-collapsed .side-menu-item {
    justify-content: center;
  } */ /* unused */ /* Not used as alignment is handled by JS toggle */
-.side-menu-item:after {
+/* .side-menu-item:after {
    position: absolute;
    right: 0;
    content: "";
@@ -539,9 +540,8 @@ header .page-title h1 {
    width: 0%;
    height: 3px;
    background-color: #8ec6f0;
-}
-.side-menu-item:hover > span > i {
-   /* background-color: var(--hover-blue-color); */
+} */
+.side-menu-item:hover {
    color: var(--brand-color-light-green);
 }
 /* Menu item underline border styling */
@@ -550,7 +550,6 @@ header .page-title h1 {
    animation: side-menu-item-animation 0.3s ease-in-out forwards;
 } */
 .side-menu-item-active {
-   /* background-color: var(--hover-blue-color); */
    color: var(--brand-color-green);
 }
 /* Menu item underline border animation */
@@ -840,6 +839,7 @@ header .page-title h1 {
 #equipment-stats {
    width: 80%;
 }
+
 /* Form Styles */
 #lg-equipment-yard-check-form {
    width: 100%;
@@ -909,24 +909,27 @@ header .page-title h1 {
 
 .form-control input,
 .form-control select {
-  width: 100%;
-  height: 40px;
-  padding: 8px;
-  border-radius: 4px;
-  box-sizing: border-box;
+   width: 100%;
+   height: 40px;
+   padding: 8px;
+   border-radius: 4px;
+   box-sizing: border-box;
 }
 
 .button-wrapper {
-  /* text-align: center; */ /* unused */ /* Not used as alignment is handled by flexbox */
-  margin: 30px 0 15px 0;
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   gap: 15px;
+   margin: 30px 0 15px 0;
 }
 
 #submit-button-ydchk {
    width: 100%;
-   font-size: 1.4rem;
+   /* font-size: 1.4rem; */
    font-weight: 500;
-   background: var(--hover-blue-color);
-   color: var(--light-grey-color1);
+   background: var(--brand-color-green);
+   color: var(--brand-color-ivory);
    border: none;
    padding: 10px 20px;
    cursor: pointer;
@@ -1027,9 +1030,6 @@ header .page-title h1 {
    padding: 15px 0;
    margin-bottom: 25px;
 }
-/* #lg-equipment-yard-check-form > .form-wrapper > .form-control:nth-child(3) {
-   margin-bottom: 25px;
-} */ /* duplicate-redundant code (repeats at line 617) */
 .option-wrapper {
    width: 100%;
 } 
@@ -1081,6 +1081,21 @@ header .page-title h1 {
   margin-top: 10px;
 }
 
+/* EQUIPMENT STATS SECTION STYLING START */
+#custom-date-range-wrapper {
+   display: flex;
+   justify-content: flex-start;
+   align-items: center;
+   flex-wrap: wrap;
+}
+#custom-date-range-wrapper > .form-control > label,input {
+   max-width: max-content;
+   padding: 10px 40px;
+}
+#eq-stats-filter-btn {
+   max-width: max-content;
+}
+
 /* EQUIPMENT MANAGEMENT STYLES START */
 #equipment-management {
    width: 100%;
@@ -1098,13 +1113,16 @@ header .page-title h1 {
    display: flex;
    justify-content: space-between;
    align-items: center;
-   flex-wrap: wrap;
+   /* flex-wrap: wrap; */
    gap: 15px;
    width: 100%;
-   margin-bottom: 20px;
+   margin: 20px 0px 25px 0px;
 }
 .tab-button {
-   flex-grow: 1;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   font-size: 1rem;
    height: 60px;
    min-height: auto;
    padding: 10px 20px;
@@ -1211,8 +1229,8 @@ header .page-title h1 {
 .sortable-ghost {
     opacity: 0.8;
     filter: blur(3px);
-    background-color: var(--hover-blue-color) !important;
-    border-color: #8ec6f0;
+    /* background-color: var(--hover-blue-color) !important;
+    border-color: #8ec6f0; */
     transition: all 0.3s ease;
 }
 
@@ -1277,10 +1295,10 @@ header .page-title h1 {
 .equipment-edit-button, .equipment-delete-button {
    padding: 10px 20px;
    color: #f6f6f6;
-   font-size: 1.2rem;
+   /* font-size: 1.2rem; */
    font-weight: 500;
    width: 100%;
-   border: solid 1px var(--light-grey-color2);
+   /* border: solid 1px var(--light-grey-color2); */
    border-radius: 4px;
    background-color: var(--button-default-color);
    cursor: pointer;
@@ -1353,7 +1371,17 @@ header .page-title h1 {
   transition: all 0.5s ease;
   z-index: 10;
 }
-
+#equipment-form .close-btn-form {
+   width: max-content;
+   height: auto;
+   font-size: 1.2rem;
+   font-weight: 400;;
+   padding: 5px;
+   background-color: transparent;
+}
+#equipment-form .close-btn-form:hover {
+   color: var(--button-red-color);
+}
 /* Show the form with animation */
 #equipment-form.show {
   opacity: 1;
@@ -1363,12 +1391,12 @@ header .page-title h1 {
 /* Button Wrapper Styles */
 #equipment-form .button-wrapper {
   padding: 10px 20px;
-  text-align: right;
+  /* text-align: right; */
 }
 
-#equipment-form .button-wrapper button {
+/* #equipment-form .button-wrapper button {
   margin-left: 10px;
-}
+} */
 
 /* Adjust Equipment Management Section */
 /* #equipment-management { */
@@ -1385,15 +1413,35 @@ header .page-title h1 {
    display: flex;
    justify-content: flex-start;
    align-items: center;
-   flex-wrap: wrap;
    gap: 10px;
 }
 .date-filter-section > .form-control {
    display: flex;
-   justify-content: flex-start;
+   justify-content: space-between;
    align-items: center;
-   flex-wrap: wrap;
-   margin-bottom: 15px;
+   width: 100%;
+   max-width: fit-content;
+}
+.date-filter-section > .form-control > label {
+   width: max-content;
+}
+#filter-start-date,#filter-end-date {
+   width: auto;
+}
+#date-range-filter-btn {
+   width: fit-content;
+   padding: 0 40px;
+}
+.pagination-wrapper {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   gap: 15px;
+   margin-top: 20px;
+   margin-bottom: 20px;
+}
+.pagination-wrapper > button {
+   width: 300px;
 }
 /* #submitted-yard-checks button {
   margin-bottom: 20px;
@@ -1526,21 +1574,16 @@ header .page-title h1 {
 .card-col-content-block p {
    text-align: center;
 }
-
-.yard-check-card .button-wrapper {
-  text-align: center;
-}
-
 .yard-check-card .button-wrapper {
    display: flex;
    justify-content: center; /* side by side center alignment */
+   align-items: center;
    gap: 15px;
  }
 .yard-check-card .button-wrapper button {
    margin: 0px;
    padding: 10px 20px;
    width: 100%;
-   font-size: 1.2rem;
    background-color: var(--button-default-color);
    color: #fff;
    border: none;
@@ -1549,8 +1592,8 @@ header .page-title h1 {
    transition: background-color 0.3s ease-in-out;
 }
 .yard-check-card .button-wrapper button:hover {
-   background-color: var(--hover-blue-color);
-   font-weight: 600;
+   background-color: var(--brand-color-light-green);
+   /* font-weight: 600; */
 }
 
 /* Equipment Stats Styles */
@@ -1570,6 +1613,7 @@ header .page-title h1 {
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
+  z-index: 10;
 }
 
 #modal-container .modal-content {
@@ -1675,6 +1719,7 @@ footer {
    #menu-collapse-btn {
       display: none;
    }
+
    /* Yard check form responsive styles*/
    .yard-check-form-title {
       font-size: 1.2rem;

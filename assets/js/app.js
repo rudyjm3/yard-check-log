@@ -1423,9 +1423,9 @@ function printYardCheck(id) {
 
 document.getElementById('stats-date-range').addEventListener('change', function() {
   if (this.value === 'custom') {
-    document.getElementById('custom-date-range').style.display = 'block';
+    document.getElementById('custom-date-range-wrapper').style.display = 'block';
   } else {
-    document.getElementById('custom-date-range').style.display = 'none';
+    document.getElementById('custom-date-range-wrapper').style.display = 'none';
   }
 });
 

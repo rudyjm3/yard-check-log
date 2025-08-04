@@ -250,7 +250,7 @@
                   <input type="date" id="filter-end-date">
                </div>
                
-               <button onclick="filterSubmittedYardChecks()">Filter</button>
+               <button id="date-range-filter-btn" onclick="filterSubmittedYardChecks()">Filter</button>
             </div> 
 
             <!-- date-filter-section -->
@@ -278,7 +278,7 @@
             </select>
          </div>
          <!-- Custom Date Range Inputs -->
-         <div id="custom-date-range" style="display: none;">
+         <div id="custom-date-range-wrapper" style="display: none;">
             <div class="form-control">
                <label for="start-date">Start Date:</label>
                <input type="date" id="start-date">
@@ -287,7 +287,7 @@
                <label for="end-date">End Date:</label>
                <input type="date" id="end-date">
             </div>
-            <button onclick="loadEquipmentStats()">Load Stats</button>
+            <button id="eq-stats-filter-btn" onclick="loadEquipmentStats()">Load Stats</button>
          </div>
          <!-- Stats Display -->
          <div id="stats-display">
@@ -336,7 +336,7 @@
             <form id="equipment-form" style="display: none;">
                <div class="form-header">
                   <h3 id="form-title">Add Equipment</h3>
-                  <button type="button" class="close-button-form" onclick="cancelEquipmentForm()"><i class="fa-regular fa-circle-xmark"></i></button>
+                  <button type="button" class="close-btn-form" onclick="cancelEquipmentForm()"><i class="fa-solid fa-rectangle-xmark"></i></button>
                </div>
                <input type="hidden" id="equipment-id" name="equipment_id">
                <div class="form-control">
@@ -401,10 +401,10 @@
   <footer>
     <div class="footer-wrapper">
       <div class="footer-col">
-        <p class="site-version-text">v2.4.0</p>
+        <p class="site-version-text">v2.4.15</p>
       </div>
       <div class="footer-col">
-        <p class="site-author-text">Designed: R.M.</p>
+        <p class="site-author-text">Designed: Rudy Mims</p>
       </div>
     </div>
   </footer>
