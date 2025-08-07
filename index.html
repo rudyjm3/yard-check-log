@@ -309,6 +309,140 @@
          </div>
          <!-- End Equipment Stats Section -->
 
+         <!-- Pickup Truck Monthly Inspection Form -->
+         <div id="pickup-truck-inspection" class="content-section-container" style="display: none;">
+            <div class="container">
+               <h1>Load N Go Monthly Inspection Checklist</h1>
+               <form id="monthly-inspection-form">
+                  <fieldset>
+                     <legend>Inspection Info</legend>
+                     <div class="form-control">
+                        <label for="inspection-date">Date:</label>
+                        <input type="date" id="inspection-date" name="inspection_date" required>
+                     </div>
+                     <div class="form-control">
+                        <label for="inspected-by">Inspected by:</label>
+                        <input type="text" id="inspected-by" name="inspected_by" required>
+                     </div>
+                  </fieldset>
+               
+                  <fieldset>
+                     <legend>Truck Fluids</legend>
+                     <div class="checkbox-group">
+                        <div>
+                        <label for="fluids-topped">All fluids are topped off</label>
+                        <input type="checkbox" id="fluids-topped" name="truck_fluids[]" value="all_fluids_topped">
+                        </div>
+                     </div>
+                  </fieldset>
+               
+                  <fieldset>
+                     <legend>Truck Exterior</legend>
+                     <div class="checkbox-group">
+                        <div>
+                        <label for="ext-license-plate">License plate present with up-to-date sticker</label>
+                        <input type="checkbox" id="ext-license-plate" name="truck_exterior[]" value="license_plate_present">
+                        </div>
+                        <div>
+                        <label for="ext-damage">Damage to the vehicle</label>
+                        <input type="checkbox" id="ext-damage" name="truck_exterior[]" value="damage_to_vehicle">
+                        </div>
+                        <div>
+                        <label for="ext-tires">Tires for appropriate inflation, tread wear and cuts</label>
+                        <input type="checkbox" id="ext-tires" name="truck_exterior[]" value="tires_inflation_and_wear">
+                        </div>
+                        <div>
+                        <label for="ext-lights">Headlights, tail lights and turn signals for cracked lens and operation</label>
+                        <input type="checkbox" id="ext-lights" name="truck_exterior[]" value="lights_operation_and_lens">
+                        </div>
+                        <div>
+                        <label for="ext-glass">Glass and mirrors for cracks and operation</label>
+                        <input type="checkbox" id="ext-glass" name="truck_exterior[]" value="glass_and_mirrors">
+                        </div>
+                        <div>
+                        <label for="ext-wipers">Windshield wipers for operation and wear</label>
+                        <input type="checkbox" id="ext-wipers" name="truck_exterior[]" value="wipers_operation_and_wear">
+                        </div>
+                        <div>
+                        <label for="ext-bed">Truck bed sides and tail gate for operation and broken hinges</label>
+                        <input type="checkbox" id="ext-bed" name="truck_exterior[]" value="bed_and_tailgate">
+                        </div>
+                        <div>
+                        <label for="ext-load-sensor">
+                           Check Load Sensor (inspect &amp; activate; see REN10-10 SOP page 21 or calibration guide)
+                        </label>
+                        <input type="checkbox" id="ext-load-sensor" name="truck_exterior[]" value="load_sensor_checked">
+                        </div>
+                        <div>
+                        <label for="ext-decals">Decals are present and in good condition</label>
+                        <input type="checkbox" id="ext-decals" name="truck_exterior[]" value="decals_condition">
+                        </div>
+                        <div>
+                        <label for="ext-tow-hitch">Ensure tow hitch has a weld or is locked (2015+ models)</label>
+                        <input type="checkbox" id="ext-tow-hitch" name="truck_exterior[]" value="tow_hitch_locked_or_welded">
+                        </div>
+                     </div>
+                  </fieldset>
+               
+                  <fieldset>
+                     <legend>Truck Interior</legend>
+                     <div class="checkbox-group">
+                        <div>
+                        <label for="int-seatbelts">Seatbelts for operation, cuts or frays</label>
+                        <input type="checkbox" id="int-seatbelts" name="truck_interior[]" value="seatbelts">
+                        </div>
+                        <div>
+                        <label for="int-horn">Steering wheel horn for operation</label>
+                        <input type="checkbox" id="int-horn" name="truck_interior[]" value="horn_operation">
+                        </div>
+                        <div>
+                        <label for="int-parking-brake">Parking brake engages</label>
+                        <input type="checkbox" id="int-parking-brake" name="truck_interior[]" value="parking_brake">
+                        </div>
+                        <div>
+                        <label for="int-spare-tire">Spare tire properly inflated (vans only) and tools</label>
+                        <input type="checkbox" id="int-spare-tire" name="truck_interior[]" value="spare_tire_inflated">
+                        </div>
+                        <div>
+                        <label for="int-ac-heater">AC and heating are operational</label>
+                        <input type="checkbox" id="int-ac-heater" name="truck_interior[]" value="ac_heater">
+                        </div>
+                        <div>
+                        <label for="int-docs">
+                           Truck registration, insurance card, accident documents in glove box
+                        </label>
+                        <input type="checkbox" id="int-docs" name="truck_interior[]" value="registration_insurance">
+                        </div>
+                        <div>
+                        <label for="int-decals-int">Decals are present and in good condition</label>
+                        <input type="checkbox" id="int-decals-int" name="truck_interior[]" value="decals_interior">
+                        </div>
+                        <div>
+                        <label for="int-transponder">Toll transponder (if applicable)</label>
+                        <input type="checkbox" id="int-transponder" name="truck_interior[]" value="toll_transponder">
+                        </div>
+                        <div>
+                        <label for="int-fire-extinguisher">
+                           Fire extinguisher present, charged, and inspection current
+                        </label>
+                        <input type="checkbox" id="int-fire-extinguisher" name="truck_interior[]" value="fire_extinguisher">
+                        </div>
+                     </div>
+                  </fieldset>
+               
+                  <p>
+                     <strong>Note:</strong> If any item is incorrect or inoperable, please correct. If repair cannot be
+                     completed onsite and affects safe operation or Load Sensor, tag the vehicle “Out of Service” and
+                     contact Element at <a href="tel:1-888-562-3646">1-888-562-3646</a> or
+                     <a href="mailto:customercareus.fleet@elementcorp.com">customercareus.fleet@elementcorp.com</a>.
+                  </p>
+               
+                  <button type="submit">Submit Inspection</button>
+               </form>
+
+            </div>
+         </div>
+      
          <!-- Equipment Management Section -->
          <div id="equipment-management" class="content-section-container" style="display: none; position: relative;">
             <h2>Manage Equipment</h2>

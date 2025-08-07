@@ -334,10 +334,6 @@ document.addEventListener('DOMContentLoaded', () => {
   loadYardCheckAlerts(startDate, endDate);
 });
 
-/* -------------------------
-// ... (Rest of the code unchanged)
-------------------------- */
-
 /* ---------------------
 SCROLL TO TOP BUTTON 
 -------------------- */
@@ -693,6 +689,7 @@ function filterSubmittedYardChecks() {
 
    // clearYardCheckForm();
    document.getElementById('lg-equipment-yard-check-form').style.display = 'block';
+   document.getElementById('pickup-truck-inspection').style.display = 'none';
    document.getElementById('equipment-management').style.display = 'none';
    document.getElementById('submitted-yard-checks').style.display = 'none';
    document.getElementById('equipment-stats').style.display = 'none';
@@ -878,6 +875,7 @@ function closeMessage() {
 function showEquipmentManagement() {
   document.getElementById('dashboard-container').style.display = 'none';
   document.getElementById('lg-equipment-yard-check-form').style.display = 'none';
+  document.getElementById('pickup-truck-inspection').style.display = 'none';
   document.getElementById('equipment-management').style.display = 'block';
   document.getElementById('submitted-yard-checks').style.display = 'none';
   document.getElementById('equipment-stats').style.display = 'none';
@@ -890,6 +888,7 @@ function showEquipmentManagement() {
 function showActiveEquipmentTab() {
   document.getElementById('tab-active-equipment').classList.add('tab-active');
   document.getElementById('tab-deactivated-equipment').classList.remove('tab-active');
+  document.getElementById('pickup-truck-inspection').style.display = 'none';
   document.getElementById('active-equipment-container').style.display = 'block';
   document.getElementById('deactivated-equipment-container').style.display = 'none';
   initializeEquipmentSorting();
@@ -1213,6 +1212,7 @@ console.log(yardCheck.user_name);
 function showEquipmentStats() {
   document.getElementById('dashboard-container').style.display = 'none';
   document.getElementById('lg-equipment-yard-check-form').style.display = 'none';
+  document.getElementById('pickup-truck-inspection').style.display = 'none';
   document.getElementById('equipment-management').style.display = 'none';
   document.getElementById('submitted-yard-checks').style.display = 'none';
   document.getElementById('equipment-stats').style.display = 'block';
@@ -1443,6 +1443,7 @@ function saveEquipmentOrder(order) {
 function showDashboard() {
   document.getElementById('dashboard-container').style.display = 'block';
   document.getElementById('lg-equipment-yard-check-form').style.display = 'none';
+  document.getElementById('pickup-truck-inspection').style.display = 'none';
   document.getElementById('equipment-management').style.display = 'none';
   document.getElementById('equipment-stats').style.display = 'none';
   document.getElementById('submitted-yard-checks').style.display = 'none';
@@ -1455,3 +1456,57 @@ document.addEventListener('DOMContentLoaded', () => {
 //   checkMissingYardChecks();
   showDashboard(); // Make dashboard visible by default
 });
+
+// 1. Load inspection form when nav item clicked
+function showPickupTruckInspectionForm() {
+   document.getElementById('pickup-truck-inspection').style.display = 'block';
+   document.getElementById('dashboard-container').style.display = 'none';
+   document.getElementById('lg-equipment-yard-check-form').style.display = 'none';
+   document.getElementById('equipment-management').style.display = 'none';
+   document.getElementById('equipment-stats').style.display = 'none';
+   document.getElementById('submitted-yard-checks').style.display = 'none';
+   setActiveMenuItem();
+//   hideAllSections(); // hide other main content
+
+//   fetch('pickup-truck-monthly-inspection-form.html')
+//     .then(response => response.text())
+//     .then(html => {
+//       document.getElementById("main-content-container").innerHTML = html;
+//     })
+//     .catch(error => {
+//       console.error("Failed to load form:", error);
+//     });
+}
+
+// 2. Check if inspection is overdue (after 5th of current month)
+function checkForOverdueInspection() {
+  const today = new Date();
+  const dayOfMonth = today.getDate();
+  const inspectionKey = `pickup_inspection_${today.getFullYear()}_${today.getMonth() + 1}`;
+  const wasSubmitted = localStorage.getItem(inspectionKey);
+
+  if (dayOfMonth > 4 && !wasSubmitted) {
+    showInspectionAlert();
+  }
+}
+
+// 3. Display alert card in dashboard alerts section
+function showInspectionAlert() {
+  const alertContainer = document.querySelector(".alerts-card-wrapper");
+  if (!alertContainer) return;
+
+  const alertCard = document.createElement("div");
+  alertCard.className = "alert-card";
+  alertCard.innerHTML = `
+    <p class="alert-title">Past Due Inspection</p>
+    <p class="alert-description">The pickup truck monthly inspection is past due. Please complete this month's inspection.</p>
+    <div class="alert-button-wrapper">
+      <button class="alert-btn-yardcheck" onclick="showPickupTruckInspectionForm()">Go to Inspection Form</button>
+    </div>
+  `;
+
+  alertContainer.appendChild(alertCard);
+}
+
+// 4. Run overdue check on page load
+document.addEventListener("DOMContentLoaded", checkForOverdueInspection);

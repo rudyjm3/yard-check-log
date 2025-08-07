@@ -818,7 +818,7 @@ header .page-title h1 {
 }
 /* END DASHBOARD STYLING */
 
-#submitted-yard-checks,#equipment-stats,#equipment-management {
+#submitted-yard-checks,#equipment-stats,#equipment-management,#pickup-truck-inspection {
    background-color: var(--main-white-color);
    height: auto;
    padding: 20px;
@@ -1095,6 +1095,17 @@ header .page-title h1 {
 #eq-stats-filter-btn {
    max-width: max-content;
 }
+
+/* PICKUP TRUCK INSPECTION FORM SECTION STYLES START */
+fieldset { 
+   margin-bottom: 20px; 
+   padding: 15px; 
+   border: 1px solid #ccc; 
+}
+legend { 
+   font-weight: bold; 
+}
+
 
 /* EQUIPMENT MANAGEMENT STYLES START */
 #equipment-management {
