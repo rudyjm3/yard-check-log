@@ -285,6 +285,7 @@ function loadYardCheckAlerts(startDate, endDate) {
 function showSubmittedYardChecks() {
   document.getElementById('dashboard-container').style.display = 'none';
   document.getElementById('lg-equipment-yard-check-form').style.display = 'none';
+  document.getElementById('pickup-truck-inspection').style.display = 'none';
   document.getElementById('equipment-management').style.display = 'none';
   document.getElementById('equipment-stats').style.display = 'none';
   document.getElementById('submitted-yard-checks').style.display = 'block';
@@ -452,6 +453,7 @@ function setActiveMenuItem() {
 function showSubmittedYardChecks() {
   document.getElementById('dashboard-container').style.display = 'none';
   document.getElementById('lg-equipment-yard-check-form').style.display = 'none';
+  document.getElementById('pickup-truck-inspection').style.display = 'none';
   document.getElementById('equipment-management').style.display = 'none';
   document.getElementById('equipment-stats').style.display = 'none';
   document.getElementById('submitted-yard-checks').style.display = 'block';

@@ -834,7 +834,7 @@ header .page-title h1 {
    margin-bottom: 15px;
 }
 #submitted-yard-checks {
-   width: 100%;
+   width: 80%;
 }
 #equipment-stats {
    width: 80%;
@@ -1614,6 +1614,11 @@ legend {
 
 #stats-display {
   margin-top: 20px;
+}
+
+/* PICKUP TRUCK INSPECTION SECTION STYLING START */
+#pickup-truck-inspection {
+  width: 80%;
 }
 
 /* Modal Styles */
