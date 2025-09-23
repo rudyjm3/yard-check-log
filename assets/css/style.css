@@ -487,10 +487,7 @@ header .page-title h1 {
       /* width: 100%; */
    }
 }
-/* Apply this style to collapse the side menu */
-.side-nav-container-collapsed {
-   width: 55px !important;
-}
+
 #side-nav-container {
    display: flex;
    justify-content: flex-start;
@@ -570,7 +567,9 @@ header .page-title h1 {
    transition: opacity 0.3s ease; /* fade in/out */
    opacity: 1;
 }
+/* Apply this style to collapse the side menu */
 .side-nav-container-collapsed {
+   width: 55px !important;
    border-radius: 50px !important;
    transition: all 0.3s ease-in-out; /* so it can animate gracefully */
 }
@@ -1096,17 +1095,6 @@ header .page-title h1 {
    max-width: max-content;
 }
 
-/* PICKUP TRUCK INSPECTION FORM SECTION STYLES START */
-fieldset { 
-   margin-bottom: 20px; 
-   padding: 15px; 
-   border: 1px solid #ccc; 
-}
-legend { 
-   font-weight: bold; 
-}
-
-
 /* EQUIPMENT MANAGEMENT STYLES START */
 #equipment-management {
    width: 100%;
@@ -1400,9 +1388,8 @@ legend {
 }
 
 /* Button Wrapper Styles */
-#equipment-form .button-wrapper {
+#equipment-form .button-wrapper, #pro-truck-inspection-form .button-wrapper {
   padding: 10px 20px;
-  /* text-align: right; */
 }
 
 /* #equipment-form .button-wrapper button {
@@ -1619,6 +1606,55 @@ legend {
 /* PICKUP TRUCK INSPECTION SECTION STYLING START */
 #pickup-truck-inspection {
   width: 80%;
+}
+#pro-truck-inspection-form, #rental-pickup-truck-inspection-form {
+   width: 100%;
+   /* max-width: 650px; */
+   min-width: 300px;
+   padding: 25px;
+   margin-bottom: 25px;
+   border: 1px solid var(--light-grey-color1);
+   border-radius: 8px;
+   box-shadow: 0px 5px 10px -1px rgba(167, 167, 167, 0.75);
+   -webkit-box-shadow: 0px 5px 10px -1px rgba(167, 167, 167, 0.75);
+   -moz-box-shadow: 0px 5px 10px -1px rgba(167, 167, 167, 0.75);
+   background-color: var(--main-white-color);
+}
+#pro-truck-inspection-form > .form-title-wrapper, #rental-pickup-truck-inspection-form > .form-title-wrapper {
+   position: relative;
+   width: calc(100% + 42px);
+   top: -21px;
+   left: -21px;
+   border-radius: 4px 4px 0 0;
+   border: 1px solid var(--brand-color-green);
+   background-color: var(--brand-color-green);
+   color: var(--main-white-color);
+   padding: 20px;
+}
+#pro-truck-inspection-form fieldset { 
+   margin-bottom: 20px; 
+   padding: 15px; 
+   border: 1px solid #ccc; 
+   width: 80%; 
+   border-radius: 5px; 
+}
+#pro-truck-inspection-form legend { 
+   font-weight: bold; 
+}
+#pro-truck-inspection-form textarea {
+   width: 100%;
+   padding: 5px;
+}
+
+
+
+.form-footer-note-wrapper {
+   width: 100%;
+   /* max-width: 650px;
+   min-width: 300px; */
+   margin-top: 10px;
+   font-size: 0.9rem;
+   color: var(--info-txt-color);
 }
 
 /* Modal Styles */
