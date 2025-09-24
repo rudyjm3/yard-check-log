@@ -58,7 +58,9 @@ button:hover {
    color: var(--main-white-color);
 }
 
-/* General Styles */
+/* ==================
+General Styles 
+===================== */
 body {
   display: flex;
   justify-content: flex-start;
@@ -67,7 +69,6 @@ body {
   height: 100dvh;
   overflow: hidden;
   font-family: "Roboto", serif;
-  /* font-family: Arial, sans-serif; */ /* duplicate-redundant code (repeats at line 39 with "Roboto") */
   margin: 0;
   padding: 0;
   background-image: url("../images/luke-chesser-3rWagdKBF7U-unsplash.jpg");
@@ -75,7 +76,6 @@ body {
   background-repeat: no-repeat;
   background-position: center;
   background-attachment: fixed;
-  /* unused */ /* Not used in any provided HTML or JS */ 
 }
 header {
    display: flex;
@@ -85,7 +85,9 @@ header {
    width: 100%;
    background-color: #333;
 }
-/* Glassmorphism Styles */
+/* ====================
+Glassmorphism Styles 
+====================== */
 .glassmorphism {
    background-color: rgba(255, 255, 255, 0.1);
    backdrop-filter: blur(10px);
@@ -123,7 +125,9 @@ header {
    filter: brightness(0.7);
    z-index: -1;
 }
-/* Login Page Styles */
+/* ==================
+LOGIN PAGE STYLE 
+===================== */
 .container {
    display: flex;
    justify-content: center;
@@ -138,7 +142,6 @@ header {
    width: 100%;
    max-width: 225px;
    height: auto;
-   /* margin-bottom: 40px; */
 }
 .logo-wrapper {
    display: flex;
@@ -290,7 +293,10 @@ header {
    background-color: var(--hover-blue-color);
    color: var(--main-white-color);
 }
-/* PENSKE FORM PAGE STYLES */
+
+/* ========================
+ PENSKE FORM PAGE STYLES 
+ ========================= */
 .penske-form-bkground-image {
    background-image: url("../images/penske-truck-bg.webp");
    background-size: cover;
@@ -424,7 +430,9 @@ header .page-title h1 {
   /* filter: brightness(0.7); */
 }
 
-/* Scroll-to-top button styling */
+/* ===========================
+Scroll-to-top button styling 
+============================== */
 #scrollToTopButton {
    display: flex;
    justify-content: center;
@@ -455,7 +463,9 @@ header .page-title h1 {
    visibility: visible;
    }
 
-/* Side Menu Styles */
+/* =================
+Side Menu Styles 
+==================== */
 #menu-collapse-btn {
    display: flex;
    justify-content: center;
@@ -503,7 +513,6 @@ header .page-title h1 {
   transition: width 0.3s ease-in-out;  /* animate the width change */
   /* overflow: hidden; /* unused */ /* Not necessary as overflow is handled by main-content-container */
   /* overflow-y: auto; /* unused */ /* Not necessary as above */
-  z-index: 10;
 }
 
 .side-menu {
@@ -623,6 +632,7 @@ header .page-title h1 {
    content: attr(data-tooltip);
    opacity: 1;
    visibility: visible;
+   z-index: 20;
  }
 
 /* Main Content Styles */
@@ -651,7 +661,7 @@ header .page-title h1 {
 #dashboard-header-container .title-wrapper {
    width: 100%;
 }
-#dashboard-header-container .title-wrapper, h2 {
+#dashboard-header-container .title-wrapper h2 {
    width: 100%;
    text-align: left;
    color: var(--brand-color-green);
@@ -1631,22 +1641,28 @@ header .page-title h1 {
    color: var(--main-white-color);
    padding: 20px;
 }
-#pro-truck-inspection-form fieldset { 
+#pro-truck-inspection-form > .form-title-wrapper h2, #rental-pickup-truck-inspection-form > .form-title-wrapper h2 {
+   margin: 0;
+   font-size: 1.3rem;
+   font-weight: 500;
+}
+#pro-truck-inspection-form fieldset, 
+#rental-pickup-truck-inspection-form fieldset { 
    margin-bottom: 20px; 
-   padding: 15px; 
+   padding: 10px 15px 15px 15px; 
    border: 1px solid #ccc; 
-   width: 80%; 
+   width: 100%; 
    border-radius: 5px; 
 }
-#pro-truck-inspection-form legend { 
-   font-weight: bold; 
+#pro-truck-inspection-form .checkbox-group div,
+#rental-pickup-truck-inspection-form .checkbox-group div {
+   padding: 5px 0;
 }
-#pro-truck-inspection-form textarea {
+#pro-truck-inspection-form textarea, 
+#rental-pickup-truck-inspection-form textarea {
    width: 100%;
    padding: 5px;
 }
-
-
 
 .form-footer-note-wrapper {
    width: 100%;
@@ -1656,6 +1672,31 @@ header .page-title h1 {
    font-size: 0.9rem;
    color: var(--info-txt-color);
 }
+@media print {
+  /* Hide app chrome; only show the form being printed */
+  header, footer, #side-nav-container, #alerts-container, #main-dashboard-content-container,
+  #submitted-yard-checks, #equipment-stats, #lg-equipment-yard-check-form, #dashboard-container,
+  #scrollToTopButton {
+    display: none !important;
+  }
+
+  /* Show inspection section */
+  #pickup-truck-inspection {
+    display: block !important;
+  }
+
+  /* If you only want to print a specific form, you can toggle which one is visible here */
+  #pro-truck-inspection-form,
+  #rental-pickup-truck-inspection-form {
+    border: none;
+    box-shadow: none;
+    width: 100%;
+  }
+
+  .button-wrapper { display: none !important; } /* hide action buttons in print */
+}
+/* PICKUP TRUCK INSPECTION SECTION STYLING END */
+
 
 /* Modal Styles */
 #modal-container .modal {

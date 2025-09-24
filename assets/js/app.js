@@ -871,6 +871,66 @@ function closeMessage() {
 }
 
 /* -------------------------
+    TRUCK INSPECTION FORMS
+------------------------- */
+// === Truck inspection forms wiring ===
+function bindTruckInspectionForms() {
+  const proForm = document.getElementById('pro-truck-inspection-form');
+  const rentalForm = document.getElementById('rental-pickup-truck-inspection-form');
+
+  async function handleSubmit(form) {
+    const fd = new FormData(form); // includes form_type, inspection_date, inspected_by, arrays, comments
+    try {
+      const res = await fetch('submit_truck_inspection_form.php', { method: 'POST', body: fd });
+      const data = await res.json();
+      if (!res.ok || data.status !== 'success') {
+        alert(data.message || 'There was a problem saving the inspection.');
+        return;
+      }
+      alert(`Inspection saved. (ID: ${data.id})`);
+      // Optional: form.reset();
+      // Optional: window.print();
+    } catch (err) {
+      console.error(err);
+      alert('Network or server error while saving.');
+    }
+  }
+
+  if (proForm) {
+    proForm.addEventListener('submit', (e) => { e.preventDefault(); handleSubmit(proForm); });
+    const printBtn = document.getElementById('print-pro-truck-inspection');
+    if (printBtn) printBtn.addEventListener('click', () => window.print());
+  }
+  if (rentalForm) {
+    rentalForm.addEventListener('submit', (e) => { e.preventDefault(); handleSubmit(rentalForm); });
+    const printBtn = document.getElementById('print-rental-truck-inspection');
+    if (printBtn) printBtn.addEventListener('click', () => window.print());
+  }
+}
+
+// Make sure this runs when inspection view is shown AND on first load
+document.addEventListener('DOMContentLoaded', () => {
+  bindTruckInspectionForms();
+});
+
+// If you’re toggling views, call this inside showPickupTruckInspectionForm()
+function showPickupTruckInspectionForm() {
+  // hide others, show inspection section
+  document.getElementById('dashboard-container').style.display = 'none';
+  document.getElementById('lg-equipment-yard-check-form').style.display = 'none';
+  document.getElementById('submitted-yard-checks').style.display = 'none';
+  document.getElementById('equipment-stats').style.display = 'none';
+
+  const section = document.getElementById('pickup-truck-inspection');
+  if (section) section.style.display = 'block';
+
+  // (re)bind to be safe if the DOM was swapped
+  bindTruckInspectionForms();
+}
+
+
+
+/* -------------------------
    8. EQUIPMENT MANAGEMENT
 ------------------------- */
 

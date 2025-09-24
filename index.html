@@ -315,7 +315,7 @@
             <!-- Pro Truck Monthly Inspection Form -->
             <form id="pro-truck-inspection-form">
                <div class="form-title-wrapper">
-                  <h1>Load N Go Monthly Inspection Checklist</h1>
+                  <h2>Load N Go Monthly Inspection Checklist</h2>
                </div>
                
                <fieldset>
@@ -326,7 +326,7 @@
                   </div>
                   <div class="form-control">
                      <label for="inspected-by">Inspected by:</label>
-                     <input type="text" id="inspected-by" name="inspected_by" required>
+                     <input type="text" id="pro-inspected-by" name="inspected_by" required>
                   </div>
                </fieldset>
             
@@ -450,15 +450,24 @@
                   </p>
                </div>
                
-               <div class="button-wrapper">
+               <!-- <div class="button-wrapper">
                   <button type="submit">Submit Inspection</button>
-               </div>   
+               </div>   -->
+               
+               <!-- inside #pro-truck-inspection-form -->
+               <input type="hidden" name="form_type" value="pro">
+
+               <div class="button-wrapper" style="display:flex;gap:10px;">
+               <button type="submit">Submit Inspection</button>
+               <button type="button" id="print-pro-truck-inspection">Print</button>
+               </div>
+
             </form>
 
             <!-- Rental Pickup Truck Inspection Form -->
              <form id="rental-pickup-truck-inspection-form">
                <div class="form-title-wrapper">
-                  <h1>Rental Pickup Truck Monthly Inspection Checklist</h1>
+                  <h2>Rental Pickup Truck Monthly Inspection Checklist</h2>
                </div>
                
                <fieldset>
@@ -469,7 +478,7 @@
                   </div>
                   <div class="form-control">
                      <label for="inspected-by">Inspected by:</label>
-                     <input type="text" id="inspected-by" name="inspected_by" required>
+                     <input type="text" id="rental-inspected-by" name="inspected_by" required>
                   </div>
                </fieldset>
             
@@ -583,9 +592,17 @@
                   </p>
                </div>
                
-               <div class="button-wrapper">
+               <!-- <div class="button-wrapper">
                   <button type="submit">Submit Inspection</button>
-               </div>   
+               </div> -->
+               <!-- inside #rental-pickup-truck-inspection-form -->
+               <input type="hidden" name="form_type" value="rental">
+
+               <div class="button-wrapper" style="display:flex;gap:10px;">
+               <button type="submit">Submit Inspection</button>
+               <button type="button" id="print-rental-truck-inspection">Print</button>
+               </div>
+   
             </form>
          </div>
       
