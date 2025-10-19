@@ -523,6 +523,7 @@ Side Menu Styles
   padding: 10px;
   width: 100%;
   max-width: 200px;
+  z-index: 1500;
   /* background-color: var(--secondary-black-color); */
   transition: width 0.3s ease-in-out;  /* animate the width change */
   /* overflow: hidden; /* unused */ /* Not necessary as overflow is handled by main-content-container */
@@ -596,9 +597,17 @@ Side Menu Styles
    border-radius: 50px !important;
    transition: all 0.3s ease-in-out; /* so it can animate gracefully */
 }
+.side-nav-container-collapsed .side-menu-item {
+   pointer-events: none;
+   justify-content: center;
+}
 .side-nav-container-collapsed .side-menu-txt {
    opacity: 0;
    pointer-events: none; /* prevents accidental hovers/clicks on hidden text */
+}
+.side-nav-container-collapsed .side-menu-item-icon-wrapper {
+   pointer-events: auto;
+   cursor: pointer;
 }
 
 .side-menu-item-icon-wrapper {
@@ -637,7 +646,7 @@ Side Menu Styles
    /* transform: translateX(-50%); */ /* unused */ /* Not necessary for tooltip positioning */
    bottom: 10%; /* Position above the icon */
    left: 135%;    /* Center horizontally under icon */
-   z-index: 999;
+   z-index: 5000;
  }
  
  /* Show tooltip ONLY when side nav is collapsed */
@@ -646,7 +655,7 @@ Side Menu Styles
    content: attr(data-tooltip);
    opacity: 1;
    visibility: visible;
-   z-index: 20;
+   z-index: 5001;
  }
 
 /* Main Content Styles */
@@ -1279,7 +1288,7 @@ Side Menu Styles
    pointer-events: none;
    bottom: -33px;
    left: 0;
-   z-index: 999;
+   z-index: 5000;
 }
 
 .drag-handle i:hover::after {
@@ -2345,6 +2354,7 @@ footer {
       align-items: center;
    }
 }
+
 
 
 
