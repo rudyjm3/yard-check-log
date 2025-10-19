@@ -149,7 +149,7 @@
 
             </section>
 
-            <section id="main-dashboard-content-container" class=""glassmorphism-black">
+            <section id="main-dashboard-content-container" class="glassmorphism-black">
                <div class="dashboard-col-1-wrapper">
                   <div class="btn-wrapper">
                      <button onclick="showYardCheckForm()">Start a Yardcheck</button>
@@ -312,298 +312,357 @@
          <!-- Pickup Truck Monthly Inspection Forms Section -->
          <div id="pickup-truck-inspection" class="content-section-container" style="display: none;">
             <h2>Monthly Inspection Forms</h2>
+            <p class="inspection-lede">Stay on top of monthly truck inspections by choosing the checklist that matches your vehicle. Review the latest submissions below or jump straight into a new inspection.</p>
+            <div class="button-wrapper inspection-toggle-buttons">
+               <button type="button" class="inspection-toggle-btn" data-inspection-target="pro">Start Load N Go Inspection</button>
+               <button type="button" class="inspection-toggle-btn" data-inspection-target="rental">Start Rental Pickup Inspection</button>
+            </div>
+
+            <div class="inspection-history">
+               <div class="inspection-history-header">
+                  <h3>Recent Inspection Submissions</h3>
+                  <p>Check the latest inspections, expand comments for more context, or reopen a form to make updates.</p>
+               </div>
+               <div class="inspection-history-controls">
+                  <label for="inspection-filter-form-type">
+                     Form type
+                     <select id="inspection-filter-form-type">
+                        <option value="all">All forms</option>
+                        <option value="pro">Load N Go</option>
+                        <option value="rental">Rental Pickup</option>
+                     </select>
+                  </label>
+                  <label for="inspection-filter-search">
+                     Search
+                     <input type="search" id="inspection-filter-search" placeholder="Search inspector or comments">
+                  </label>
+               </div>
+               <div id="inspection-history-list" class="inspection-history-list">
+                  <p class="inspection-history-empty">No inspections have been submitted yet. Completed inspections will appear here.</p>
+               </div>
+               <div class="inspection-history-pagination">
+                  <div class="inspection-history-pagination-buttons">
+                     <button type="button" class="inspection-history-page-btn" data-action="prev-page" disabled>Previous</button>
+                     <button type="button" class="inspection-history-page-btn" data-action="next-page" disabled>Next</button>
+                  </div>
+                  <span id="inspection-pagination-status" class="inspection-history-page-status">Page 1 of 1</span>
+               </div>
+            </div>
             <!-- Pro Truck Monthly Inspection Form -->
-            <form id="pro-truck-inspection-form">
-               <div class="form-title-wrapper">
-                  <h2>Load N Go Monthly Inspection Checklist</h2>
-               </div>
-               
-               <fieldset>
-                  <legend>Inspection Info</legend>
-                  <div class="form-control">
-                     <label for="inspection-date">Date:</label>
-                     <input type="date" id="inspection-date" name="inspection_date" required>
-                  </div>
-                  <div class="form-control">
-                     <label for="inspected-by">Inspected by:</label>
-                     <input type="text" id="pro-inspected-by" name="inspected_by" required>
-                  </div>
-               </fieldset>
-            
-               <fieldset>
-                  <legend>Truck Fluids</legend>
-                  <div class="checkbox-group">
-                     <div>
-                     <label for="fluids-topped">All fluids are topped off</label>
-                     <input type="checkbox" id="fluids-topped" name="truck_fluids[]" value="all_fluids_topped" required>
+            <div id="pro-inspection-modal" class="inspection-form-modal hidden" data-form-type="pro">
+               <div class="inspection-form-modal-dialog">
+                  <button type="button" class="inspection-form-close" data-action="close-modal" aria-label="Close inspection form">&times;</button>
+                  <form id="pro-truck-inspection-form" class="inspection-form" data-form-type="pro">
+                     <div class="form-title-wrapper">
+                        <h2>Load N Go Monthly Inspection Checklist</h2>
                      </div>
-                  </div>
-               </fieldset>
-            
-               <fieldset>
-                  <legend>Truck Exterior</legend>
-                  <div class="checkbox-group">
-                     <div>
-                     <label for="ext-license-plate">License plate present with up-to-date sticker</label>
-                     <input type="checkbox" id="ext-license-plate" name="truck_exterior[]" value="license_plate_present" required>
-                     </div>
-                     <div>
-                     <label for="ext-damage">Damage to the vehicle</label>
-                     <input type="checkbox" id="ext-damage" name="truck_exterior[]" value="damage_to_vehicle" required>
-                     </div>
-                     <div>
-                     <label for="ext-tires">Tires for appropriate inflation, tread wear and cuts</label>
-                     <input type="checkbox" id="ext-tires" name="truck_exterior[]" value="tires_inflation_and_wear" required>
-                     </div>
-                     <div>
-                     <label for="ext-lights">Headlights, tail lights and turn signals for cracked lens and operation</label>
-                     <input type="checkbox" id="ext-lights" name="truck_exterior[]" value="lights_operation_and_lens" required>
-                     </div>
-                     <div>
-                     <label for="ext-glass">Glass and mirrors for cracks and operation</label>
-                     <input type="checkbox" id="ext-glass" name="truck_exterior[]" value="glass_and_mirrors" required>
-                     </div>
-                     <div>
-                     <label for="ext-wipers">Windshield wipers for operation and wear</label>
-                     <input type="checkbox" id="ext-wipers" name="truck_exterior[]" value="wipers_operation_and_wear" required>
-                     </div>
-                     <div>
-                     <label for="ext-bed">Truck bed sides and tail gate for operation and broken hinges</label>
-                     <input type="checkbox" id="ext-bed" name="truck_exterior[]" value="bed_and_tailgate" required>
-                     </div>
-                     <div>
-                     <label for="ext-load-sensor">
-                        Check Load Sensor (inspect &amp; activate; see REN10-10 SOP page 21 or calibration guide)
-                     </label>
-                     <input type="checkbox" id="ext-load-sensor" name="truck_exterior[]" value="load_sensor_checked" required>
-                     </div>
-                     <div>
-                     <label for="ext-decals">Decals are present and in good condition</label>
-                     <input type="checkbox" id="ext-decals" name="truck_exterior[]" value="decals_condition" required>
-                     </div>
-                     <div>
-                     <label for="ext-tow-hitch">Ensure tow hitch has a weld or is locked (2015+ models)</label>
-                     <input type="checkbox" id="ext-tow-hitch" name="truck_exterior[]" value="tow_hitch_locked_or_welded" required>
-                     </div>
-                  </div>
-               </fieldset>
-            
-               <fieldset>
-                  <legend>Truck Interior</legend>
-                  <div class="checkbox-group">
-                     <div>
-                     <label for="int-seatbelts">Seatbelts for operation, cuts or frays</label>
-                     <input type="checkbox" id="int-seatbelts" name="truck_interior[]" value="seatbelts" required>
-                     </div>
-                     <div>
-                     <label for="int-horn">Steering wheel horn for operation</label>
-                     <input type="checkbox" id="int-horn" name="truck_interior[]" value="horn_operation" required>
-                     </div>
-                     <div>
-                     <label for="int-parking-brake">Parking brake engages</label>
-                     <input type="checkbox" id="int-parking-brake" name="truck_interior[]" value="parking_brake" required>
-                     </div>
-                     <div>
-                     <label for="int-spare-tire">Spare tire properly inflated (vans only) and tools</label>
-                     <input type="checkbox" id="int-spare-tire" name="truck_interior[]" value="spare_tire_inflated" required>
-                     </div>
-                     <div>
-                     <label for="int-ac-heater">AC and heating are operational</label>
-                     <input type="checkbox" id="int-ac-heater" name="truck_interior[]" value="ac_heater" required>
-                     </div>
-                     <div>
-                     <label for="int-docs">
-                        Truck registration, insurance card, accident documents in glove box
-                     </label>
-                     <input type="checkbox" id="int-docs" name="truck_interior[]" value="registration_insurance" required>
-                     </div>
-                     <div>
-                     <label for="int-decals-int">Decals are present and in good condition</label>
-                     <input type="checkbox" id="int-decals-int" name="truck_interior[]" value="decals_interior" required>
-                     </div>
-                     <div>
-                     <label for="int-transponder">Toll transponder (if applicable)</label>
-                     <input type="checkbox" id="int-transponder" name="truck_interior[]" value="toll_transponder">
-                     </div>
-                     <div>
-                     <label for="int-fire-extinguisher">
-                        Fire extinguisher present, charged, and inspection current
-                     </label>
-                     <input type="checkbox" id="int-fire-extinguisher" name="truck_interior[]" value="fire_extinguisher" required>
-                     </div>
-                  </div>
-               </fieldset>  
+                     
+                     <fieldset>
+                        <legend>Inspection Info</legend>
+                        <div class="form-control">
+                           <label for="pro-inspection-date">Date:</label>
+                           <input type="date" id="pro-inspection-date" name="inspection_date" required>
+                        </div>
+                        <div class="form-control">
+                           <label for="pro-inspected-by">Inspected by:</label>
+                           <input type="text" id="pro-inspected-by" name="inspected_by" required>
+                        </div>
+                     </fieldset>
                   
-               <fieldset>
-                  <legend>Comments</legend>
-                  <div class="form-control">
-                     <textarea id="inspection-comments" name="inspection_comments" rows="4" placeholder="Enter any additional comments or notes here..."></textarea>
-                  </div>
-               </fieldset>
+                     <fieldset>
+                        <legend>Truck Fluids</legend>
+                        <div class="checkbox-group">
+                           <div>
+                           <label for="pro-fluids-topped">All fluids are topped off</label>
+                           <input type="checkbox" id="pro-fluids-topped" name="truck_fluids[]" value="all_fluids_topped" required>
+                           </div>
+                        </div>
+                     </fieldset>
+                  
+                     <fieldset>
+                        <legend>Truck Exterior</legend>
+                        <div class="checkbox-group">
+                           <div>
+                           <label for="pro-ext-license-plate">License plate present with up-to-date sticker</label>
+                           <input type="checkbox" id="pro-ext-license-plate" name="truck_exterior[]" value="license_plate_present" required>
+                           </div>
+                           <div>
+                           <label for="pro-ext-damage">Damage to the vehicle</label>
+                           <input type="checkbox" id="pro-ext-damage" name="truck_exterior[]" value="damage_to_vehicle" required>
+                           </div>
+                           <div>
+                           <label for="pro-ext-tires">Tires for appropriate inflation, tread wear and cuts</label>
+                           <input type="checkbox" id="pro-ext-tires" name="truck_exterior[]" value="tires_inflation_and_wear" required>
+                           </div>
+                           <div>
+                           <label for="pro-ext-lights">Headlights, tail lights and turn signals for cracked lens and operation</label>
+                           <input type="checkbox" id="pro-ext-lights" name="truck_exterior[]" value="lights_operation_and_lens" required>
+                           </div>
+                           <div>
+                           <label for="pro-ext-glass">Glass and mirrors for cracks and operation</label>
+                           <input type="checkbox" id="pro-ext-glass" name="truck_exterior[]" value="glass_and_mirrors" required>
+                           </div>
+                           <div>
+                           <label for="pro-ext-wipers">Windshield wipers for operation and wear</label>
+                           <input type="checkbox" id="pro-ext-wipers" name="truck_exterior[]" value="wipers_operation_and_wear" required>
+                           </div>
+                           <div>
+                           <label for="pro-ext-bed">Truck bed sides and tail gate for operation and broken hinges</label>
+                           <input type="checkbox" id="pro-ext-bed" name="truck_exterior[]" value="bed_and_tailgate" required>
+                           </div>
+                           <div>
+                           <label for="pro-ext-load-sensor">
+                              Check Load Sensor (inspect &amp; activate; see REN10-10 SOP page 21 or calibration guide)
+                           </label>
+                           <input type="checkbox" id="pro-ext-load-sensor" name="truck_exterior[]" value="load_sensor_checked" required>
+                           </div>
+                           <div>
+                           <label for="pro-ext-decals">Decals are present and in good condition</label>
+                           <input type="checkbox" id="pro-ext-decals" name="truck_exterior[]" value="decals_condition" required>
+                           </div>
+                           <div>
+                           <label for="pro-ext-tow-hitch">Ensure tow hitch has a weld or is locked (2015+ models)</label>
+                           <input type="checkbox" id="pro-ext-tow-hitch" name="truck_exterior[]" value="tow_hitch_locked_or_welded" required>
+                           </div>
+                        </div>
+                     </fieldset>
+                  
+                     <fieldset>
+                        <legend>Truck Interior</legend>
+                        <div class="checkbox-group">
+                           <div>
+                           <label for="pro-int-seatbelts">Seatbelts for operation, cuts or frays</label>
+                           <input type="checkbox" id="pro-int-seatbelts" name="truck_interior[]" value="seatbelts" required>
+                           </div>
+                           <div>
+                           <label for="pro-int-horn">Steering wheel horn for operation</label>
+                           <input type="checkbox" id="pro-int-horn" name="truck_interior[]" value="horn_operation" required>
+                           </div>
+                           <div>
+                           <label for="pro-int-parking-brake">Parking brake engages</label>
+                           <input type="checkbox" id="pro-int-parking-brake" name="truck_interior[]" value="parking_brake" required>
+                           </div>
+                           <div>
+                           <label for="pro-int-spare-tire">Spare tire properly inflated (vans only) and tools</label>
+                           <input type="checkbox" id="pro-int-spare-tire" name="truck_interior[]" value="spare_tire_inflated" required>
+                           </div>
+                           <div>
+                           <label for="pro-int-ac-heater">AC and heating are operational</label>
+                           <input type="checkbox" id="pro-int-ac-heater" name="truck_interior[]" value="ac_heater" required>
+                           </div>
+                           <div>
+                           <label for="pro-int-docs">
+                              Truck registration, insurance card, accident documents in glove box
+                           </label>
+                           <input type="checkbox" id="pro-int-docs" name="truck_interior[]" value="registration_insurance" required>
+                           </div>
+                           <div>
+                           <label for="pro-int-decals-int">Decals are present and in good condition</label>
+                           <input type="checkbox" id="pro-int-decals-int" name="truck_interior[]" value="decals_interior" required>
+                           </div>
+                           <div>
+                           <label for="pro-int-transponder">Toll transponder (if applicable)</label>
+                           <input type="checkbox" id="pro-int-transponder" name="truck_interior[]" value="toll_transponder">
+                           </div>
+                           <div>
+                           <label for="pro-int-fire-extinguisher">
+                              Fire extinguisher present, charged, and inspection current
+                           </label>
+                           <input type="checkbox" id="pro-int-fire-extinguisher" name="truck_interior[]" value="fire_extinguisher" required>
+                           </div>
+                        </div>
+                     </fieldset>  
+                        
+                     <fieldset>
+                        <legend>Comments</legend>
+                        <div class="form-control">
+                           <textarea id="pro-inspection-comments" name="inspection_comments" rows="4" placeholder="Enter any additional comments or notes here..."></textarea>
+                        </div>
+                     </fieldset>
 
-               <div class="form-footer-note-wrapper">
-                  <p>
-                     <strong>Note:</strong> If any item is incorrect or inoperable, please correct. If repair cannot be
-                     completed onsite and affects safe operation or Load Sensor, tag the vehicle “Out of Service” and
-                     contact Element at <a href="tel:1-888-562-3646">1-888-562-3646</a> or
-                     <a href="mailto:customercareus.fleet@elementcorp.com">customercareus.fleet@elementcorp.com</a>.
-                  </p>
+                     <div class="form-footer-note-wrapper">
+                        <p>
+                           <strong>Note:</strong> If any item is incorrect or inoperable, please correct. If repair cannot be
+                           completed onsite and affects safe operation or Load Sensor, tag the vehicle “Out of Service” and
+                           contact Element at <a href="tel:1-888-562-3646">1-888-562-3646</a> or
+                           <a href="mailto:customercareus.fleet@elementcorp.com">customercareus.fleet@elementcorp.com</a>.
+                        </p>
+                     </div>
+                     
+                     <input type="hidden" name="id" value="">
+                     <input type="hidden" name="form_type" value="pro">
+
+                     <div class="button-wrapper inspection-form-actions">
+                        <button type="submit" class="inspection-submit-btn" data-role="submit-label">Submit Inspection</button>
+                        <button type="button" class="inspection-generate-pdf-btn" data-action="generate-pdf" data-form-type="pro">Generate PDF</button>
+                        <button type="button" class="inspection-cancel-btn" data-action="cancel-form">Cancel</button>
+                     </div>
+
+                  </form>
                </div>
-               
-               <!-- <div class="button-wrapper">
-                  <button type="submit">Submit Inspection</button>
-               </div>   -->
-               
-               <!-- inside #pro-truck-inspection-form -->
-               <input type="hidden" name="form_type" value="pro">
-
-               <div class="button-wrapper" style="display:flex;gap:10px;">
-               <button type="submit">Submit Inspection</button>
-               <button type="button" id="print-pro-truck-inspection">Print</button>
-               </div>
-
-            </form>
+            </div>
 
             <!-- Rental Pickup Truck Inspection Form -->
-             <form id="rental-pickup-truck-inspection-form">
-               <div class="form-title-wrapper">
-                  <h2>Rental Pickup Truck Monthly Inspection Checklist</h2>
-               </div>
-               
-               <fieldset>
-                  <legend>Inspection Info</legend>
-                  <div class="form-control">
-                     <label for="inspection-date">Date:</label>
-                     <input type="date" id="inspection-date" name="inspection_date" required>
-                  </div>
-                  <div class="form-control">
-                     <label for="inspected-by">Inspected by:</label>
-                     <input type="text" id="rental-inspected-by" name="inspected_by" required>
-                  </div>
-               </fieldset>
-            
-               <fieldset>
-                  <legend>Truck Fluids</legend>
-                  <div class="checkbox-group">
-                     <div>
-                     <label for="fluids-topped">All fluids are topped off</label>
-                     <input type="checkbox" id="fluids-topped" name="truck_fluids[]" value="all_fluids_topped" required>
+            <div id="rental-inspection-modal" class="inspection-form-modal hidden" data-form-type="rental">
+               <div class="inspection-form-modal-dialog">
+                  <button type="button" class="inspection-form-close" data-action="close-modal" aria-label="Close inspection form">&times;</button>
+                  <form id="rental-pickup-truck-inspection-form" class="inspection-form" data-form-type="rental">
+                     <div class="form-title-wrapper">
+                        <h2>Rental Pickup Truck Monthly Inspection Checklist</h2>
                      </div>
-                  </div>
-               </fieldset>
-            
-               <fieldset>
-                  <legend>Truck Exterior</legend>
-                  <div class="checkbox-group">
-                     <div>
-                     <label for="ext-license-plate">License plate present with up-to-date sticker</label>
-                     <input type="checkbox" id="ext-license-plate" name="truck_exterior[]" value="license_plate_present" required>
-                     </div>
-                     <div>
-                     <label for="ext-damage">Damage to the vehicle</label>
-                     <input type="checkbox" id="ext-damage" name="truck_exterior[]" value="damage_to_vehicle" required>
-                     </div>
-                     <div>
-                     <label for="ext-tires">Tires for appropriate inflation, tread wear and cuts</label>
-                     <input type="checkbox" id="ext-tires" name="truck_exterior[]" value="tires_inflation_and_wear" required>
-                     </div>
-                     <div>
-                     <label for="ext-lights">Headlights, tail lights and turn signals for cracked lens and operation</label>
-                     <input type="checkbox" id="ext-lights" name="truck_exterior[]" value="lights_operation_and_lens" required>
-                     </div>
-                     <div>
-                     <label for="ext-glass">Glass and mirrors for cracks and operation</label>
-                     <input type="checkbox" id="ext-glass" name="truck_exterior[]" value="glass_and_mirrors" required>
-                     </div>
-                     <div>
-                     <label for="ext-wipers">Windshield wipers for operation and wear</label>
-                     <input type="checkbox" id="ext-wipers" name="truck_exterior[]" value="wipers_operation_and_wear" required>
-                     </div>
-                     <div>
-                     <label for="ext-bed">Truck bed sides and tail gate for operation and broken hinges</label>
-                     <input type="checkbox" id="ext-bed" name="truck_exterior[]" value="bed_and_tailgate" required>
-                     </div>
-                     <div>
-                     <label for="ext-decals">Decals are present and in good condition</label>
-                     <input type="checkbox" id="ext-decals" name="truck_exterior[]" value="decals_condition" required>
-                     </div>
-                  </div>
-               </fieldset>
-            
-               <fieldset>
-                  <legend>Truck Interior</legend>
-                  <div class="checkbox-group">
-                     <div>
-                     <label for="int-seatbelts">Seatbelts for operation, cuts or frays</label>
-                     <input type="checkbox" id="int-seatbelts" name="truck_interior[]" value="seatbelts" required>
-                     </div>
-                     <div>
-                     <label for="int-horn">Steering wheel horn for operation</label>
-                     <input type="checkbox" id="int-horn" name="truck_interior[]" value="horn_operation" required>
-                     </div>
-                     <div>
-                     <label for="int-parking-brake">Parking brake engages</label>
-                     <input type="checkbox" id="int-parking-brake" name="truck_interior[]" value="parking_brake" required>
-                     </div>
-                     <div>
-                     <label for="int-spare-tire">Spare tire properly inflated (vans only) and tools</label>
-                     <input type="checkbox" id="int-spare-tire" name="truck_interior[]" value="spare_tire_inflated" required>
-                     </div>
-                     <div>
-                     <label for="int-ac-heater">AC and heating are operational</label>
-                     <input type="checkbox" id="int-ac-heater" name="truck_interior[]" value="ac_heater" required>
-                     </div>
-                     <div>
-                     <label for="int-docs">
-                        Truck registration, insurance card, accident documents in glove box
-                     </label>
-                     <input type="checkbox" id="int-docs" name="truck_interior[]" value="registration_insurance" required>
-                     </div>
-                     <div>
-                     <label for="int-decals-int">Decals are present and in good condition</label>
-                     <input type="checkbox" id="int-decals-int" name="truck_interior[]" value="decals_interior" required>
-                     </div>
-                     <div>
-                     <label for="int-transponder">Toll transponder (if applicable)</label>
-                     <input type="checkbox" id="int-transponder" name="truck_interior[]" value="toll_transponder">
-                     </div>
-                     <div>
-                     <label for="int-fire-extinguisher">
-                        Fire extinguisher present, charged, and inspection current
-                     </label>
-                     <input type="checkbox" id="int-fire-extinguisher" name="truck_interior[]" value="fire_extinguisher" required>
-                     </div>
-                  </div>
-               </fieldset>  
+                     
+                     <fieldset>
+                        <legend>Inspection Info</legend>
+                        <div class="form-control">
+                           <label for="rental-inspection-date">Date:</label>
+                           <input type="date" id="rental-inspection-date" name="inspection_date" required>
+                        </div>
+                        <div class="form-control">
+                           <label for="rental-inspected-by">Inspected by:</label>
+                           <input type="text" id="rental-inspected-by" name="inspected_by" required>
+                        </div>
+                     </fieldset>
                   
-               <fieldset>
-                  <legend>Comments</legend>
-                  <div class="form-control">
-                     <textarea id="inspection-comments" name="inspection_comments" rows="4" placeholder="Enter any additional comments or notes here..."></textarea>
-                  </div>
-               </fieldset>
+                     <fieldset>
+                        <legend>Truck Fluids</legend>
+                        <div class="checkbox-group">
+                           <div>
+                           <label for="rental-fluids-topped">All fluids are topped off</label>
+                           <input type="checkbox" id="rental-fluids-topped" name="truck_fluids[]" value="all_fluids_topped" required>
+                           </div>
+                        </div>
+                     </fieldset>
+                  
+                     <fieldset>
+                        <legend>Truck Exterior</legend>
+                        <div class="checkbox-group">
+                           <div>
+                           <label for="rental-ext-license-plate">License plate present with up-to-date sticker</label>
+                           <input type="checkbox" id="rental-ext-license-plate" name="truck_exterior[]" value="license_plate_present" required>
+                           </div>
+                           <div>
+                           <label for="rental-ext-damage">Damage to the vehicle</label>
+                           <input type="checkbox" id="rental-ext-damage" name="truck_exterior[]" value="damage_to_vehicle" required>
+                           </div>
+                           <div>
+                           <label for="rental-ext-tires">Tires for appropriate inflation, tread wear and cuts</label>
+                           <input type="checkbox" id="rental-ext-tires" name="truck_exterior[]" value="tires_inflation_and_wear" required>
+                           </div>
+                           <div>
+                           <label for="rental-ext-lights">Headlights, tail lights and turn signals for cracked lens and operation</label>
+                           <input type="checkbox" id="rental-ext-lights" name="truck_exterior[]" value="lights_operation_and_lens" required>
+                           </div>
+                           <div>
+                           <label for="rental-ext-glass">Glass and mirrors for cracks and operation</label>
+                           <input type="checkbox" id="rental-ext-glass" name="truck_exterior[]" value="glass_and_mirrors" required>
+                           </div>
+                           <div>
+                           <label for="rental-ext-wipers">Windshield wipers for operation and wear</label>
+                           <input type="checkbox" id="rental-ext-wipers" name="truck_exterior[]" value="wipers_operation_and_wear" required>
+                           </div>
+                           <div>
+                           <label for="rental-ext-bed">Truck bed sides and tail gate for operation and broken hinges</label>
+                           <input type="checkbox" id="rental-ext-bed" name="truck_exterior[]" value="bed_and_tailgate" required>
+                           </div>
+                           <div>
+                           <label for="rental-ext-decals">Decals are present and in good condition</label>
+                           <input type="checkbox" id="rental-ext-decals" name="truck_exterior[]" value="decals_condition" required>
+                           </div>
+                        </div>
+                     </fieldset>
+                  
+                     <fieldset>
+                        <legend>Truck Interior</legend>
+                        <div class="checkbox-group">
+                           <div>
+                           <label for="rental-int-seatbelts">Seatbelts for operation, cuts or frays</label>
+                           <input type="checkbox" id="rental-int-seatbelts" name="truck_interior[]" value="seatbelts" required>
+                           </div>
+                           <div>
+                           <label for="rental-int-horn">Steering wheel horn for operation</label>
+                           <input type="checkbox" id="rental-int-horn" name="truck_interior[]" value="horn_operation" required>
+                           </div>
+                           <div>
+                           <label for="rental-int-parking-brake">Parking brake engages</label>
+                           <input type="checkbox" id="rental-int-parking-brake" name="truck_interior[]" value="parking_brake" required>
+                           </div>
+                           <div>
+                           <label for="rental-int-spare-tire">Spare tire properly inflated (vans only) and tools</label>
+                           <input type="checkbox" id="rental-int-spare-tire" name="truck_interior[]" value="spare_tire_inflated" required>
+                           </div>
+                           <div>
+                           <label for="rental-int-ac-heater">AC and heating are operational</label>
+                           <input type="checkbox" id="rental-int-ac-heater" name="truck_interior[]" value="ac_heater" required>
+                           </div>
+                           <div>
+                           <label for="rental-int-docs">
+                              Truck registration, insurance card, accident documents in glove box
+                           </label>
+                           <input type="checkbox" id="rental-int-docs" name="truck_interior[]" value="registration_insurance" required>
+                           </div>
+                           <div>
+                           <label for="rental-int-decals-int">Decals are present and in good condition</label>
+                           <input type="checkbox" id="rental-int-decals-int" name="truck_interior[]" value="decals_interior" required>
+                           </div>
+                           <div>
+                           <label for="rental-int-transponder">Toll transponder (if applicable)</label>
+                           <input type="checkbox" id="rental-int-transponder" name="truck_interior[]" value="toll_transponder">
+                           </div>
+                           <div>
+                           <label for="rental-int-fire-extinguisher">
+                              Fire extinguisher present, charged, and inspection current
+                           </label>
+                           <input type="checkbox" id="rental-int-fire-extinguisher" name="truck_interior[]" value="fire_extinguisher" required>
+                           </div>
+                        </div>
+                     </fieldset>  
+                        
+                     <fieldset>
+                        <legend>Comments</legend>
+                        <div class="form-control">
+                           <textarea id="rental-inspection-comments" name="inspection_comments" rows="4" placeholder="Enter any additional comments or notes here..."></textarea>
+                        </div>
+                     </fieldset>
 
-               <div class="form-footer-note-wrapper">
-                  <p>
-                     <strong>Note:</strong> If any item is incorrect or inoperable, please correct. If repair cannot be
-                     completed onsite and affects safe operation or Load Sensor, tag the vehicle “Out of Service” and
-                     contact Element at <a href="tel:1-888-562-3646">1-888-562-3646</a> or
-                     <a href="mailto:customercareus.fleet@elementcorp.com">customercareus.fleet@elementcorp.com</a>.
-                  </p>
-               </div>
-               
-               <!-- <div class="button-wrapper">
-                  <button type="submit">Submit Inspection</button>
-               </div> -->
-               <!-- inside #rental-pickup-truck-inspection-form -->
-               <input type="hidden" name="form_type" value="rental">
+                     <div class="form-footer-note-wrapper">
+                        <p>
+                           <strong>Note:</strong> If any item is incorrect or inoperable, please correct. If repair cannot be
+                           completed onsite and affects safe operation or Load Sensor, tag the vehicle “Out of Service” and
+                           contact Element at <a href="tel:1-888-562-3646">1-888-562-3646</a> or
+                           <a href="mailto:customercareus.fleet@elementcorp.com">customercareus.fleet@elementcorp.com</a>.
+                        </p>
+                     </div>
+                     
+                     <input type="hidden" name="id" value="">
+                     <input type="hidden" name="form_type" value="rental">
 
-               <div class="button-wrapper" style="display:flex;gap:10px;">
-               <button type="submit">Submit Inspection</button>
-               <button type="button" id="print-rental-truck-inspection">Print</button>
-               </div>
+                     <div class="button-wrapper inspection-form-actions">
+                        <button type="submit" class="inspection-submit-btn" data-role="submit-label">Submit Inspection</button>
+                        <button type="button" class="inspection-generate-pdf-btn" data-action="generate-pdf" data-form-type="rental">Generate PDF</button>
+                        <button type="button" class="inspection-cancel-btn" data-action="cancel-form">Cancel</button>
+                     </div>
    
-            </form>
+                  </form>
+               </div>
+            </div>
+            <div id="inspection-success-modal" class="inspection-success-modal hidden">
+               <div class="inspection-success-modal-dialog">
+                  <p class="inspection-success-title">Inspection Submitted</p>
+                  <p id="inspection-success-message" class="inspection-success-message">Your inspection was saved successfully.</p>
+                  <button type="button" class="inspection-success-close" data-action="close">Close</button>
+               </div>
+            </div>
+            <div id="inspection-warning-modal" class="inspection-warning-modal hidden">
+               <div class="inspection-warning-modal-dialog">
+                  <p class="inspection-warning-title">Inspection Already Submitted</p>
+                  <p id="inspection-warning-message" class="inspection-warning-message"></p>
+                  <p class="inspection-warning-subtext">Select "Proceed Anyway" to start a new inspection or cancel to stay on the dashboard.</p>
+                  <div class="inspection-warning-actions">
+                     <button type="button" class="inspection-warning-cancel" data-action="warning-cancel">Cancel</button>
+                     <button type="button" class="inspection-warning-proceed" data-action="warning-proceed">Proceed Anyway</button>
+                  </div>
+               </div>
+            </div>
          </div>
       
          <!-- Equipment Management Section -->
@@ -715,3 +774,4 @@
 
 </body>
 </html>
+

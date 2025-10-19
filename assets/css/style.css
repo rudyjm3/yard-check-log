@@ -247,6 +247,20 @@ LOGIN PAGE STYLE
    padding: 15px;
    gap: 15px;
 }
+.dashboard-col-1-wrapper .btn-wrapper {
+   justify-content: flex-start;
+   gap: 12px;
+   padding: 0;
+   margin: 0 0 20px 0;
+   flex-wrap: wrap;
+}
+
+.dashboard-col-1-wrapper .btn-wrapper button {
+   width: auto;
+   min-width: 200px;
+   height: 48px;
+}
+
 #associate-login-btn {
    width: 100%;
    padding: 10px;
@@ -657,6 +671,9 @@ Side Menu Styles
    justify-content: space-between;
    align-items: center;
    flex-wrap: wrap;
+   width: 100%;
+   max-width: 80%;
+   margin: 0 auto;
 }
 #dashboard-header-container .title-wrapper {
    width: 100%;
@@ -751,17 +768,28 @@ Side Menu Styles
    width: 100%;
 }
 .weather-days-wrapper .weather-days-card {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   justify-content: center;
    text-align: center;
    padding: 10px;
    border: 1px solid var(--light-grey-color2);
    border-radius: 4px;
+   gap: 10px;
 }
-.weather-days-wrapper .weather-days-card {
-   flex-wrap: nowrap;
+.weather-days-wrapper .weather-days-card .weather-info-wrapper {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   justify-content: center;
+   gap: 8px;
+   width: 100%;
 }
 .weather-days-wrapper .weather-days-card .weather-day-date {
    display: flex;
-   justify-content: space-evenly;
+   justify-content: center;
+   width: 100%;
 }
 .date {
    font-weight: 500;
@@ -772,7 +800,10 @@ Side Menu Styles
    max-width: 35px;
    height: auto;
 }
-.weather-days-card .weather-temp-wrapper {
+.weather-days-card .weather-temps-wrapper {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
    text-align: center;
    width: 100%;
 }
@@ -802,6 +833,29 @@ Side Menu Styles
    margin-top: 10px;
    background-color: var(--main-white-color);
    /* box-shadow: rgba(167, 167, 167, 0.75) 0px 5px 10px -1px; */
+}
+
+.alert-button-wrapper .alert-btn-yardcheck,
+.alert-button-wrapper .alert-btn-inspection {
+   display: inline-flex;
+   align-items: center;
+   justify-content: center;
+   padding: 8px 14px;
+   border: none;
+   border-radius: 4px;
+   background-color: var(--brand-color-green);
+   color: #ffffff;
+   font-weight: 600;
+   cursor: pointer;
+   transition: background-color 0.2s ease-in-out;
+}
+
+.alert-button-wrapper .alert-btn-yardcheck:hover,
+.alert-button-wrapper .alert-btn-yardcheck:focus,
+.alert-button-wrapper .alert-btn-inspection:hover,
+.alert-button-wrapper .alert-btn-inspection:focus {
+   background-color: var(--brand-color-mid-green);
+   outline: none;
 }
 .alert-title {
    font-weight: 500;
@@ -859,7 +913,8 @@ Side Menu Styles
    border-radius: 8px;
    box-shadow: 0px 5px 10px -1px rgba(167, 167, 167, 0.75);
    -webkit-box-shadow: 0px 5px 10px -1px rgba(167, 167, 167, 0.75);
-   -moz-box-shadow: 0px 5px 10px -1px rgba(167, 167, 167, 0.75);background-color: var(--main-white-color);
+   -moz-box-shadow: 0px 5px 10px -1px rgba(167, 167, 167, 0.75);
+   background-color: var(--main-white-color);
 }
 
 .form-title-wrapper {
@@ -1617,6 +1672,430 @@ Side Menu Styles
 #pickup-truck-inspection {
   width: 80%;
 }
+.inspection-lede {
+  margin: 0 0 20px 0;
+  max-width: 780px;
+  color: var(--main-grey-color);
+  line-height: 1.5;
+}
+.inspection-toggle-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-top: 20px;
+}
+.inspection-toggle-btn {
+  padding: 12px 20px;
+  background-color: var(--button-default-color);
+  color: var(--main-white-color);
+  border: none;
+  border-radius: 6px;
+  width: auto;
+  min-width: 220px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+.inspection-toggle-btn:hover {
+  background-color: var(--brand-color-green);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+.inspection-toggle-btn.is-active {
+  background-color: var(--brand-color-light-green);
+  color: var(--button-default-color);
+}
+.inspection-form.hidden {
+  display: none !important;
+}
+.inspection-history {
+  margin: 30px 0;
+  padding: 24px;
+  border: 1px solid var(--light-grey-color1);
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.85);
+  box-shadow: 0px 5px 10px -1px rgba(167, 167, 167, 0.45);
+}
+.inspection-history-header h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  color: var(--brand-color-green);
+}
+.inspection-history-header p {
+  margin: 8px 0 0 0;
+  color: var(--main-grey-color);
+}
+.inspection-history-controls {
+  margin-top: 18px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+.inspection-history-controls label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--button-default-color);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.inspection-history-controls select,
+.inspection-history-controls input[type="search"] {
+  padding: 8px 10px;
+  border: 1px solid var(--light-grey-color1);
+  border-radius: 6px;
+  background-color: var(--main-white-color);
+  min-width: 200px;
+}
+.inspection-history-list {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.inspection-history-empty {
+  margin: 0;
+  color: var(--main-grey-color);
+}
+.inspection-history-item {
+  border: 1px solid var(--light-grey-color1);
+  border-radius: 8px;
+  padding: 16px 20px;
+  background-color: var(--main-white-color);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.inspection-history-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  font-weight: 600;
+  color: #112132;
+}
+.inspection-history-meta span {
+  font-size: 0.95rem;
+}
+.inspection-history-comments {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  color: var(--main-grey-color);
+}
+.inspection-history-comments-label {
+  font-weight: 600;
+}
+.inspection-history-comments-text {
+  flex: 1 1 auto;
+  min-width: 200px;
+}
+.inspection-history-toggle {
+  background: none;
+  border: none;
+  color: var(--button-default-color);
+  cursor: pointer;
+  font-weight: 600;
+  text-decoration: underline;
+  padding: 0;
+}
+.inspection-history-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+.inspection-history-action {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  background-color: var(--brand-color-green);
+  color: var(--main-white-color);
+  min-width: 160px;
+  width: auto;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+.inspection-history-action:hover {
+  background-color: var(--brand-color-light-green);
+  color: var(--main-white-color);
+}
+.inspection-history-checklist {
+  border-top: 1px solid var(--light-grey-color1);
+  padding-top: 12px;
+  display: none;
+  gap: 12px;
+  flex-direction: column;
+}
+.inspection-history-checklist.is-visible {
+  display: flex;
+}
+.inspection-history-checklist-section h4 {
+  margin: 0 0 6px 0;
+  font-size: 0.95rem;
+  color: var(--button-default-color);
+}
+.inspection-history-checklist-section ul {
+  margin: 0;
+  padding-left: 18px;
+  color: var(--main-grey-color);
+  font-size: 0.9rem;
+}
+.inspection-history-pagination {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+.inspection-history-pagination-buttons {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.inspection-history-page-btn {
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: none;
+  background-color: var(--secondary-black-color);
+  color: var(--main-white-color);
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+  width: 100px;
+  text-align: center;
+}
+.inspection-history-page-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: var(--secondary-black-color);
+}
+.inspection-history-page-btn:not(:disabled):hover {
+  background-color: var(--hover-blue-color);
+  color: var(--main-white-color);
+}
+.inspection-history-page-status {
+  font-weight: 600;
+  color: var(--secondary-black-color);
+  display: block;
+}
+body.modal-open {
+  overflow: hidden;
+}
+#inspection-success-modal,
+#inspection-warning-modal {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.55);
+  z-index: 2000;
+  padding: 20px;
+}
+.inspection-success-modal.hidden,
+.inspection-warning-modal.hidden {
+
+  display: none !important;
+}
+.inspection-success-modal-dialog,
+.inspection-warning-modal-dialog {
+
+  background-color: var(--main-white-color);
+  border-radius: 8px;
+  padding: 28px;
+  max-width: 360px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+.inspection-success-title,
+.inspection-warning-title {
+
+  margin: 0 0 10px 0;
+  font-size: 1.35rem;
+  color: var(--button-default-color);
+}
+.inspection-success-message,
+.inspection-warning-message {
+
+  margin: 0 0 20px 0;
+  color: var(--main-grey-color);
+}
+
+.inspection-warning-title {
+  color: var(--button-red-color);
+}
+
+.inspection-warning-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.inspection-warning-actions button {
+  width: auto;
+  min-width: 130px;
+  padding: 10px 18px;
+  border-radius: 6px;
+  border: none;
+  font-weight: 600;
+}
+
+.inspection-warning-cancel {
+  background-color: var(--button-default-color);
+  color: var(--main-white-color);
+}
+
+.inspection-warning-cancel:hover,
+.inspection-warning-cancel:focus {
+  background-color: var(--secondary-black-color);
+  color: var(--main-white-color);
+}
+
+.inspection-warning-proceed {
+  background-color: var(--brand-color-green);
+  color: var(--main-white-color);
+}
+
+.inspection-warning-proceed:hover,
+.inspection-warning-proceed:focus {
+  background-color: var(--brand-color-light-green);
+  color: var(--main-white-color);
+}
+
+.inspection-warning-subtext {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--main-grey-color);
+}
+.inspection-success-close {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 6px;
+  background-color: var(--button-default-color);
+  color: var(--main-white-color);
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.2s ease-in-out;
+}
+.inspection-success-close:hover {
+  background-color: var(--brand-color-green);
+}
+.inspection-form-modal {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30px;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 1900;
+}
+.inspection-form-modal.hidden {
+  display: none !important;
+}
+.inspection-form-modal-dialog {
+  position: relative;
+  max-height: 90vh;
+  overflow-y: auto;
+  width: min(900px, 100%);
+  background: var(--main-white-color);
+  border-radius: 10px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
+}
+.inspection-form-close {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  border: none;
+  background: transparent;
+  font-size: 1.8rem;
+  color: var(--button-default-color);
+  width: 32px;
+  height: 32px;
+  line-height: 32px;
+  text-align: center;
+  cursor: pointer;
+  z-index: 10;
+}
+.inspection-form-close:hover {
+  color: var(--brand-color-green);
+}
+.inspection-form-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  padding: 10px 0;
+}
+.inspection-form-actions button {
+  padding: 10px 18px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
+}
+.inspection-submit-btn {
+  background-color: var(--button-default-color);
+  color: var(--main-white-color);
+}
+.inspection-submit-btn:hover {
+  background-color: var(--brand-color-green);
+}
+.inspection-generate-pdf-btn {
+  background-color: var(--brand-color-light-green);
+  color: var(--button-default-color);
+}
+.inspection-generate-pdf-btn:hover {
+  background-color: var(--brand-color-green);
+  color: var(--main-white-color);
+}
+.inspection-cancel-btn {
+  background-color: var(--main-grey-color);
+  color: var(--main-white-color);
+}
+.inspection-cancel-btn:hover {
+  background-color: var(--button-default-color);
+}
+@media (max-width: 900px) {
+  #pickup-truck-inspection {
+    width: 100%;
+  }
+  .inspection-history-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .inspection-toggle-buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .inspection-toggle-btn {
+    width: 100%;
+  }
+  .inspection-history-controls select,
+  .inspection-history-controls input[type="search"] {
+    width: 100%;
+  }
+  .inspection-history-item {
+    padding: 14px 16px;
+  }
+  .inspection-history-meta {
+    flex-direction: column;
+    gap: 6px;
+  }
+  .inspection-history-comments {
+    flex-direction: column;
+  }
+  .inspection-history-actions {
+    width: 100%;
+    flex-direction: column;
+  }
+  .inspection-history-action {
+    width: 100%;
+  }
+}
 #pro-truck-inspection-form, #rental-pickup-truck-inspection-form {
    width: 100%;
    /* max-width: 650px; */
@@ -1866,3 +2345,17 @@ footer {
       align-items: center;
    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

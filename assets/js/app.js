@@ -11,6 +11,9 @@
 let equipmentData = [];   // Will be populated from the server
 let currentMonday = null; // Tracks Monday for the displayed week
 let currentSortable = null;
+let currentAlertDiscrepancies = [];
+let currentAlertMissingSubmissions = [];
+let currentInspectionAlerts = [];
 
 /* -------------------------
    2. HELPER FUNCTIONS
@@ -30,7 +33,7 @@ function getOrdinalSuffix(day) {
 }
 
 /**
- * Convert a Date -> "YYYY-MM-DD"
+ * Convert a Date -> 'YYYY-MM-DD'
  */
 function formatAsYyyyMmDd(dateObj) {
   const y = dateObj.getFullYear();
@@ -40,7 +43,7 @@ function formatAsYyyyMmDd(dateObj) {
 }
 
 /**
- * Convert "YYYY-MM-DD" -> "MM/DD/YYYY"
+ * Convert 'YYYY-MM-DD' -> 'MM/DD/YYYY'
  * for the no-submissions message
  */
 function formatDateForDisplay(isoDateStr) {
@@ -49,12 +52,12 @@ function formatDateForDisplay(isoDateStr) {
 }
 
 /**
- * Return array of date strings from start->end inclusive, "YYYY-MM-DD".
+ * Return array of date strings from start->end inclusive, 'YYYY-MM-DD'.
  */
 function getDatesInRange(startStr, endStr) {
   const dates = [];
-  const start = new Date(startStr + "T00:00:00");
-  const end   = new Date(endStr + "T00:00:00");
+  const start = new Date(startStr + 'T00:00:00');
+  const end   = new Date(endStr + 'T00:00:00');
   while (start <= end) {
     dates.push(formatAsYyyyMmDd(start));
     start.setDate(start.getDate() + 1);
@@ -75,12 +78,12 @@ function getTodayDateString() {
   return `${yyyy}-${mm}-${dd}`;
 }
 
-// 2. Formats a date string from API to readable form (like "Wednesday, April 30, 2025")
+// 2. Formats a date string from API to readable form (like 'Wednesday, April 30, 2025')
 function formatDate(dateString) {
   const [year, month, day] = dateString.split('-');
-  const months = ["January", "February", "March", "April", "May", "June", 
-                  "July", "August", "September", "October", "November", "December"];
-  const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  const months = ['January', 'February', 'March', 'April', 'May', 'June', 
+                  'July', 'August', 'September', 'October', 'November', 'December'];
+  const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
   const date = new Date(`${year}-${month}-${day}T00:00:00`);
   const formattedDate = `${weekdays[date.getUTCDay()]}, ${months[parseInt(month) - 1]} ${parseInt(day)}, ${year}`;
   return formattedDate;
@@ -100,7 +103,7 @@ function formatWeatherText(text) {
 // 4. Main function that processes and displays weather data
 function displayWeatherData(data) {
   const todayString = getTodayDateString();
-  console.log("Today String:", todayString); // Debug today’s date
+  console.log('Today String:', todayString); // Debug today's date
 
   // Find the forecast object for today
   const todayIndex = data.daily.data.findIndex(day => day.day === todayString);
@@ -108,21 +111,21 @@ function displayWeatherData(data) {
     console.error("Today's weather data not found. Data:", data.daily.data);
     return;
   }
-  console.log("Today Index:", todayIndex, "Data at Index:", data.daily.data[todayIndex]); // Debug index and data
+  console.log('Today Index:', todayIndex, 'Data at Index:', data.daily.data[todayIndex]); // Debug index and data
 
   // Get today's forecast for current-weather-card
   const currentWeather = data.daily.data[todayIndex];
   document.querySelector('.current-weather-date-txt').textContent = formatDate(currentWeather.day);
-  document.querySelector('.current-temp').textContent = `${Math.round(currentWeather.temperature)}°F`;
-  document.querySelector('.current-hi-temp').textContent = `${Math.round(currentWeather.temperature_max)}°F`;
-  document.querySelector('.current-lo-temp').textContent = `${Math.round(currentWeather.temperature_min)}°F`;
+  document.querySelector('.current-temp').textContent = `${Math.round(currentWeather.temperature)}\u00B0F`;
+  document.querySelector('.current-hi-temp').textContent = `${Math.round(currentWeather.temperature_max)}\u00B0F`;
+  document.querySelector('.current-lo-temp').textContent = `${Math.round(currentWeather.temperature_min)}\u00B0F`;
   document.querySelector('.weather-description').textContent = formatWeatherText(currentWeather.weather);
   document.querySelector('.weather-summary').textContent = currentWeather.summary;
   document.querySelector('.current-weather-card .weather-icon').src = getMappedIcon(currentWeather.icon);
 
   // Get the next 6 forecast days, explicitly excluding today
   const upcomingDays = data.daily.data.slice(todayIndex + 1, todayIndex + 7);
-  console.log("Upcoming Days Raw:", upcomingDays.map(day => day.day)); // Debug raw days
+  console.log('Upcoming Days Raw:', upcomingDays.map(day => day.day)); // Debug raw days
   const weatherDaysWrapper = document.querySelector('.weather-days-wrapper');
   weatherDaysWrapper.innerHTML = ''; // Clear previous content
 
@@ -130,23 +133,24 @@ function displayWeatherData(data) {
   if (upcomingDays.length >= 6) {
     upcomingDays.slice(0, 6).forEach(day => {
       const dateObj = new Date(day.day + 'T00:00:00'); // Ensure local date parsing
-      const options = { weekday: 'short', day: 'numeric', timeZone: 'America/New_York' };
-      const formattedDate = dateObj.toLocaleDateString('en-US', options);
+      const weekday = dateObj.toLocaleDateString('en-US', { weekday: 'short', timeZone: 'America/New_York' });
+      const dayNumber = parseInt(dateObj.toLocaleDateString('en-US', { day: 'numeric', timeZone: 'America/New_York' }), 10);
+      const formattedDate = `${weekday} ${dayNumber}${getOrdinalSuffix(dayNumber)}`;
 
-      console.log("Processing Day:", day.day, "Formatted as:", formattedDate); // Debug each day
+      console.log('Processing Day:', day.day, 'Formatted as:', formattedDate); // Debug each day
 
       const cardHTML = `
-        <div class="weather-days-card glassmorphism-white">
-          <div class="weather-day-date">
-            <p class="weather-day"><span class="date">${formattedDate}</span></p>
+        <div class='weather-days-card glassmorphism-white'>
+          <div class='weather-day-date'>
+            <p class='weather-day'><span class='date'>${formattedDate}</span></p>
           </div>
-          <div class="weather-info-wrapper">
-            <div class="weather-icon-wrapper">
-              <img src="${getMappedIcon(day.icon)}" alt="Weather Icon" class="weather-icon"> 
+          <div class='weather-info-wrapper'>
+            <div class='weather-icon-wrapper'>
+              <img src='${getMappedIcon(day.icon)}' alt='Weather Icon' class='weather-icon'> 
             </div>
-            <div class="weather-temps-wrapper">
-              <p class="hi-temp">${Math.round(day.temperature_max)}°F</p>
-              <p class="lo-temp">${Math.round(day.temperature_min)}°F</p>
+            <div class='weather-temps-wrapper'>
+              <p class='hi-temp'>${Math.round(day.temperature_max)}\u00B0F</p>
+              <p class='lo-temp'>${Math.round(day.temperature_min)}\u00B0F</p>
             </div>
           </div>
         </div>
@@ -155,7 +159,7 @@ function displayWeatherData(data) {
     });
   } else {
     weatherDaysWrapper.innerHTML = '<p>Insufficient forecast data for the next 6 days.</p>';
-    console.warn("Insufficient days:", upcomingDays.length);
+    console.warn('Insufficient days:', upcomingDays.length);
   }
 }
 
@@ -187,7 +191,15 @@ document.addEventListener('DOMContentLoaded', fetchWeatherData);
 /* ---------------------
 YARDCHECK DISCREPANCY AND MISSING SUBMISSION ALERTS
 --------------------- */
-function displayDiscrepancyAlerts(discrepancies, missingSubmissions) {
+function displayDiscrepancyAlerts(
+  discrepancies = currentAlertDiscrepancies,
+  missingSubmissions = currentAlertMissingSubmissions,
+  inspectionAlerts = currentInspectionAlerts
+) {
+  currentAlertDiscrepancies = Array.isArray(discrepancies) ? discrepancies : [];
+  currentAlertMissingSubmissions = Array.isArray(missingSubmissions) ? missingSubmissions : [];
+  currentInspectionAlerts = Array.isArray(inspectionAlerts) ? inspectionAlerts : [];
+
   const wrapper = document.querySelector('.alerts-card-wrapper');
   if (!wrapper) {
     console.error('Error: .alerts-card-wrapper not found in DOM');
@@ -195,12 +207,13 @@ function displayDiscrepancyAlerts(discrepancies, missingSubmissions) {
   }
   wrapper.innerHTML = ''; // Clear previous alerts
 
-  console.log('Discrepancies:', JSON.stringify(discrepancies, null, 2));
-  console.log('Missing Submissions:', JSON.stringify(missingSubmissions, null, 2));
+  console.log('Discrepancies:', JSON.stringify(currentAlertDiscrepancies, null, 2));
+  console.log('Missing Submissions:', JSON.stringify(currentAlertMissingSubmissions, null, 2));
+  console.log('Inspection Alerts:', JSON.stringify(currentInspectionAlerts, null, 2));
 
   // Display missing submission alerts
-  if (missingSubmissions && missingSubmissions.length) {
-    missingSubmissions.forEach(({ type, message, date }) => {
+  if (currentAlertMissingSubmissions.length) {
+    currentAlertMissingSubmissions.forEach(({ type, message }) => {
       let title;
       if (type === 'week') {
         title = 'Missing Week Yard Checks';
@@ -213,18 +226,16 @@ function displayDiscrepancyAlerts(discrepancies, missingSubmissions) {
       const card = document.createElement('div');
       card.className = 'alert-card';
       card.innerHTML = `
-        <p class="alert-title">${title}</p>
-        <p class="alert-description">${message}</p>
+        <p class='alert-title'>${title}</p>
+        <p class='alert-description'>${message}</p>
       `;
       wrapper.appendChild(card);
     });
-  } else {
-    console.warn('No missing submissions found or missingSubmissions is undefined');
   }
 
   // Display discrepancy alerts
-  if (discrepancies && discrepancies.length) {
-    discrepancies.forEach(({ type, date, expected, actual, note }) => {
+  if (currentAlertDiscrepancies.length) {
+    currentAlertDiscrepancies.forEach(({ type, date, expected, actual, note }) => {
       const title = type === 'rented_out'
         ? 'Rental Count Discrepancy'
         : 'Service Status Discrepancy';
@@ -237,8 +248,8 @@ function displayDiscrepancyAlerts(discrepancies, missingSubmissions) {
       const card = document.createElement('div');
       card.className = 'alert-card';
       card.innerHTML = `
-        <p class="alert-title">${title}</p>
-        <p class="alert-description">
+        <p class='alert-title'>${title}</p>
+        <p class='alert-description'>
           On <strong>${new Date(date).toLocaleDateString()}</strong>, AM shows 
           <strong>${actual}</strong> ${itemLabel}, but previous PM had 
           <strong>${expected}</strong>.${noteText} Please verify.
@@ -246,8 +257,35 @@ function displayDiscrepancyAlerts(discrepancies, missingSubmissions) {
       `;
       wrapper.appendChild(card);
     });
-  } else {
-    console.warn('No discrepancies found');
+  }
+
+  // Display inspection alerts
+  if (currentInspectionAlerts.length) {
+    currentInspectionAlerts.forEach(({ formType, title, description, buttonLabel = 'Complete Inspection', buttonClass }) => {
+      const card = document.createElement('div');
+      card.className = 'alert-card';
+
+      const titleEl = document.createElement('p');
+      titleEl.className = 'alert-title';
+      titleEl.textContent = title;
+
+      const descriptionEl = document.createElement('p');
+      descriptionEl.className = 'alert-description';
+      descriptionEl.textContent = description;
+
+      const buttonWrapper = document.createElement('div');
+      buttonWrapper.className = 'alert-button-wrapper';
+
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = buttonClass || 'alert-btn-inspection';
+      button.textContent = buttonLabel;
+      button.addEventListener('click', () => handleOverdueInspectionClick(formType));
+
+      buttonWrapper.appendChild(button);
+      card.append(titleEl, descriptionEl, buttonWrapper);
+      wrapper.appendChild(card);
+    });
   }
 }
 
@@ -267,49 +305,21 @@ function loadYardCheckAlerts(startDate, endDate) {
         console.error('Server error:', data.message);
         const wrapper = document.querySelector('.alerts-card-wrapper');
         if (wrapper) {
-          wrapper.innerHTML = `<div class="alert-card"><p class="alert-description">Error: ${data.message}</p></div>`;
+          wrapper.innerHTML = `<div class='alert-card'><p class='alert-description'>Error: ${data.message}</p></div>`;
         }
         return;
       }
-      displayDiscrepancyAlerts(data.discrepancies || [], data.missingSubmissions || []);
+      currentAlertDiscrepancies = Array.isArray(data.discrepancies) ? data.discrepancies : [];
+      currentAlertMissingSubmissions = Array.isArray(data.missingSubmissions) ? data.missingSubmissions : [];
+      displayDiscrepancyAlerts();
     })
     .catch(error => {
       console.error('Error loading yard check alerts:', error);
       const wrapper = document.querySelector('.alerts-card-wrapper');
       if (wrapper) {
-        wrapper.innerHTML = '<div class="alert-card"><p class="alert-description">Unable to load alerts at this time. Please try again later.</p></div>';
+        wrapper.innerHTML = "<div class='alert-card'><p class='alert-description'>Unable to load alerts at this time. Please try again later.</p></div>";
       }
     });
-}
-
-function showSubmittedYardChecks() {
-  document.getElementById('dashboard-container').style.display = 'none';
-  document.getElementById('lg-equipment-yard-check-form').style.display = 'none';
-  document.getElementById('pickup-truck-inspection').style.display = 'none';
-  document.getElementById('equipment-management').style.display = 'none';
-  document.getElementById('equipment-stats').style.display = 'none';
-  document.getElementById('submitted-yard-checks').style.display = 'block';
-
-  const now = new Date();
-  now.setHours(0,0,0,0);
-
-  const dayOfWeek = now.getDay();
-  const offset = (dayOfWeek + 6) % 7; // Offset to previous Monday
-  console.log('showSubmittedYardChecks => dayOfWeek=', dayOfWeek, ' offset=', offset);
-
-  const currentMonday = new Date(now);
-  currentMonday.setDate(now.getDate() - offset);
-
-  const sunday = new Date(currentMonday);
-  sunday.setDate(currentMonday.getDate() + 6);
-
-  const startDate = formatAsYyyyMmDd(currentMonday);
-  const endDate = formatAsYyyyMmDd(sunday);
-
-  loadSubmittedYardChecks(startDate, endDate);
-  loadYardCheckAlerts(startDate, endDate); // Refresh alerts
-
-  setActiveMenuItem();
 }
 
 /* -------------------------
@@ -419,9 +429,9 @@ function sideMenuCollapse() {
 
   navContainer.classList.toggle('side-nav-container-collapsed');
 //   if (navContainer.classList.contains('side-nav-container-collapsed')) {
-//     collapseBtn.innerHTML = '<i class="fa-solid fa-angle-right"></i>';
+//     collapseBtn.innerHTML = '<i class='fa-solid fa-angle-right'></i>';
 //   } else {
-//     collapseBtn.innerHTML = '<i class="fa-solid fa-angle-left"></i>';
+//     collapseBtn.innerHTML = '<i class='fa-solid fa-angle-left'></i>';
 //   }
   if (navContainer.classList.contains('side-nav-container-collapsed')) {
     menuIcon.classList.remove('side-menu-btn-open-state');
@@ -448,7 +458,7 @@ function setActiveMenuItem() {
 ------------------------- */
 
 /**
- * Show "Submitted Yard Checks" for the current local Monday→Sunday.
+ * Show 'Submitted Yard Checks' for the current local Mondayâ†’Sunday.
  */
 function showSubmittedYardChecks() {
   document.getElementById('dashboard-container').style.display = 'none';
@@ -461,7 +471,6 @@ function showSubmittedYardChecks() {
   const now = new Date();
   now.setHours(0,0,0,0);
 
-  // dayOfWeek=0..6 (Sun..Sat). offset => how many days from now to Monday
   const dayOfWeek = now.getDay();
   const offset = (dayOfWeek + 6) % 7;
   console.log('showSubmittedYardChecks => dayOfWeek=', dayOfWeek, ' offset=', offset);
@@ -469,7 +478,6 @@ function showSubmittedYardChecks() {
   currentMonday = new Date(now);
   currentMonday.setDate(now.getDate() - offset);
 
-  // Sunday = Monday + 6
   const sunday = new Date(currentMonday);
   sunday.setDate(currentMonday.getDate() + 6);
 
@@ -477,13 +485,17 @@ function showSubmittedYardChecks() {
   const endDate   = formatAsYyyyMmDd(sunday);
 
   loadSubmittedYardChecks(startDate, endDate);
+  loadYardCheckAlerts(startDate, endDate); // Refresh alerts
 
+  closeActiveInspectionModal({ resetForm: true });
+  hideInspectionSuccess();
+  hideInspectionWarningModal();
   setActiveMenuItem();
 }
 
 /**
  * Load yard checks for [startDate..endDate].
- * If none => single “no submissions” message,
+ * If none => single â€œno submissionsâ€ message,
  * else partial placeholders for missing AM/PM.
  */
 function loadSubmittedYardChecks(startDate, endDate) {
@@ -574,42 +586,42 @@ function loadSubmittedYardChecks(startDate, endDate) {
             const formattedTime = `${hours}:${minutesStr} ${ampm}`;
 
             columnDiv.innerHTML = `
-               <div class="card-col-title-wrapper">
-                  <p class="ampm-txt">${checkTime} Submission -</p>
-                  <p class="user-name-txt">Submitted by:<span class="user-name-txt-data"> ${yardCheck.user_name}</span></p>
-                  <p class="time-submitted-txt">Time submitted: <span class="time-submitted-txt-data">${formattedTime}</span></p>
+               <div class='card-col-title-wrapper'>
+                  <p class='ampm-txt'>${checkTime} Submission -</p>
+                  <p class='user-name-txt'>Submitted by:<span class='user-name-txt-data'> ${yardCheck.user_name}</span></p>
+                  <p class='time-submitted-txt'>Time submitted: <span class='time-submitted-txt-data'>${formattedTime}</span></p>
                </div>
-               <div class="card-col-content-wrapper">
-                  <div class="card-col-content-block">
+               <div class='card-col-content-wrapper'>
+                  <div class='card-col-content-block'>
                      <p>Available</p>
-                     <p class="available-num-data"> ${yardCheck.equipment_available}</p>
+                     <p class='available-num-data'> ${yardCheck.equipment_available}</p>
                   </div>
-                  <div class="card-col-content-block">
+                  <div class='card-col-content-block'>
                      <p>Rented out</p> 
-                     <p class="rented-out-num-data">${yardCheck.equipment_rented_out}</p>
+                     <p class='rented-out-num-data'>${yardCheck.equipment_rented_out}</p>
                   </div>
-                  <div class="card-col-content-block">
+                  <div class='card-col-content-block'>
                      <p>Out of service</p> 
-                     <p class="out-of-service-num-data">${yardCheck.equipment_out_of_service}</p>
+                     <p class='out-of-service-num-data'>${yardCheck.equipment_out_of_service}</p>
                   </div>
-                  <div class="card-col-content-block">
+                  <div class='card-col-content-block'>
                      <p>Total equipment</p> 
-                     <p class="total-equipment-num-data">${yardCheck.total_equipment}</p>
+                     <p class='total-equipment-num-data'>${yardCheck.total_equipment}</p>
                   </div>
                </div>
               
                ${
                   checkTime === 'PM'
-                     ? `<p class="est-profit-txt"><strong>Estimated profit:</strong> $<span class="profit-amount">${yardCheck.estimated_profit.toFixed(2)}</span></p>`
+                     ? `<p class='est-profit-txt'><strong>Estimated profit:</strong> $<span class='profit-amount'>${yardCheck.estimated_profit.toFixed(2)}</span></p>`
                      : ''
                }
               
-               <p class="profit-loss-txt"><strong>Profit loss:</strong> $<span class="loss-amount">${yardCheck.profit_loss.toFixed(2)}</span>
+               <p class='profit-loss-txt'><strong>Profit loss:</strong> $<span class='loss-amount'>${yardCheck.profit_loss.toFixed(2)}</span>
                </p>
               
-               <div class="button-wrapper">
-                  <button onclick="viewYardCheckDetails(${yardCheck.id})">View Yard Check</button>
-                  <button onclick="editYardCheck(${yardCheck.id})">Edit Yard Check</button>
+               <div class='button-wrapper'>
+                  <button onclick='viewYardCheckDetails(${yardCheck.id})'>View Yard Check</button>
+                  <button onclick='editYardCheck(${yardCheck.id})'>Edit Yard Check</button>
               </div>
             `;
           } else {
@@ -667,14 +679,14 @@ function filterSubmittedYardChecks() {
   const endDate   = endInput.value;
 
   if (!startDate || !endDate) {
-    alert("Please select both a start and end date.");
+    alert('Please select both a start and end date.');
     return;
   }
 
   loadSubmittedYardChecks(startDate, endDate);
 
-  /* update currentMonday to the “start” date so Next/Prev know where to begin */
-  currentMonday = new Date(startDate + "T00:00:00");
+  /* update currentMonday to the â€œstartâ€ date so Next/Prev know where to begin */
+  currentMonday = new Date(startDate + 'T00:00:00');
 }
 
 /* -------------------------
@@ -717,23 +729,23 @@ async function populateEquipmentList() {
        // Create image element if image_url exists
        let imageHTML = '';
        if (equipment.image_url) {
-         imageHTML = `<img src="${equipment.image_url}" alt="${equipment.equipment_name}" class="equipment-image">`;
+         imageHTML = `<img src='${equipment.image_url}' alt='${equipment.equipment_name}' class='equipment-image'>`;
        }
  
        // Equipment label with equipment image and info
        const label = document.createElement('label');
        label.htmlFor = `equipment-status-${equipment.unit_id}`;
        label.innerHTML = `
-         <div class="img-eq-info-wrapper">
-           <div class="image-wrapper">
+         <div class='img-eq-info-wrapper'>
+           <div class='image-wrapper'>
              ${imageHTML}
            </div>
-           <div class="eq-info-wrapper">
-             <p class="rental-id-label">Unit ID - <span class="rental-id-num">${equipment.unit_id}</span></p>
-             <p class="equipment-name">${equipment.equipment_name}</p>
-             <div class="view-more-wrapper">
-               <a href="#" onclick="toggleEquipmentInfo(event, '${equipment.unit_id}')">View more info</a>
-               <div id="equipment-info-${equipment.unit_id}" class="equipment-info" style="display: none;">
+           <div class='eq-info-wrapper'>
+             <p class='rental-id-label'>Unit ID - <span class='rental-id-num'>${equipment.unit_id}</span></p>
+             <p class='equipment-name'>${equipment.equipment_name}</p>
+             <div class='view-more-wrapper'>
+               <a href='#' onclick='toggleEquipmentInfo(event, '${equipment.unit_id}')'>View more info</a>
+               <div id='equipment-info-${equipment.unit_id}' class='equipment-info' style='display: none;'>
                  <p><strong>Manufacturer:</strong> ${equipment.manufacturer}</p>
                  <p><strong>Model:</strong> ${equipment.model}</p>
                </div>
@@ -854,13 +866,13 @@ function showDuplicateSubmissionMessage(existingYardCheck) {
                         dateObj.getFullYear();
 
   const messageContent = `
-    <div class="message">
+    <div class='message'>
       <p>A yard check for this date and time has already been submitted.</p>
       <p><strong>Date:</strong> ${formattedDate}</p>
       <p><strong>Time:</strong> ${existingYardCheck.check_time}</p>
       <p><strong>Submitted by:</strong> ${existingYardCheck.user_name}</p>
-      <button onclick="viewYardCheckDetails(${existingYardCheck.id})">View Submitted Yard Check</button>
-      <button onclick="closeMessage()">Close</button>
+      <button onclick='viewYardCheckDetails(${existingYardCheck.id})'>View Submitted Yard Check</button>
+      <button onclick='closeMessage()'>Close</button>
     </div>
   `;
   document.getElementById('message-container').innerHTML = messageContent;
@@ -873,64 +885,823 @@ function closeMessage() {
 /* -------------------------
     TRUCK INSPECTION FORMS
 ------------------------- */
-// === Truck inspection forms wiring ===
-function bindTruckInspectionForms() {
-  const proForm = document.getElementById('pro-truck-inspection-form');
-  const rentalForm = document.getElementById('rental-pickup-truck-inspection-form');
+const INSPECTION_CHECKBOX_LABELS = {
+  all_fluids_topped: 'All fluids are topped off',
+  license_plate_present: 'License plate present with up-to-date sticker',
+  damage_to_vehicle: 'Damage to the vehicle',
+  tires_inflation_and_wear: 'Tires for appropriate inflation, tread wear and cuts',
+  lights_operation_and_lens: 'Headlights, tail lights and turn signals for cracked lens and operation',
+  glass_and_mirrors: 'Glass and mirrors for cracks and operation',
+  wipers_operation_and_wear: 'Windshield wipers for operation and wear',
+  bed_and_tailgate: 'Truck bed sides and tail gate for operation and broken hinges',
+  load_sensor_checked: 'Load sensor inspected and activated',
+  decals_condition: 'Decals are present and in good condition',
+  tow_hitch_locked_or_welded: 'Tow hitch has a weld or locking mechanism (2015+ models)',
+  seatbelts: 'Seatbelts for operation, cuts or frays',
+  horn_operation: 'Steering wheel horn for operation',
+  parking_brake: 'Parking brake engages',
+  spare_tire_inflated: 'Spare tire properly inflated (vans only) and tools',
+  ac_heater: 'AC and heating are operational',
+  registration_insurance: 'Registration, insurance card, and accident documents in glove box',
+  decals_interior: 'Interior decals are present and in good condition',
+  toll_transponder: 'Toll transponder (if applicable)',
+  fire_extinguisher: 'Fire extinguisher present, charged, inspection current'
+};
 
-  async function handleSubmit(form) {
-    const fd = new FormData(form); // includes form_type, inspection_date, inspected_by, arrays, comments
-    try {
-      const res = await fetch('submit_truck_inspection_form.php', { method: 'POST', body: fd });
-      const data = await res.json();
-      if (!res.ok || data.status !== 'success') {
-        alert(data.message || 'There was a problem saving the inspection.');
-        return;
-      }
-      alert(`Inspection saved. (ID: ${data.id})`);
-      // Optional: form.reset();
-      // Optional: window.print();
-    } catch (err) {
-      console.error(err);
-      alert('Network or server error while saving.');
+const INSPECTION_CATEGORY_ORDER = [
+  { key: 'truck_fluids', label: 'Truck Fluids' },
+  { key: 'truck_exterior', label: 'Truck Exterior' },
+  { key: 'truck_interior', label: 'Truck Interior' }
+];
+
+const TRUCK_INSPECTION_PAGE_SIZE = 5;
+
+let truckInspectionHistoryData = [];
+let truckInspectionHistoryFiltered = [];
+let truckInspectionHistoryListEl = null;
+let truckInspectionForms = { pro: null, rental: null };
+let truckInspectionModals = { pro: null, rental: null };
+let truckInspectionToggleButtons = [];
+let truckInspectionSuccessModal = null;
+let truckInspectionWarningModal = null;
+let truckInspectionSection = null;
+let truckInspectionFilterFormTypeEl = null;
+let truckInspectionFilterSearchEl = null;
+let truckInspectionPaginationStatusEl = null;
+let truckInspectionPaginationButtons = { prev: null, next: null };
+let truckInspectionHistoryPage = 1;
+let activeInspectionModalType = null;
+let truckInspectionSearchDebounce = null;
+let truckInspectionWarningMessageEl = null;
+let truckInspectionWarningProceedBtn = null;
+let truckInspectionWarningCancelBtn = null;
+let pendingInspectionStartType = null;
+
+function getInspectionFormLabel(type) {
+  return type === 'pro' ? 'Load N Go Inspection' : 'Rental Pickup Inspection';
+}
+
+function formatInspectionDateTime(value) {
+  if (!value) return 'N/A';
+  const normalized = value.includes('T') ? value : value.replace(' ', 'T');
+  const date = new Date(normalized);
+  if (!Number.isNaN(date.getTime())) {
+    const hasTime = normalized.length > 10;
+    return date.toLocaleString([], {
+      dateStyle: 'medium',
+      timeStyle: hasTime ? 'short' : undefined
+    });
+  }
+  if (/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+    const dateOnly = new Date(`${value}T00:00:00`);
+    if (!Number.isNaN(dateOnly.getTime())) {
+      return dateOnly.toLocaleDateString();
+    }
+  }
+  return value;
+}
+
+function fallbackChecklistLabel(value) {
+  return value
+    .split('_')
+    .map(part => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(' ');
+}
+
+function mapChecklistValues(values = []) {
+  if (!Array.isArray(values)) return [];
+  return values.map(code => INSPECTION_CHECKBOX_LABELS[code] || fallbackChecklistLabel(code));
+}
+
+function setInspectionSubmitButtonLabel(form, label) {
+  if (!form) return;
+  const submitBtn = form.querySelector('.inspection-submit-btn');
+  if (submitBtn) {
+    submitBtn.textContent = label;
+  }
+}
+
+function resetInspectionForm(form) {
+  if (!form) return;
+  form.reset();
+  const idField = form.querySelector("input[name='id']");
+  if (idField) idField.value = '';
+  form.dataset.editing = 'false';
+  const defaultLabel = form.dataset.submitDefault || 'Submit Inspection';
+  setInspectionSubmitButtonLabel(form, defaultLabel);
+}
+
+function populateInspectionForm(form, record) {
+  if (!form || !record) return;
+  resetInspectionForm(form);
+
+  const idField = form.querySelector("input[name='id']");
+  if (idField) idField.value = record.id;
+
+  const dateField = form.querySelector("input[name='inspection_date']");
+  if (dateField) dateField.value = record.inspection_date || '';
+
+  const inspectorField = form.querySelector("input[name='inspected_by']");
+  if (inspectorField) inspectorField.value = record.inspected_by || '';
+
+  ['truck_fluids', 'truck_exterior', 'truck_interior'].forEach((groupName) => {
+    const values = new Set(Array.isArray(record[groupName]) ? record[groupName] : []);
+    form.querySelectorAll(`input[name='${groupName}[]']`).forEach((input) => {
+      input.checked = values.has(input.value);
+    });
+  });
+
+  const commentsField = form.querySelector("textarea[name='inspection_comments']");
+  if (commentsField) commentsField.value = record.inspection_comments || '';
+
+  form.dataset.editing = 'true';
+  setInspectionSubmitButtonLabel(form, 'Update Inspection');
+}
+
+function buildChecklistContainer(record) {
+  const container = document.createElement('div');
+  container.className = 'inspection-history-checklist';
+
+  INSPECTION_CATEGORY_ORDER.forEach(({ key, label }) => {
+    const friendlyItems = mapChecklistValues(record[key]);
+    if (!friendlyItems.length) return;
+
+    const section = document.createElement('div');
+    section.className = 'inspection-history-checklist-section';
+
+    const heading = document.createElement('h4');
+    heading.textContent = label;
+    section.appendChild(heading);
+
+    const list = document.createElement('ul');
+    friendlyItems.forEach((item) => {
+      const li = document.createElement('li');
+      li.textContent = item;
+      list.appendChild(li);
+    });
+
+    section.appendChild(list);
+    container.appendChild(section);
+  });
+
+  if (!container.children.length) {
+    const emptyMessage = document.createElement('p');
+    emptyMessage.textContent = 'No checklist items recorded.';
+    container.appendChild(emptyMessage);
+  }
+
+  return container;
+}
+
+function openInspectionModal(type, options = {}) {
+  const { resetForm = true, record = null } = options;
+  const modal = truckInspectionModals[type];
+  const form = truckInspectionForms[type];
+  if (!modal || !form) return;
+
+  if (resetForm) {
+    resetInspectionForm(form);
+  }
+
+  if (record) {
+    populateInspectionForm(form, record);
+  }
+
+  truckInspectionToggleButtons.forEach((btn) => {
+    if (btn.dataset.inspectionTarget === type) {
+      btn.classList.add('is-active');
+    } else {
+      btn.classList.remove('is-active');
+    }
+  });
+
+  modal.classList.remove('hidden');
+  document.body.classList.add('modal-open');
+  activeInspectionModalType = type;
+
+  const firstField = form.querySelector('input, textarea, select');
+  if (firstField) {
+    firstField.focus({ preventScroll: true });
+  }
+}
+
+function closeActiveInspectionModal(options = {}) {
+  const { resetForm = false } = options;
+  if (!activeInspectionModalType) return;
+
+  const modal = truckInspectionModals[activeInspectionModalType];
+  const form = truckInspectionForms[activeInspectionModalType];
+  if (modal) {
+    modal.classList.add('hidden');
+  }
+  if (resetForm && form) {
+    resetInspectionForm(form);
+  }
+
+  truckInspectionToggleButtons.forEach((btn) => btn.classList.remove('is-active'));
+  unlockBodyScrollIfNoModal();
+  activeInspectionModalType = null;
+}
+
+function showInspectionSuccess(message) {
+  if (!truckInspectionSuccessModal) return;
+  const messageEl = truckInspectionSuccessModal.querySelector('#inspection-success-message');
+  if (messageEl) {
+    messageEl.textContent = message;
+  }
+  truckInspectionSuccessModal.classList.remove('hidden');
+  document.body.classList.add('modal-open');
+}
+
+function hideInspectionSuccess() {
+  if (!truckInspectionSuccessModal) return;
+  truckInspectionSuccessModal.classList.add('hidden');
+  unlockBodyScrollIfNoModal();
+}
+
+async function submitInspectionForm(form) {
+  const formData = new FormData(form);
+  const isEdit = Boolean(formData.get('id'));
+  try {
+    const response = await fetch('submit_truck_inspection_form.php', {
+      method: 'POST',
+      body: formData
+    });
+    const payload = await response.json();
+    if (!response.ok || payload.status !== 'success') {
+      alert(payload.message || 'There was a problem saving the inspection.');
+      return;
+    }
+
+    closeActiveInspectionModal({ resetForm: true });
+    showInspectionSuccess(isEdit ? 'Inspection updated successfully.' : 'Inspection submitted successfully.');
+    await fetchTruckInspectionHistory();
+  } catch (error) {
+    console.error(error);
+    alert('Network or server error while saving.');
+  }
+}
+
+function updateInspectionPaginationControls(totalItems, totalPages) {
+  if (truckInspectionPaginationStatusEl) {
+    if (totalItems === 0) {
+      truckInspectionPaginationStatusEl.textContent = 'No results';
+    } else {
+      const label = totalItems === 1 ? 'result' : 'results';
+      truckInspectionPaginationStatusEl.textContent = `Page ${truckInspectionHistoryPage} of ${totalPages} | ${totalItems} ${label}`;
     }
   }
 
-  if (proForm) {
-    proForm.addEventListener('submit', (e) => { e.preventDefault(); handleSubmit(proForm); });
-    const printBtn = document.getElementById('print-pro-truck-inspection');
-    if (printBtn) printBtn.addEventListener('click', () => window.print());
+  if (truckInspectionPaginationButtons.prev) {
+    truckInspectionPaginationButtons.prev.disabled = truckInspectionHistoryPage <= 1 || totalItems === 0;
   }
-  if (rentalForm) {
-    rentalForm.addEventListener('submit', (e) => { e.preventDefault(); handleSubmit(rentalForm); });
-    const printBtn = document.getElementById('print-rental-truck-inspection');
-    if (printBtn) printBtn.addEventListener('click', () => window.print());
+  if (truckInspectionPaginationButtons.next) {
+    truckInspectionPaginationButtons.next.disabled = truckInspectionHistoryPage >= totalPages || totalItems === 0;
   }
 }
 
-// Make sure this runs when inspection view is shown AND on first load
-document.addEventListener('DOMContentLoaded', () => {
-  bindTruckInspectionForms();
-});
+function renderTruckInspectionHistory() {
+  if (!truckInspectionHistoryListEl) return;
 
-// If you’re toggling views, call this inside showPickupTruckInspectionForm()
-function showPickupTruckInspectionForm() {
-  // hide others, show inspection section
-  document.getElementById('dashboard-container').style.display = 'none';
-  document.getElementById('lg-equipment-yard-check-form').style.display = 'none';
-  document.getElementById('submitted-yard-checks').style.display = 'none';
-  document.getElementById('equipment-stats').style.display = 'none';
+  truckInspectionHistoryListEl.innerHTML = '';
 
+  const totalItems = truckInspectionHistoryFiltered.length;
+  const totalPages = Math.max(1, Math.ceil(totalItems / TRUCK_INSPECTION_PAGE_SIZE));
+  if (truckInspectionHistoryPage > totalPages) {
+    truckInspectionHistoryPage = totalPages;
+  }
+
+  const startIndex = (truckInspectionHistoryPage - 1) * TRUCK_INSPECTION_PAGE_SIZE;
+  const pageItems = truckInspectionHistoryFiltered.slice(startIndex, startIndex + TRUCK_INSPECTION_PAGE_SIZE);
+
+  if (!pageItems.length) {
+    const emptyState = document.createElement('p');
+    emptyState.className = 'inspection-history-empty';
+    emptyState.textContent = truckInspectionHistoryData.length
+      ? 'No inspections match your current filters.'
+      : 'No inspections have been submitted yet. Completed inspections will appear here.';
+    truckInspectionHistoryListEl.appendChild(emptyState);
+    updateInspectionPaginationControls(totalItems, totalPages);
+    return;
+  }
+
+  const fragment = document.createDocumentFragment();
+
+  pageItems.forEach((record) => {
+    const item = document.createElement('article');
+    item.className = 'inspection-history-item';
+    item.dataset.id = String(record.id);
+
+    const meta = document.createElement('div');
+    meta.className = 'inspection-history-meta';
+
+    const typeSpan = document.createElement('span');
+    typeSpan.textContent = getInspectionFormLabel(record.form_type);
+
+    const submittedSpan = document.createElement('span');
+    const submittedDate = formatInspectionDateTime(record.created_at || record.updated_at || record.inspection_date);
+    submittedSpan.textContent = `Submitted: ${submittedDate}`;
+
+    const inspectorSpan = document.createElement('span');
+    inspectorSpan.textContent = `Completed by: ${record.inspected_by || 'Unknown'}`;
+
+    meta.append(typeSpan, submittedSpan, inspectorSpan);
+
+    const commentsRow = document.createElement('div');
+    commentsRow.className = 'inspection-history-comments';
+
+    const commentsLabel = document.createElement('span');
+    commentsLabel.className = 'inspection-history-comments-label';
+    commentsLabel.textContent = 'Comments:';
+
+    const fullComment = (record.inspection_comments || '').trim();
+    const commentsText = document.createElement('span');
+    commentsText.className = 'inspection-history-comments-text';
+
+    if (!fullComment) {
+      commentsText.textContent = 'No comments were provided.';
+      commentsText.dataset.expanded = 'true';
+      commentsRow.append(commentsLabel, commentsText);
+    } else {
+      const needsToggle = fullComment.length > 80;
+      const truncated = needsToggle ? `${fullComment.slice(0, 80)}...` : fullComment;
+
+      commentsText.textContent = truncated;
+      commentsText.dataset.fullText = fullComment;
+      commentsText.dataset.truncatedText = truncated;
+      commentsText.dataset.expanded = needsToggle ? 'false' : 'true';
+
+      commentsRow.append(commentsLabel, commentsText);
+
+      if (needsToggle) {
+        const toggleBtn = document.createElement('button');
+        toggleBtn.type = 'button';
+        toggleBtn.className = 'inspection-history-toggle';
+        toggleBtn.dataset.action = 'toggle-comment';
+        toggleBtn.dataset.id = String(record.id);
+        toggleBtn.textContent = 'View more';
+        commentsRow.append(toggleBtn);
+      }
+    }
+
+    const actions = document.createElement('div');
+    actions.className = 'inspection-history-actions';
+
+    const viewBtn = document.createElement('button');
+    viewBtn.type = 'button';
+    viewBtn.className = 'inspection-history-action';
+    viewBtn.dataset.action = 'view';
+    viewBtn.dataset.id = String(record.id);
+    viewBtn.textContent = 'View Inspection';
+
+    const editBtn = document.createElement('button');
+    editBtn.type = 'button';
+    editBtn.className = 'inspection-history-action';
+    editBtn.dataset.action = 'edit';
+    editBtn.dataset.id = String(record.id);
+    editBtn.textContent = 'Edit';
+
+    const checklistBtn = document.createElement('button');
+    checklistBtn.type = 'button';
+    checklistBtn.className = 'inspection-history-action';
+    checklistBtn.dataset.action = 'toggle-checklist';
+    checklistBtn.dataset.id = String(record.id);
+    checklistBtn.textContent = 'View Checklist';
+
+    actions.append(viewBtn, editBtn, checklistBtn);
+
+    const checklist = buildChecklistContainer(record);
+
+    item.append(meta, commentsRow, actions, checklist);
+    fragment.appendChild(item);
+  });
+
+  truckInspectionHistoryListEl.appendChild(fragment);
+  updateInspectionPaginationControls(totalItems, totalPages);
+}
+
+function applyInspectionHistoryFilters() {
+  const typeFilter = truckInspectionFilterFormTypeEl ? truckInspectionFilterFormTypeEl.value : 'all';
+  const searchTerm = truckInspectionFilterSearchEl ? truckInspectionFilterSearchEl.value.trim().toLowerCase() : '';
+
+  truckInspectionHistoryFiltered = truckInspectionHistoryData.filter((record) => {
+    if (typeFilter !== 'all' && record.form_type !== typeFilter) {
+      return false;
+    }
+    if (searchTerm) {
+      const haystack = [
+        record.inspected_by,
+        record.inspection_comments,
+        record.inspection_date,
+        getInspectionFormLabel(record.form_type)
+      ]
+        .join(' ')
+        .toLowerCase();
+      return haystack.includes(searchTerm);
+    }
+    return true;
+  });
+
+  truckInspectionHistoryPage = 1;
+  renderTruckInspectionHistory();
+}
+
+function changeInspectionHistoryPage(delta) {
+  const totalItems = truckInspectionHistoryFiltered.length;
+  if (!totalItems) return;
+
+  const totalPages = Math.max(1, Math.ceil(totalItems / TRUCK_INSPECTION_PAGE_SIZE));
+  const nextPage = truckInspectionHistoryPage + delta;
+  if (nextPage < 1 || nextPage > totalPages) return;
+
+  truckInspectionHistoryPage = nextPage;
+  renderTruckInspectionHistory();
+}
+
+function handleInspectionHistoryClick(event) {
+  const actionButton = event.target.closest('[data-action]');
+  if (!actionButton) return;
+
+  const action = actionButton.dataset.action;
+  const recordId = actionButton.dataset.id;
+
+  if (action === 'toggle-comment') {
+    const commentsRow = actionButton.closest('.inspection-history-comments');
+    const textEl = commentsRow ? commentsRow.querySelector('.inspection-history-comments-text') : null;
+    if (!textEl) return;
+    const isExpanded = textEl.dataset.expanded === 'true';
+    textEl.textContent = isExpanded ? textEl.dataset.truncatedText || '' : textEl.dataset.fullText || '';
+    textEl.dataset.expanded = isExpanded ? 'false' : 'true';
+    actionButton.textContent = isExpanded ? 'View more' : 'View less';
+    return;
+  }
+
+  if (action === 'toggle-checklist') {
+    const item = actionButton.closest('.inspection-history-item');
+    const checklist = item ? item.querySelector('.inspection-history-checklist') : null;
+    if (!checklist) return;
+    const isVisible = checklist.classList.toggle('is-visible');
+    actionButton.textContent = isVisible ? 'Hide Checklist' : 'View Checklist';
+    return;
+  }
+
+  if (!recordId) return;
+  const record = truckInspectionHistoryData.find((entry) => String(entry.id) === String(recordId));
+  if (!record) return;
+
+  if (action === 'view') {
+    window.open(`generate_truck_inspection_pdf.php?id=${record.id}`, '_blank');
+    return;
+  }
+
+  if (action === 'edit') {
+    openInspectionModal(record.form_type, { resetForm: true, record });
+    if (truckInspectionSection) {
+      truckInspectionSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+}
+
+async function fetchTruckInspectionHistory() {
+  if (!truckInspectionHistoryListEl) return;
+
+  try {
+    const response = await fetch('get_truck_inspections.php', { cache: 'no-store' });
+    const payload = await response.json();
+    if (!response.ok || payload.status !== 'success') {
+      console.error(payload.message || 'Failed to load inspection history.');
+      return;
+    }
+    truckInspectionHistoryData = Array.isArray(payload.data) ? payload.data : [];
+    applyInspectionHistoryFilters();
+    updateInspectionOverdueAlerts();
+  } catch (error) {
+    console.error('Unable to load inspection history.', error);
+  }
+}
+
+function updateInspectionOverdueAlerts() {
+  const today = new Date();
+  if (today.getDate() < 2) {
+    currentInspectionAlerts = [];
+    displayDiscrepancyAlerts();
+    return;
+  }
+
+  const currentYear = today.getFullYear();
+  const currentMonth = today.getMonth();
+  const periodLabel = today.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
+  const alerts = [];
+
+  ['pro', 'rental'].forEach((type) => {
+    const submissionInfo = findInspectionSubmissionForMonth(type, currentYear, currentMonth);
+    if (submissionInfo) {
+      return;
+    }
+
+    const formLabel = getInspectionFormLabel(type);
+    alerts.push({
+      formType: type,
+      title: `${formLabel} Past Due`,
+      description: `No ${formLabel.toLowerCase()} has been submitted for ${periodLabel}.`,
+      buttonLabel: 'Complete Inspection',
+      buttonClass: 'alert-btn-inspection'
+    });
+  });
+
+  currentInspectionAlerts = alerts;
+  displayDiscrepancyAlerts();
+}
+
+function hasInspectionSubmissionForMonth(formType, year, month) {
+  return Boolean(findInspectionSubmissionForMonth(formType, year, month));
+}
+
+function isDateInYearMonth(value, year, month) {
+  if (!value) return false;
+
+  let date;
+  if (typeof value === 'string') {
+    const normalized = value.includes('T') ? value : value.replace(' ', 'T');
+    date = normalized.includes('T') ? new Date(normalized) : new Date(`${normalized}T00:00:00`);
+  } else if (value instanceof Date) {
+    date = value;
+  } else {
+    return false;
+  }
+
+  if (Number.isNaN(date.getTime())) return false;
+  return date.getFullYear() === year && date.getMonth() === month;
+}
+
+function parseInspectionDate(value) {
+  if (!value) return null;
+  if (value instanceof Date) {
+    return Number.isNaN(value.getTime()) ? null : value;
+  }
+
+  let normalized = String(value).trim();
+  if (!normalized || normalized === '0000-00-00') return null;
+
+  if (!normalized.includes('T')) {
+    normalized = normalized.includes(' ') ? normalized.replace(' ', 'T') : `${normalized}T00:00:00`;
+  }
+
+  const date = new Date(normalized);
+  return Number.isNaN(date.getTime()) ? null : date;
+}
+
+function findInspectionSubmissionForMonth(formType, year, month) {
+  const normalizedTarget = String(formType || '').trim().toLowerCase();
+  let latest = null;
+
+  truckInspectionHistoryData.forEach((record) => {
+    const recordType = String(record.form_type || '').trim().toLowerCase();
+    if (recordType !== normalizedTarget) return;
+
+    const candidates = [];
+    if (record.inspection_date && record.inspection_date !== '0000-00-00') {
+      candidates.push({ value: record.inspection_date, field: 'inspection_date' });
+    }
+    if (record.created_at) {
+      candidates.push({ value: record.created_at, field: 'created_at' });
+    }
+
+    for (const candidate of candidates) {
+      if (!isDateInYearMonth(candidate.value, year, month)) continue;
+
+      const parsed = parseInspectionDate(candidate.value);
+      if (!parsed) continue;
+
+      if (!latest || parsed > latest.date) {
+        latest = { record, date: parsed, sourceValue: candidate.value, sourceField: candidate.field };
+      }
+      break;
+    }
+  });
+
+  return latest;
+}
+
+function findLatestInspectionForCurrentMonth(formType) {
+  const today = new Date();
+  return findInspectionSubmissionForMonth(formType, today.getFullYear(), today.getMonth());
+}
+
+function handleInspectionStart(formType) {
+  const submissionInfo = findLatestInspectionForCurrentMonth(formType);
+  if (submissionInfo) {
+    showInspectionWarningModal(formType, submissionInfo);
+  } else {
+    openInspectionModal(formType, { resetForm: true });
+  }
+}
+
+function showInspectionWarningModal(formType, submissionInfo) {
+  if (!truckInspectionWarningModal || !truckInspectionWarningMessageEl) {
+    openInspectionModal(formType, { resetForm: true });
+    return;
+  }
+
+  pendingInspectionStartType = formType;
+  const formLabel = getInspectionFormLabel(formType);
+  const record = submissionInfo.record;
+  const inspector = record.inspected_by ? record.inspected_by : 'Unknown';
+  const submittedValue = submissionInfo.sourceValue || record.created_at || record.inspection_date;
+  const submittedAt = formatInspectionDateTime(submittedValue);
+
+  truckInspectionWarningMessageEl.textContent = `${formLabel} was already submitted on ${submittedAt} by ${inspector}. You can proceed to record another inspection for this month if needed.`;
+  truckInspectionWarningModal.classList.remove('hidden');
+  document.body.classList.add('modal-open');
+}
+
+function hideInspectionWarningModal() {
+  if (truckInspectionWarningModal) {
+    truckInspectionWarningModal.classList.add('hidden');
+  }
+  pendingInspectionStartType = null;
+  unlockBodyScrollIfNoModal();
+}
+
+function handleInspectionWarningCancel() {
+  hideInspectionWarningModal();
+}
+
+function handleInspectionWarningProceed() {
+  const type = pendingInspectionStartType;
+  hideInspectionWarningModal();
+  if (type) {
+    openInspectionModal(type, { resetForm: true });
+  }
+}
+
+function unlockBodyScrollIfNoModal() {
+  const isInspectionModalOpen = Boolean(activeInspectionModalType);
+  const isWarningOpen = truckInspectionWarningModal && !truckInspectionWarningModal.classList.contains('hidden');
+  const isSuccessOpen = truckInspectionSuccessModal && !truckInspectionSuccessModal.classList.contains('hidden');
+
+  if (!isInspectionModalOpen && !isWarningOpen && !isSuccessOpen) {
+    document.body.classList.remove('modal-open');
+  }
+}
+
+function handleOverdueInspectionClick(type) {
+  showPickupTruckInspectionForm();
+  openInspectionModal(type, { resetForm: true });
+}
+
+function prepareInspectionForm(form) {
+  if (!form) return;
+  const submitBtn = form.querySelector('.inspection-submit-btn');
+  if (submitBtn && !form.dataset.submitDefault) {
+    form.dataset.submitDefault = submitBtn.textContent.trim();
+  }
+}
+
+function handleGeneratePdfClick(formType) {
+  const form = truckInspectionForms[formType];
+  if (!form) return;
+  const idField = form.querySelector("input[name='id']");
+  const recordId = idField ? idField.value.trim() : '';
+  if (!recordId) {
+    alert('Please submit the inspection before generating a PDF.');
+    return;
+  }
+  window.open(`generate_truck_inspection_pdf.php?id=${recordId}`, '_blank');
+}
+
+function bindTruckInspectionForms() {
   const section = document.getElementById('pickup-truck-inspection');
-  if (section) section.style.display = 'block';
+  if (!section || section.dataset.bound === 'true') {
+    if (!truckInspectionHistoryListEl && section) {
+      truckInspectionHistoryListEl = section.querySelector('#inspection-history-list');
+    }
+    return;
+  }
 
-  // (re)bind to be safe if the DOM was swapped
-  bindTruckInspectionForms();
-}
+  section.dataset.bound = 'true';
+  truckInspectionSection = section;
 
+  truckInspectionForms = {
+    pro: section.querySelector('#pro-truck-inspection-form'),
+    rental: section.querySelector('#rental-pickup-truck-inspection-form')
+  };
 
+  truckInspectionModals = {
+    pro: section.querySelector('#pro-inspection-modal'),
+    rental: section.querySelector('#rental-inspection-modal')
+  };
 
-/* -------------------------
+  truckInspectionToggleButtons = Array.from(section.querySelectorAll('.inspection-toggle-btn'));
+  truckInspectionHistoryListEl = section.querySelector('#inspection-history-list');
+  truckInspectionSuccessModal = section.querySelector('#inspection-success-modal');
+  truckInspectionWarningModal = section.querySelector('#inspection-warning-modal');
+  truckInspectionFilterFormTypeEl = section.querySelector('#inspection-filter-form-type');
+  truckInspectionFilterSearchEl = section.querySelector('#inspection-filter-search');
+  truckInspectionPaginationStatusEl = section.querySelector('#inspection-pagination-status');
+  truckInspectionPaginationButtons = {
+    prev: section.querySelector("[data-action='prev-page']"),
+    next: section.querySelector("[data-action='next-page']")
+  };
+  truckInspectionWarningMessageEl = section.querySelector('#inspection-warning-message');
+  truckInspectionWarningProceedBtn = section.querySelector('[data-action="warning-proceed"]');
+  truckInspectionWarningCancelBtn = section.querySelector('[data-action="warning-cancel"]');
+
+  Object.values(truckInspectionForms).forEach(prepareInspectionForm);
+
+  truckInspectionToggleButtons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const target = btn.dataset.inspectionTarget;
+      if (!target) return;
+      handleInspectionStart(target);
+    });
+  });
+
+  Object.entries(truckInspectionModals).forEach(([type, modal]) => {
+    if (!modal) return;
+    const closeBtn = modal.querySelector("[data-action='close-modal']");
+    if (closeBtn) {
+      closeBtn.addEventListener('click', () => closeActiveInspectionModal({ resetForm: true }));
+    }
+    modal.addEventListener('click', (event) => {
+      if (event.target === modal) {
+        closeActiveInspectionModal({ resetForm: true });
+      }
+    });
+  });
+
+  const cancelButtons = section.querySelectorAll('.inspection-cancel-btn');
+  cancelButtons.forEach((btn) => {
+    btn.addEventListener('click', () => closeActiveInspectionModal({ resetForm: true }));
+  });
+
+  const generateButtons = section.querySelectorAll('.inspection-generate-pdf-btn');
+  generateButtons.forEach((btn) => {
+    const formType = btn.dataset.formType;
+    if (!formType) return;
+    btn.addEventListener('click', () => handleGeneratePdfClick(formType));
+  });
+
+  Object.entries(truckInspectionForms).forEach(([type, form]) => {
+    if (!form) return;
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      submitInspectionForm(form);
+    });
+  });
+
+  if (truckInspectionHistoryListEl) {
+    truckInspectionHistoryListEl.addEventListener('click', handleInspectionHistoryClick);
+  }
+
+  if (truckInspectionFilterFormTypeEl) {
+    truckInspectionFilterFormTypeEl.addEventListener('change', applyInspectionHistoryFilters);
+  }
+  if (truckInspectionFilterSearchEl) {
+    truckInspectionFilterSearchEl.addEventListener('input', () => {
+      if (truckInspectionSearchDebounce) {
+        clearTimeout(truckInspectionSearchDebounce);
+      }
+      truckInspectionSearchDebounce = setTimeout(applyInspectionHistoryFilters, 200);
+    });
+  }
+
+  if (truckInspectionPaginationButtons.prev) {
+    truckInspectionPaginationButtons.prev.addEventListener('click', () => changeInspectionHistoryPage(-1));
+  }
+  if (truckInspectionPaginationButtons.next) {
+    truckInspectionPaginationButtons.next.addEventListener('click', () => changeInspectionHistoryPage(1));
+  }
+
+  if (truckInspectionSuccessModal) {
+    const closeBtn = truckInspectionSuccessModal.querySelector("[data-action='close']");
+    if (closeBtn) {
+      closeBtn.addEventListener('click', hideInspectionSuccess);
+    }
+    truckInspectionSuccessModal.addEventListener('click', (event) => {
+      if (event.target === truckInspectionSuccessModal) {
+        hideInspectionSuccess();
+      }
+    });
+  }
+
+  if (truckInspectionWarningModal) {
+    truckInspectionWarningModal.addEventListener('click', (event) => {
+      if (event.target === truckInspectionWarningModal) {
+        handleInspectionWarningCancel();
+      }
+    });
+  }
+  if (truckInspectionWarningCancelBtn) {
+    truckInspectionWarningCancelBtn.addEventListener('click', handleInspectionWarningCancel);
+  }
+  if (truckInspectionWarningProceedBtn) {
+    truckInspectionWarningProceedBtn.addEventListener('click', handleInspectionWarningProceed);
+  }
+
+  renderTruckInspectionHistory();
+}/* -------------------------
    8. EQUIPMENT MANAGEMENT
 ------------------------- */
 
@@ -944,6 +1715,8 @@ function showEquipmentManagement() {
 
   showActiveEquipmentTab();
   loadEquipmentLists();
+  closeActiveInspectionModal({ resetForm: true });
+  hideInspectionSuccess();
   setActiveMenuItem();
 }
 
@@ -978,23 +1751,23 @@ function loadEquipmentLists() {
 
         let imageHTML = '';
         if (equipment.image_url) {
-          imageHTML = `<img src="${equipment.image_url}" alt="${equipment.equipment_name}" class="equipment-image">`;
+          imageHTML = `<img src='${equipment.image_url}' alt='${equipment.equipment_name}' class='equipment-image'>`;
         }
         const equipmentHTML = `
-          <div class="drag-handle">
-            <i class="fa-solid fa-grip-vertical" data-tooltip="Drag to reorder"></i>
+          <div class='drag-handle'>
+            <i class='fa-solid fa-grip-vertical' data-tooltip='Drag to reorder'></i>
           </div>
-          <div class="equipment-image-wrapper">${imageHTML}</div>
-          <div class="equipment-info-container">
-            <div class="equipment-txt-wrapper">
-              <p>Unit ID: <span class="eq-list-id-num-txt">${equipment.unit_id}</span></p>
-              <p>Name: <span class="eq-list-name-txt">${equipment.equipment_name}</span></p>
-              <p>Manufacturer: <span class="eq-list-manufacturer-txt">${equipment.manufacturer}</span></p>
-              <p>Model: <span class="eq-list-model-txt">${equipment.model}</span></p>
+          <div class='equipment-image-wrapper'>${imageHTML}</div>
+          <div class='equipment-info-container'>
+            <div class='equipment-txt-wrapper'>
+              <p>Unit ID: <span class='eq-list-id-num-txt'>${equipment.unit_id}</span></p>
+              <p>Name: <span class='eq-list-name-txt'>${equipment.equipment_name}</span></p>
+              <p>Manufacturer: <span class='eq-list-manufacturer-txt'>${equipment.manufacturer}</span></p>
+              <p>Model: <span class='eq-list-model-txt'>${equipment.model}</span></p>
             </div>
-            <div class="equipment-rates-wrapper">
+            <div class='equipment-rates-wrapper'>
               <p><strong>Rental Rates:</strong></p>
-              <ul class="rental-rates-list">
+              <ul class='rental-rates-list'>
                 <li>4 Hours: $${parseFloat(equipment.rental_rate_4h || 0).toFixed(2)}</li>
                 <li>Daily: $${parseFloat(equipment.rental_rate_daily || 0).toFixed(2)}</li>
                 <li>Weekly: $${parseFloat(equipment.rental_rate_weekly || 0).toFixed(2)}</li>
@@ -1004,27 +1777,27 @@ function loadEquipmentLists() {
           </div>
         `;
         let actionButtonsHTML = `
-          <button class="equipment-edit-button" onclick="showEditEquipmentForm(${equipment.id})">
-            <span class="eq-list-btn-icon"><i class="fa-solid fa-pen-to-square"></i></span> Edit 
+          <button class='equipment-edit-button' onclick='showEditEquipmentForm(${equipment.id})'>
+            <span class='eq-list-btn-icon'><i class='fa-solid fa-pen-to-square'></i></span> Edit 
           </button>
         `;
         if (equipment.is_active == 1) {
           actionButtonsHTML += `
-            <button class="equipment-delete-button" onclick="deactivateEquipment(${equipment.id})">
-              <span class="eq-list-btn-icon"><i class="fa-solid fa-ban"></i></span> Deactivate 
+            <button class='equipment-delete-button' onclick='deactivateEquipment(${equipment.id})'>
+              <span class='eq-list-btn-icon'><i class='fa-solid fa-ban'></i></span> Deactivate 
             </button>
           `;
         } else {
           actionButtonsHTML += `
-            <button class="equipment-reactivate-button" onclick="activateEquipment(${equipment.id})">
-              <span class="eq-list-btn-icon"><i class="fa-solid fa-check"></i></span> Reactivate 
+            <button class='equipment-reactivate-button' onclick='activateEquipment(${equipment.id})'>
+              <span class='eq-list-btn-icon'><i class='fa-solid fa-check'></i></span> Reactivate 
             </button>
           `;
         }
 
         equipmentItemDiv.innerHTML = `
           ${equipmentHTML}
-          <div class="equipment-button-wrapper">
+          <div class='equipment-button-wrapper'>
             ${actionButtonsHTML}
           </div>
         `;
@@ -1165,7 +1938,7 @@ function viewYardCheckDetails(id) {
 function showYardCheckDetails(yardCheck) {
    const modalContainer = document.getElementById('modal-container');
  
-   // Format the date from "YYYY-MM-DD" to "MM/DD/YYYY"
+   // Format the date from 'YYYY-MM-DD' to 'MM/DD/YYYY'
    const [year, month, day] = yardCheck.date.split('-');
    const formattedDate = `${month}/${day}/${year}`;
  
@@ -1177,7 +1950,7 @@ function showYardCheckDetails(yardCheck) {
          <p><strong>Equipment Name:</strong> ${status.equipment_name}</p>
          <p>
            <strong>Status:</strong> 
-           <span class="status-print-color status-${statusClass}">
+           <span class='status-print-color status-${statusClass}'>
              ${status.equipment_status}
            </span>
          </p>
@@ -1187,16 +1960,16 @@ function showYardCheckDetails(yardCheck) {
    }).join('');
  
    const modalContent = `
-      <div class="modal">
-         <div class="modal-content">
-            <span class="close-button" onclick="closeModal()">&times;</span>
+      <div class='modal'>
+         <div class='modal-content'>
+            <span class='close-button' onclick='closeModal()'>&times;</span>
             <h2>Yard Check Details</h2>
             <p><strong>Date:</strong> ${formattedDate}</p>
             <p><strong>Time:</strong> ${yardCheck.check_time}</p>
             <p><strong>Submitted by:</strong> ${yardCheck.user_name}</p>
             <div>${equipmentStatuses}</div>
-            <button onclick="editYardCheck(${yardCheck.id})">Edit</button>
-            <button onclick="printYardCheck(${yardCheck.id})">Print</button>
+            <button onclick='editYardCheck(${yardCheck.id})'>Edit</button>
+            <button onclick='printYardCheck(${yardCheck.id})'>Print</button>
          </div>
       </div>
    `;
@@ -1208,7 +1981,7 @@ function showYardCheckDetails(yardCheck) {
 function closeModal() {
   document.getElementById('modal-container').style.display = 'none';
 }
-// Close modal when clicking outside of it "view yard check"
+// Close modal when clicking outside of it 'view yard check'
 addEventListener('click', function(event) {
   const modal = document.getElementsByClassName('modal');
   if (event.target === modal[0]) {
@@ -1254,7 +2027,7 @@ console.log(yardCheck.user_name);
    // });
    yardCheck.equipment_statuses.forEach(status => {
       const unitId = status.unit_id;
-      const savedStatus = status.equipment_status; // e.g. "Available"
+      const savedStatus = status.equipment_status; // e.g. 'Available'
       const allRadios = document.getElementsByName(`equipment_status_${unitId}`);
       console.log(allRadios, 'for unitId:', unitId, 'with savedStatus:', savedStatus);
       // allRadios is a NodeList of three radio inputs for that unitId
@@ -1279,6 +2052,8 @@ function showEquipmentStats() {
   document.getElementById('submitted-yard-checks').style.display = 'none';
   document.getElementById('equipment-stats').style.display = 'block';
   loadEquipmentStats();
+  closeActiveInspectionModal({ resetForm: true });
+  hideInspectionSuccess();
   setActiveMenuItem();
 }
 
@@ -1329,14 +2104,14 @@ function displayEquipmentStats(stats) {
   const totalLoss   = stats.total_profit_loss.toFixed(2);
 
   statsDisplay.innerHTML += `
-    <h3>Total Estimated Profit: $<span class="profit-amount">${totalProfit}</span></h3>
-    <h3>Total Profit Loss: $<span class="loss-amount">${totalLoss}</span></h3>
+    <h3>Total Estimated Profit: $<span class='profit-amount'>${totalProfit}</span></h3>
+    <h3>Total Profit Loss: $<span class='loss-amount'>${totalLoss}</span></h3>
   `;
 
   // Top 8
   let top8HTML = '<h4>Top 8 Most Popular Equipment</h4><ol>';
   stats.top8.forEach(item => {
-    top8HTML += `<li>${item.equipment_name} - Days Rented: ${item.days_rented}, Estimated Profit: $<span class="profit-amount">${item.estimated_profit.toFixed(2)}</span></li>`;
+    top8HTML += `<li>${item.equipment_name} - Days Rented: ${item.days_rented}, Estimated Profit: $<span class='profit-amount'>${item.estimated_profit.toFixed(2)}</span></li>`;
   });
   top8HTML += '</ol>';
   statsDisplay.innerHTML += top8HTML;
@@ -1344,7 +2119,7 @@ function displayEquipmentStats(stats) {
   // Bottom 8
   let bottom8HTML = '<h4>Bottom 8 Least Popular Equipment</h4><ol>';
   stats.bottom8.forEach(item => {
-    bottom8HTML += `<li>${item.equipment_name} - Days Rented: ${item.days_rented}, Estimated Profit: $<span class="profit-amount">${item.estimated_profit.toFixed(2)}</span></li>`;
+    bottom8HTML += `<li>${item.equipment_name} - Days Rented: ${item.days_rented}, Estimated Profit: $<span class='profit-amount'>${item.estimated_profit.toFixed(2)}</span></li>`;
   });
   bottom8HTML += '</ol>';
   statsDisplay.innerHTML += bottom8HTML;
@@ -1353,7 +2128,7 @@ function displayEquipmentStats(stats) {
   if (stats.potential_sales.length > 0) {
     let potentialSalesHTML = '<h4>Potential Sales for Non-Rented Equipment</h4><ul>';
     stats.potential_sales.forEach(item => {
-      potentialSalesHTML += `<li>${item.equipment_name} - Potential Profit: $<span class="profit-amount">${item.potential_profit.toFixed(2)}</span></li>`;
+      potentialSalesHTML += `<li>${item.equipment_name} - Potential Profit: $<span class='profit-amount'>${item.potential_profit.toFixed(2)}</span></li>`;
     });
     potentialSalesHTML += '</ul>';
     statsDisplay.innerHTML += potentialSalesHTML;
@@ -1509,13 +2284,18 @@ function showDashboard() {
   document.getElementById('equipment-management').style.display = 'none';
   document.getElementById('equipment-stats').style.display = 'none';
   document.getElementById('submitted-yard-checks').style.display = 'none';
+  closeActiveInspectionModal({ resetForm: true });
+  hideInspectionSuccess();
   setActiveMenuItem();
 }
+
 
 // Update the DOMContentLoaded event listener to show dashboard by default
 document.addEventListener('DOMContentLoaded', () => {
   displayCurrentDateTime();
 //   checkMissingYardChecks();
+  bindTruckInspectionForms();
+  fetchTruckInspectionHistory();
   showDashboard(); // Make dashboard visible by default
 });
 
@@ -1527,48 +2307,33 @@ function showPickupTruckInspectionForm() {
    document.getElementById('equipment-management').style.display = 'none';
    document.getElementById('equipment-stats').style.display = 'none';
    document.getElementById('submitted-yard-checks').style.display = 'none';
+   bindTruckInspectionForms();
+   if (truckInspectionHistoryListEl && !truckInspectionHistoryFiltered.length && !truckInspectionHistoryData.length) {
+      renderTruckInspectionHistory();
+   }
+   fetchTruckInspectionHistory();
+   closeActiveInspectionModal({ resetForm: true });
+   hideInspectionSuccess();
    setActiveMenuItem();
 //   hideAllSections(); // hide other main content
 
 //   fetch('pickup-truck-monthly-inspection-form.html')
 //     .then(response => response.text())
 //     .then(html => {
-//       document.getElementById("main-content-container").innerHTML = html;
+//       document.getElementById('main-content-container').innerHTML = html;
 //     })
 //     .catch(error => {
-//       console.error("Failed to load form:", error);
+//       console.error('Failed to load form:', error);
 //     });
 }
 
-// 2. Check if inspection is overdue (after 5th of current month)
-function checkForOverdueInspection() {
-  const today = new Date();
-  const dayOfMonth = today.getDate();
-  const inspectionKey = `pickup_inspection_${today.getFullYear()}_${today.getMonth() + 1}`;
-  const wasSubmitted = localStorage.getItem(inspectionKey);
 
-  if (dayOfMonth > 4 && !wasSubmitted) {
-    showInspectionAlert();
-  }
-}
 
-// 3. Display alert card in dashboard alerts section
-function showInspectionAlert() {
-  const alertContainer = document.querySelector(".alerts-card-wrapper");
-  if (!alertContainer) return;
 
-  const alertCard = document.createElement("div");
-  alertCard.className = "alert-card";
-  alertCard.innerHTML = `
-    <p class="alert-title">Past Due Inspection</p>
-    <p class="alert-description">The pickup truck monthly inspection is past due. Please complete this month's inspection.</p>
-    <div class="alert-button-wrapper">
-      <button class="alert-btn-yardcheck" onclick="showPickupTruckInspectionForm()">Go to Inspection Form</button>
-    </div>
-  `;
 
-  alertContainer.appendChild(alertCard);
-}
 
-// 4. Run overdue check on page load
-document.addEventListener("DOMContentLoaded", checkForOverdueInspection);
+
+
+
+
+
