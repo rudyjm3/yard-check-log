@@ -4,6 +4,40 @@
 require_once __DIR__ . '/db_connection_info.php';
 require_once __DIR__ . '/fpdf/fpdf.php';
 
+class InspectionPDF extends FPDF
+{
+    public function drawRoundedRect(float $x, float $y, float $w, float $h, float $r = 2.0): void
+    {
+        $k = $this->k;
+        $hp = $this->h;
+        $r = min($r, min($w, $h) / 2);
+        $MyArc = 4 / 3 * (sqrt(2) - 1) * $r;
+
+        $this->_out(sprintf('%.2F %.2F m', ($x + $r) * $k, ($hp - $y) * $k));
+        $this->_out(sprintf('%.2F %.2F l', ($x + $w - $r) * $k, ($hp - $y) * $k));
+        $this->_out(sprintf('%.2F %.2F %.2F %.2F %.2F %.2F c',
+            ($x + $w - $r + $MyArc) * $k, ($hp - $y) * $k,
+            ($x + $w) * $k, ($hp - ($y + $r - $MyArc)) * $k,
+            ($x + $w) * $k, ($hp - ($y + $r)) * $k));
+        $this->_out(sprintf('%.2F %.2F l', ($x + $w) * $k, ($hp - ($y + $h - $r)) * $k));
+        $this->_out(sprintf('%.2F %.2F %.2F %.2F %.2F %.2F c',
+            ($x + $w) * $k, ($hp - ($y + $h - $r + $MyArc)) * $k,
+            ($x + $w - $r + $MyArc) * $k, ($hp - ($y + $h)) * $k,
+            ($x + $w - $r) * $k, ($hp - ($y + $h)) * $k));
+        $this->_out(sprintf('%.2F %.2F l', ($x + $r) * $k, ($hp - ($y + $h)) * $k));
+        $this->_out(sprintf('%.2F %.2F %.2F %.2F %.2F %.2F c',
+            ($x + $r - $MyArc) * $k, ($hp - ($y + $h)) * $k,
+            $x * $k, ($hp - ($y + $h - $r + $MyArc)) * $k,
+            $x * $k, ($hp - ($y + $h - $r)) * $k));
+        $this->_out(sprintf('%.2F %.2F l', $x * $k, ($hp - ($y + $r)) * $k));
+        $this->_out(sprintf('%.2F %.2F %.2F %.2F %.2F %.2F c',
+            $x * $k, ($hp - ($y + $r - $MyArc)) * $k,
+            ($x + $r - $MyArc) * $k, ($hp - $y) * $k,
+            ($x + $r) * $k, ($hp - $y) * $k));
+        $this->_out('h S');
+    }
+}
+
 $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 if (!$id) {
     http_response_code(400);
@@ -87,6 +121,19 @@ $formTypeLabel = $inspection['form_type'] === 'pro'
     ? 'Load N Go Monthly Inspection Checklist'
     : 'Rental Pickup Truck Monthly Inspection Checklist';
 
+function formatDateForPdf(?string $value): string {
+    if (!$value || !preg_match('/^\d{4}-\d{2}-\d{2}/', $value)) {
+        return $value ?? 'N/A';
+    }
+
+    try {
+        $date = new DateTime(substr($value, 0, 10));
+        return $date->format('M j, Y');
+    } catch (Exception $e) {
+        return $value;
+    }
+}
+
 $inspectionNote = "Note: If any item is incorrect or inoperable, please correct. "
     . "If repair cannot be completed onsite and affects safe operation or Load Sensor, "
     . "tag the vehicle \"Out of Service\" and contact Element at 1-888-562-3646 or "
@@ -113,7 +160,7 @@ $formatDateTime = static function (?string $value): ?string {
     }
 };
 
-$pdf = new FPDF();
+$pdf = new InspectionPDF();
 $leftMargin = 15;
 $rightMargin = 15;
 $topMargin = 20;
@@ -134,7 +181,7 @@ $pdf->Cell(50, 8, $encode('Form Type:'), 0, 0);
 $pdf->Cell(0, 8, $encode($formTypeLabel), 0, 1);
 
 $pdf->Cell(50, 8, $encode('Inspection Date:'), 0, 0);
-$pdf->Cell(0, 8, $encode($inspection['inspection_date']), 0, 1);
+$pdf->Cell(0, 8, $encode(formatDateForPdf($inspection['inspection_date'])), 0, 1);
 
 $pdf->Cell(50, 8, $encode('Inspected By:'), 0, 0);
 $pdf->Cell(0, 8, $encode($inspection['inspected_by']), 0, 1);
@@ -173,8 +220,8 @@ $printChecklist = static function (FPDF $pdf, string $title, array $items) use (
     $endY = $pdf->GetY();
     $sectionHeight = $endY - $startY;
     $pdf->SetDrawColor(200, 200, 200);
-    $pdf->Rect($startX, $startY - 1.5, $usableWidth, $sectionHeight + 3);
-    $pdf->Ln(2);
+    $pdf->drawRoundedRect($startX, $startY - 1.5, $usableWidth, $sectionHeight + 3, 2.5);
+    $pdf->Ln(5);
 };
 
 $printChecklist($pdf, 'Truck Fluids', $fluids);
@@ -196,8 +243,8 @@ if ($comments !== '') {
     $endY = $pdf->GetY();
     $sectionHeight = $endY - $startY;
     $pdf->SetDrawColor(200, 200, 200);
-    $pdf->Rect($startX, $startY - 1.5, $usableWidth, $sectionHeight + 3);
-    $pdf->Ln(2);
+    $pdf->drawRoundedRect($startX, $startY - 1.5, $usableWidth, $sectionHeight + 3, 2.5);
+    $pdf->Ln(5);
 }
 
 $pdf->Ln(3);
@@ -205,4 +252,11 @@ $pdf->SetFont('Arial', 'I', 10);
 $pdf->MultiCell(0, 6, $encode($inspectionNote), 0, 'L');
 
 $pdf->Output('I', "inspection-{$id}.pdf");
+
+
+
+
+
+
+
 

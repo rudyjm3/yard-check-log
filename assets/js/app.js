@@ -1,4 +1,4 @@
-// Large equipment array temporary storage
+﻿// Large equipment array temporary storage
 // const largeEquipment = [
 //   ... // If you want to keep it, or omit. It's commented out anyway.
 // ];
@@ -936,6 +936,7 @@ let truckInspectionWarningMessageEl = null;
 let truckInspectionWarningProceedBtn = null;
 let truckInspectionWarningCancelBtn = null;
 let pendingInspectionStartType = null;
+let truckInspectionServerSummary = null;
 
 function getInspectionFormLabel(type) {
   return type === 'pro' ? 'Load N Go Inspection' : 'Rental Pickup Inspection';
@@ -943,22 +944,34 @@ function getInspectionFormLabel(type) {
 
 function formatInspectionDateTime(value) {
   if (!value) return 'N/A';
-  const normalized = value.includes('T') ? value : value.replace(' ', 'T');
-  const date = new Date(normalized);
-  if (!Number.isNaN(date.getTime())) {
-    const hasTime = normalized.length > 10;
-    return date.toLocaleString([], {
-      dateStyle: 'medium',
-      timeStyle: hasTime ? 'short' : undefined
+  const date = parseInspectionDate(value);
+  if (!date) return value;
+  const normalized = String(value);
+  const hasTime = /T\d|\s\d/.test(normalized);
+  if (hasTime) {
+    return date.toLocaleString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+      hour: 'numeric',
+      minute: '2-digit'
     });
   }
-  if (/^\d{4}-\d{2}-\d{2}$/.test(value)) {
-    const dateOnly = new Date(`${value}T00:00:00`);
-    if (!Number.isNaN(dateOnly.getTime())) {
-      return dateOnly.toLocaleDateString();
-    }
-  }
-  return value;
+  return date.toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric'
+  });
+}
+
+function formatInspectionDate(value) {
+  const date = parseInspectionDate(value);
+  if (!date) return 'N/A';
+  return date.toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric'
+  });
 }
 
 function fallbackChecklistLabel(value) {
@@ -986,6 +999,14 @@ function resetInspectionForm(form) {
   form.reset();
   const idField = form.querySelector("input[name='id']");
   if (idField) idField.value = '';
+  const dateField = form.querySelector('input[type="date"][data-default-today="true"]');
+  if (dateField) {
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
+    const dd = String(today.getDate()).padStart(2, '0');
+    dateField.value = `${yyyy}-${mm}-${dd}`;
+  }
   form.dataset.editing = 'false';
   const defaultLabel = form.dataset.submitDefault || 'Submit Inspection';
   setInspectionSubmitButtonLabel(form, defaultLabel);
@@ -997,6 +1018,7 @@ function populateInspectionForm(form, record) {
 
   const idField = form.querySelector("input[name='id']");
   if (idField) idField.value = record.id;
+  form.dataset.editing = 'true';
 
   const dateField = form.querySelector("input[name='inspection_date']");
   if (dateField) dateField.value = record.inspection_date || '';
@@ -1014,7 +1036,6 @@ function populateInspectionForm(form, record) {
   const commentsField = form.querySelector("textarea[name='inspection_comments']");
   if (commentsField) commentsField.value = record.inspection_comments || '';
 
-  form.dataset.editing = 'true';
   setInspectionSubmitButtonLabel(form, 'Update Inspection');
 }
 
@@ -1198,14 +1219,28 @@ function renderTruckInspectionHistory() {
     const typeSpan = document.createElement('span');
     typeSpan.textContent = getInspectionFormLabel(record.form_type);
 
-    const submittedSpan = document.createElement('span');
-    const submittedDate = formatInspectionDateTime(record.created_at || record.updated_at || record.inspection_date);
-    submittedSpan.textContent = `Submitted: ${submittedDate}`;
+    const inspectionDateSpan = document.createElement('span');
+    const inspectionDateDisplay = formatInspectionDate(record.inspection_date || record.created_at);
+    inspectionDateSpan.textContent = `Inspection Date: ${inspectionDateDisplay}`;
 
     const inspectorSpan = document.createElement('span');
     inspectorSpan.textContent = `Completed by: ${record.inspected_by || 'Unknown'}`;
 
-    meta.append(typeSpan, submittedSpan, inspectorSpan);
+    meta.append(typeSpan, inspectionDateSpan);
+
+    if (record.created_at) {
+      const submittedSpan = document.createElement('span');
+      submittedSpan.textContent = `Submitted: ${formatInspectionDateTime(record.created_at)}`;
+      meta.appendChild(submittedSpan);
+    }
+
+    if (record.updated_at) {
+      const updatedSpan = document.createElement('span');
+      updatedSpan.textContent = `Last Updated: ${formatInspectionDateTime(record.updated_at)}`;
+      meta.appendChild(updatedSpan);
+    }
+
+    meta.appendChild(inspectorSpan);
 
     const commentsRow = document.createElement('div');
     commentsRow.className = 'inspection-history-comments';
@@ -1224,7 +1259,7 @@ function renderTruckInspectionHistory() {
       commentsRow.append(commentsLabel, commentsText);
     } else {
       const needsToggle = fullComment.length > 80;
-      const truncated = needsToggle ? `${fullComment.slice(0, 80)}...` : fullComment;
+      const truncated = needsToggle ? `${fullComment.slice(0, 80)}…` : fullComment;
 
       commentsText.textContent = truncated;
       commentsText.dataset.fullText = fullComment;
@@ -1234,12 +1269,14 @@ function renderTruckInspectionHistory() {
       commentsRow.append(commentsLabel, commentsText);
 
       if (needsToggle) {
+        commentsText.classList.add('inspection-comment-visual');
         const toggleBtn = document.createElement('button');
         toggleBtn.type = 'button';
         toggleBtn.className = 'inspection-history-toggle';
         toggleBtn.dataset.action = 'toggle-comment';
         toggleBtn.dataset.id = String(record.id);
         toggleBtn.textContent = 'View more';
+        toggleBtn.classList.add('inspection-history-toggle-inline');
         commentsRow.append(toggleBtn);
       }
     }
@@ -1252,7 +1289,7 @@ function renderTruckInspectionHistory() {
     viewBtn.className = 'inspection-history-action';
     viewBtn.dataset.action = 'view';
     viewBtn.dataset.id = String(record.id);
-    viewBtn.textContent = 'View Inspection';
+    viewBtn.textContent = 'Generate PDF';
 
     const editBtn = document.createElement('button');
     editBtn.type = 'button';
@@ -1330,9 +1367,12 @@ function handleInspectionHistoryClick(event) {
     const textEl = commentsRow ? commentsRow.querySelector('.inspection-history-comments-text') : null;
     if (!textEl) return;
     const isExpanded = textEl.dataset.expanded === 'true';
-    textEl.textContent = isExpanded ? textEl.dataset.truncatedText || '' : textEl.dataset.fullText || '';
-    textEl.dataset.expanded = isExpanded ? 'false' : 'true';
-    actionButton.textContent = isExpanded ? 'View more' : 'View less';
+    const newExpanded = !isExpanded;
+    textEl.textContent = newExpanded ? textEl.dataset.fullText || '' : textEl.dataset.truncatedText || '';
+    textEl.dataset.expanded = newExpanded ? 'true' : 'false';
+    textEl.classList.toggle('inspection-comment-visual', !newExpanded);
+    actionButton.textContent = newExpanded ? 'View less' : 'View more';
+    actionButton.classList.toggle('is-expanded', newExpanded);
     return;
   }
 
@@ -1373,14 +1413,32 @@ async function fetchTruckInspectionHistory() {
       return;
     }
     truckInspectionHistoryData = Array.isArray(payload.data) ? payload.data : [];
+    truckInspectionServerSummary = payload.meta ?? payload.summary ?? null;
     applyInspectionHistoryFilters();
-    updateInspectionOverdueAlerts();
+    updateInspectionOverdueAlerts(truckInspectionServerSummary);
   } catch (error) {
     console.error('Unable to load inspection history.', error);
   }
 }
 
-function updateInspectionOverdueAlerts() {
+function buildInspectionAlertsFromMissing(missingTypes, periodLabel) {
+  if (!Array.isArray(missingTypes) || !missingTypes.length) {
+    return [];
+  }
+
+  return missingTypes.map((type) => {
+    const formLabel = getInspectionFormLabel(type);
+    return {
+      formType: type,
+      title: `${formLabel} Past Due`,
+      description: `No ${formLabel.toLowerCase()} has been submitted for ${periodLabel}.`,
+      buttonLabel: 'Complete Inspection',
+      buttonClass: 'alert-btn-inspection'
+    };
+  });
+}
+
+function updateInspectionOverdueAlerts(summary = null) {
   const today = new Date();
   if (today.getDate() < 2) {
     currentInspectionAlerts = [];
@@ -1388,29 +1446,35 @@ function updateInspectionOverdueAlerts() {
     return;
   }
 
+  if (summary && Array.isArray(summary.missing_form_types)) {
+    const periodLabel = (() => {
+      if (summary.period_label) {
+        return summary.period_label;
+      }
+      const summaryYear = typeof summary.current_year === 'number'
+        ? summary.current_year
+        : today.getFullYear();
+      const summaryMonthRaw = typeof summary.current_month === 'number'
+        ? summary.current_month
+        : today.getMonth() + 1; // convert to 1-based
+      const normalizedMonthIndex = Math.min(12, Math.max(1, parseInt(summaryMonthRaw, 10) || (today.getMonth() + 1))) - 1;
+      const periodDate = new Date(summaryYear, normalizedMonthIndex, 1);
+      return periodDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+    })();
+
+    currentInspectionAlerts = buildInspectionAlertsFromMissing(summary.missing_form_types, periodLabel);
+    displayDiscrepancyAlerts();
+    return;
+  }
+
   const currentYear = today.getFullYear();
   const currentMonth = today.getMonth();
-  const periodLabel = today.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+  const fallbackPeriodLabel = today.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+  const missingTypes = ['pro', 'rental'].filter(
+    (type) => !findInspectionSubmissionForMonth(type, currentYear, currentMonth)
+  );
 
-  const alerts = [];
-
-  ['pro', 'rental'].forEach((type) => {
-    const submissionInfo = findInspectionSubmissionForMonth(type, currentYear, currentMonth);
-    if (submissionInfo) {
-      return;
-    }
-
-    const formLabel = getInspectionFormLabel(type);
-    alerts.push({
-      formType: type,
-      title: `${formLabel} Past Due`,
-      description: `No ${formLabel.toLowerCase()} has been submitted for ${periodLabel}.`,
-      buttonLabel: 'Complete Inspection',
-      buttonClass: 'alert-btn-inspection'
-    });
-  });
-
-  currentInspectionAlerts = alerts;
+  currentInspectionAlerts = buildInspectionAlertsFromMissing(missingTypes, fallbackPeriodLabel);
   displayDiscrepancyAlerts();
 }
 
@@ -1419,19 +1483,8 @@ function hasInspectionSubmissionForMonth(formType, year, month) {
 }
 
 function isDateInYearMonth(value, year, month) {
-  if (!value) return false;
-
-  let date;
-  if (typeof value === 'string') {
-    const normalized = value.includes('T') ? value : value.replace(' ', 'T');
-    date = normalized.includes('T') ? new Date(normalized) : new Date(`${normalized}T00:00:00`);
-  } else if (value instanceof Date) {
-    date = value;
-  } else {
-    return false;
-  }
-
-  if (Number.isNaN(date.getTime())) return false;
+  const date = parseInspectionDate(value);
+  if (!date) return false;
   return date.getFullYear() === year && date.getMonth() === month;
 }
 
@@ -1460,24 +1513,29 @@ function findInspectionSubmissionForMonth(formType, year, month) {
     const recordType = String(record.form_type || '').trim().toLowerCase();
     if (recordType !== normalizedTarget) return;
 
-    const candidates = [];
-    if (record.inspection_date && record.inspection_date !== '0000-00-00') {
-      candidates.push({ value: record.inspection_date, field: 'inspection_date' });
-    }
-    if (record.created_at) {
-      candidates.push({ value: record.created_at, field: 'created_at' });
-    }
+    const inspectionDate = record.inspection_date && record.inspection_date !== '0000-00-00'
+      ? record.inspection_date
+      : null;
 
-    for (const candidate of candidates) {
-      if (!isDateInYearMonth(candidate.value, year, month)) continue;
-
-      const parsed = parseInspectionDate(candidate.value);
-      if (!parsed) continue;
-
-      if (!latest || parsed > latest.date) {
-        latest = { record, date: parsed, sourceValue: candidate.value, sourceField: candidate.field };
+    if (inspectionDate) {
+      if (isDateInYearMonth(inspectionDate, year, month)) {
+        const parsed = parseInspectionDate(inspectionDate);
+        if (parsed && (!latest || parsed > latest.date)) {
+          latest = { record, date: parsed, sourceValue: inspectionDate, sourceField: 'inspection_date' };
+        }
       }
-      break;
+      return;
+    }
+
+    const fallback = record.created_at || null;
+    if (!fallback) return;
+    if (!isDateInYearMonth(fallback, year, month)) return;
+
+    const parsed = parseInspectionDate(fallback);
+    if (!parsed) return;
+
+    if (!latest || parsed > latest.date) {
+      latest = { record, date: parsed, sourceValue: fallback, sourceField: 'created_at' };
     }
   });
 
@@ -1508,8 +1566,10 @@ function showInspectionWarningModal(formType, submissionInfo) {
   const formLabel = getInspectionFormLabel(formType);
   const record = submissionInfo.record;
   const inspector = record.inspected_by ? record.inspected_by : 'Unknown';
-  const submittedValue = submissionInfo.sourceValue || record.created_at || record.inspection_date;
-  const submittedAt = formatInspectionDateTime(submittedValue);
+  const submittedValue = submissionInfo.sourceValue || record.inspection_date || record.created_at;
+  const submittedAt = submissionInfo.sourceField === 'created_at'
+    ? formatInspectionDateTime(submittedValue)
+    : formatInspectionDate(submittedValue);
 
   truckInspectionWarningMessageEl.textContent = `${formLabel} was already submitted on ${submittedAt} by ${inspector}. You can proceed to record another inspection for this month if needed.`;
   truckInspectionWarningModal.classList.remove('hidden');
@@ -1634,13 +1694,6 @@ function bindTruckInspectionForms() {
   const cancelButtons = section.querySelectorAll('.inspection-cancel-btn');
   cancelButtons.forEach((btn) => {
     btn.addEventListener('click', () => closeActiveInspectionModal({ resetForm: true }));
-  });
-
-  const generateButtons = section.querySelectorAll('.inspection-generate-pdf-btn');
-  generateButtons.forEach((btn) => {
-    const formType = btn.dataset.formType;
-    if (!formType) return;
-    btn.addEventListener('click', () => handleGeneratePdfClick(formType));
   });
 
   Object.entries(truckInspectionForms).forEach(([type, form]) => {
@@ -2294,6 +2347,7 @@ function showDashboard() {
 document.addEventListener('DOMContentLoaded', () => {
   displayCurrentDateTime();
 //   checkMissingYardChecks();
+  setTodayOnNewInspectionForms();
   bindTruckInspectionForms();
   fetchTruckInspectionHistory();
   showDashboard(); // Make dashboard visible by default
@@ -2326,6 +2380,43 @@ function showPickupTruckInspectionForm() {
 //       console.error('Failed to load form:', error);
 //     });
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function setTodayOnNewInspectionForms() {
+  const dateFields = document.querySelectorAll('input[type="date"][data-default-today="true"]');
+  if (!dateFields.length) return;
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  const mm = String(today.getMonth() + 1).padStart(2, '0');
+  const dd = String(today.getDate()).padStart(2, '0');
+  const todayStr = `${yyyy}-${mm}-${dd}`;
+
+  dateFields.forEach((field) => {
+    const form = field.closest('form');
+    if (form && form.dataset.editing === 'true') {
+      return;
+    }
+    field.value = todayStr;
+  });
+}
+
+
+
+
+
 
 
 

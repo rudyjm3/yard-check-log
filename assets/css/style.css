@@ -1798,6 +1798,27 @@ Side Menu Styles
 .inspection-history-comments-text {
   flex: 1 1 auto;
   min-width: 200px;
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+  line-height: 1.4;
+  padding-right: 60px;
+}
+
+.inspection-history-comments-text::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 45px;
+  width: 45px;
+  height: 100%;
+  pointer-events: none;
+  background: linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,0.85));
+  opacity: 0;
+}
+
+.inspection-history-comments-text.inspection-comment-visual::after {
+  opacity: 1;
 }
 .inspection-history-toggle {
   background: none;
@@ -1807,6 +1828,34 @@ Side Menu Styles
   font-weight: 600;
   text-decoration: underline;
   padding: 0;
+}
+.inspection-history-toggle-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+  background: none;
+  color: var(--brand-color-green);
+  text-decoration: none;
+  padding: 0 6px;
+  margin-left: 4px;
+  border-radius: 999px;
+  transition: background-color 0.2s ease;
+}
+
+.inspection-history-toggle-inline::after {
+  content: "\203A";
+  font-size: 0.65rem;
+  transition: transform 0.2s ease;
+}
+
+.inspection-history-toggle-inline:hover {
+  background-color: rgba(118, 179, 157, 0.1);
+  color: var(--brand-color-green);
+}
+
+.inspection-history-toggle-inline.is-expanded::after {
+  transform: rotate(90deg);
 }
 .inspection-history-actions {
   display: flex;
@@ -1846,9 +1895,25 @@ Side Menu Styles
 }
 .inspection-history-checklist-section ul {
   margin: 0;
-  padding-left: 18px;
+  padding-left: 0;
   color: var(--main-grey-color);
   font-size: 0.9rem;
+  list-style: none;
+}
+
+.inspection-history-checklist-section li {
+  position: relative;
+  padding-left: 1.5rem;
+  margin-bottom: 4px;
+}
+
+.inspection-history-checklist-section li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--brand-color-green);
+  font-weight: 600;
 }
 .inspection-history-pagination {
   margin-top: 20px;
@@ -1886,6 +1951,33 @@ Side Menu Styles
   font-weight: 600;
   color: var(--secondary-black-color);
   display: block;
+}
+
+.checkbox-group div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-direction: row-reverse;
+}
+
+.checkbox-group label {
+  margin: 0;
+  flex: 1;
+}
+
+.checkbox-group input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--brand-color-green);
+  border: 1.5px solid #8a8a8a;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.checkbox-group input[type="checkbox"]:focus-visible,
+.checkbox-group input[type="checkbox"]:hover {
+  outline: 2px solid var(--brand-color-light-green);
+  outline-offset: 2px;
 }
 body.modal-open {
   overflow: hidden;
