@@ -670,7 +670,7 @@ Side Menu Styles
    overflow-x: hidden;
 }
 /* DASHBOARD STYLING START */
-#dashboard-header-container,#dashboard-weather-container,#alerts-container{
+#dashboard-header-container,#dashboard-weather-container,#alerts-container, #main-dashboard-content-container{
    width: 100%;
    padding: 20px;
    margin-bottom: 20px;
@@ -879,14 +879,21 @@ Side Menu Styles
 
 /* ---- DASHBOARD MAIN CONTENT STYLING ---- */
 
-.dashboard-main-content {
+#main-dashboard-content-container {
    display: flex;
    justify-content: space-between;
-   align-items: flex-start;
+   align-items: center;
    width: 100%;
    height: auto;
    flex-wrap: wrap;
    gap: 20px;
+}
+.dashboard-col-1-wrapper {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   flex-direction: column;
+   width: 100%;
 }
 /* END DASHBOARD STYLING */
 
