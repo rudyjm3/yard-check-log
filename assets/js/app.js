@@ -2112,6 +2112,9 @@ function showEquipmentStats() {
 
 function loadEquipmentStats() {
   const dateRange = document.getElementById('stats-date-range').value;
+  const countSelect = document.getElementById('stats-count');
+  const listCountRaw = countSelect ? parseInt(countSelect.value, 10) : NaN;
+  const listCount = Number.isNaN(listCountRaw) ? 5 : Math.min(10, Math.max(3, listCountRaw));
   let startDate, endDate;
 
   if (dateRange === 'weekly') {
@@ -2141,7 +2144,7 @@ function loadEquipmentStats() {
     endDate   = document.getElementById('end-date').value;
   }
 
-  fetch(`get_equipment_stats.php?start_date=${startDate}&end_date=${endDate}`)
+  fetch(`get_equipment_stats.php?start_date=${startDate}&end_date=${endDate}&limit=${listCount}`)
     .then(resp => resp.json())
     .then(stats => {
       displayEquipmentStats(stats);
@@ -2153,39 +2156,78 @@ function displayEquipmentStats(stats) {
   const statsDisplay = document.getElementById('stats-display');
   statsDisplay.innerHTML = '';
 
-  const totalProfit = stats.total_estimated_profit.toFixed(2);
-  const totalLoss   = stats.total_profit_loss.toFixed(2);
+  const totalProfit = Number(stats.total_estimated_profit || 0).toFixed(2);
+  const sections = [];
 
-  statsDisplay.innerHTML += `
-    <h3>Total Estimated Profit: $<span class='profit-amount'>${totalProfit}</span></h3>
-    <h3>Total Profit Loss: $<span class='loss-amount'>${totalLoss}</span></h3>
-  `;
+  sections.push(`
+    <div class="stats-block stats-total-profit">
+      <h3>Total Estimated Profit: $<span class='profit-amount'>${totalProfit}</span></h3>
+    </div>
+  `);
 
-  // Top 8
-  let top8HTML = '<h4>Top 8 Most Popular Equipment</h4><ol>';
-  stats.top8.forEach(item => {
-    top8HTML += `<li>${item.equipment_name} - Days Rented: ${item.days_rented}, Estimated Profit: $<span class='profit-amount'>${item.estimated_profit.toFixed(2)}</span></li>`;
-  });
-  top8HTML += '</ol>';
-  statsDisplay.innerHTML += top8HTML;
+  const limitValue = Number(stats.requested_limit || 0);
+  const listLabelCount = limitValue || (Array.isArray(stats.top_equipment) ? stats.top_equipment.length : 0);
+  const topList = Array.isArray(stats.top_equipment) ? stats.top_equipment : [];
+  const bottomList = Array.isArray(stats.bottom_equipment) ? stats.bottom_equipment : [];
 
-  // Bottom 8
-  let bottom8HTML = '<h4>Bottom 8 Least Popular Equipment</h4><ol>';
-  stats.bottom8.forEach(item => {
-    bottom8HTML += `<li>${item.equipment_name} - Days Rented: ${item.days_rented}, Estimated Profit: $<span class='profit-amount'>${item.estimated_profit.toFixed(2)}</span></li>`;
-  });
-  bottom8HTML += '</ol>';
-  statsDisplay.innerHTML += bottom8HTML;
+  const renderList = (items) => {
+    if (!items.length) {
+      return '<p class="empty-stats-msg">No equipment data for this range.</p>';
+    }
+    return `<ol>${items.map(item => {
+      const profit = Number(item.estimated_profit || 0).toFixed(2);
+      return `<li>${item.equipment_name} - Days Rented: ${item.days_rented}, Estimated Profit: $<span class='profit-amount'>${profit}</span></li>`;
+    }).join('')}</ol>`;
+  };
 
-  // Potential Sales
-  if (stats.potential_sales.length > 0) {
-    let potentialSalesHTML = '<h4>Potential Sales for Non-Rented Equipment</h4><ul>';
-    stats.potential_sales.forEach(item => {
-      potentialSalesHTML += `<li>${item.equipment_name} - Potential Profit: $<span class='profit-amount'>${item.potential_profit.toFixed(2)}</span></li>`;
-    });
-    potentialSalesHTML += '</ul>';
-    statsDisplay.innerHTML += potentialSalesHTML;
+  sections.push(`
+    <div class="stats-block stats-top-list">
+      <h4>Top ${listLabelCount} Most Popular Equipment</h4>
+      ${renderList(topList)}
+    </div>
+  `);
+
+  sections.push(`
+    <div class="stats-block stats-bottom-list">
+      <h4>Bottom ${listLabelCount} Least Popular Equipment</h4>
+      ${renderList(bottomList)}
+    </div>
+  `);
+
+  const totalLoss = Number(stats.total_profit_loss || 0).toFixed(2);
+  const lossDetails = Array.isArray(stats.profit_loss_details) ? stats.profit_loss_details : [];
+  let lossContent = `<p>Total: $<span class='loss-amount'>${totalLoss}</span></p>`;
+
+  if (lossDetails.length) {
+    lossContent += `<ul class="profit-loss-list">${lossDetails.map(item => {
+      const amount = Number(item.profit_loss || 0).toFixed(2);
+      const daysDown = item.days_out_of_service ?? 0;
+      return `<li>${item.equipment_name} - Days Down: ${daysDown}, Estimated Loss: $<span class='loss-amount'>${amount}</span></li>`;
+    }).join('')}</ul>`;
+  } else {
+    lossContent += '<p class="empty-stats-msg">No downtime recorded for this range.</p>';
   }
+
+  sections.push(`
+    <div class="stats-block profit-loss-section">
+      <h4>Total Profit Loss</h4>
+      ${lossContent}
+    </div>
+  `);
+
+  if (Array.isArray(stats.potential_sales) && stats.potential_sales.length) {
+    sections.push(`
+      <div class="stats-block stats-potential-sales">
+        <h4>Potential Sales for Non-Rented Equipment</h4>
+        <ul>${stats.potential_sales.map(item => {
+          const potential = Number(item.potential_profit || 0).toFixed(2);
+          return `<li>${item.equipment_name} - Potential Profit: $<span class='profit-amount'>${potential}</span></li>`;
+        }).join('')}</ul>
+      </div>
+    `);
+  }
+
+  statsDisplay.innerHTML = sections.join('');
 }
 
 /* -------------------------
@@ -2412,6 +2454,8 @@ function setTodayOnNewInspectionForms() {
     field.value = todayStr;
   });
 }
+
+
 
 
 

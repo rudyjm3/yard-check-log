@@ -17,9 +17,11 @@ include 'db_connection_info.php';
 
 $start_date = $_GET['start_date'];
 $end_date = $_GET['end_date'];
+$limitParam = isset($_GET['limit']) ? (int) $_GET['limit'] : 5;
+$limit = max(3, min(10, $limitParam));
 
-// Fetch all equipment
-$stmt = $conn->query("SELECT * FROM equipment");
+// Fetch all active equipment
+$stmt = $conn->query("SELECT * FROM equipment WHERE is_active = 1");
 $equipmentList = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Initialize stats arrays
@@ -87,32 +89,45 @@ foreach ($equipmentList as $equipment) {
     ];
 }
 
-// Sort equipment stats for Top 8 and Bottom 8
+// Sort equipment stats
 usort($equipmentStats, function($a, $b) {
     return $b['days_rented'] - $a['days_rented'];
 });
 
-// Top 8
-$top8 = array_slice($equipmentStats, 0, 8);
+// Top list
+$topEquipment = array_slice($equipmentStats, 0, $limit);
 
-// Exclude equipment that was out of service from Bottom 8
-$bottomList = array_filter($equipmentStats, function($item) {
-    return !$item['is_out_of_service'] && $item['was_rented'];
+// Exclude Top records from bottom calculations
+$bottomCandidates = array_slice($equipmentStats, $limit);
+
+// Exclude equipment that was out of service from Bottom list, allow unrented units
+$bottomList = array_filter($bottomCandidates, function($item) {
+    return !$item['is_out_of_service'];
 });
 $bottomList = array_reverse($bottomList);
-$bottom8 = array_slice($bottomList, 0, 8);
+$bottomEquipment = array_slice($bottomList, 0, $limit);
 
 // Potential Sales for Non-Rented Equipment
 $potential_sales = array_filter($equipmentStats, function($item) {
     return $item['days_rented'] == 0 && !$item['is_out_of_service'];
 });
 
+// Profit loss breakdown (equipment with downtime)
+$profitLossDetails = array_filter($equipmentStats, function($item) {
+    return $item['days_out_of_service'] > 0 && $item['profit_loss'] > 0;
+});
+usort($profitLossDetails, function($a, $b) {
+    return $b['profit_loss'] <=> $a['profit_loss'];
+});
+
 echo json_encode([
     'total_estimated_profit' => $total_estimated_profit,
     'total_profit_loss' => $total_profit_loss,
-    'top8' => $top8,
-    'bottom8' => $bottom8,
-    'potential_sales' => $potential_sales
+    'top_equipment' => $topEquipment,
+    'bottom_equipment' => $bottomEquipment,
+    'potential_sales' => $potential_sales,
+    'profit_loss_details' => array_values($profitLossDetails),
+    'requested_limit' => $limit
 ]);
 
 function calculateEstimatedProfit($days_rented, $daily_rate, $weekly_rate, $monthly_rate) {

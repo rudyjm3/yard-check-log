@@ -276,21 +276,36 @@
          <div id="equipment-stats" class="content-section-container" style="display: none;">
          <h2>Large Equipment Stats</h2>
          <!-- Date Range Selection -->
-         <div class="form-control">
-            <label for="stats-date-range">Select Date Range:</label>
-            <select id="stats-date-range" onchange="loadEquipmentStats()">
-               <option value="weekly">This Week</option>
-               <option value="monthly">This Month</option>
-               <option value="custom">Custom Range</option>
-            </select>
+         <div class="stats-filters">
+            <div class="stats-filter-field">
+               <label for="stats-date-range">Select Date Range:</label>
+               <select id="stats-date-range" onchange="loadEquipmentStats()">
+                  <option value="weekly">This Week</option>
+                  <option value="monthly">This Month</option>
+                  <option value="custom">Custom Range</option>
+               </select>
+            </div>
+            <div class="stats-filter-field">
+               <label for="stats-count">Items Per List:</label>
+               <select id="stats-count" onchange="loadEquipmentStats()">
+                  <option value="3">3 per list</option>
+                  <option value="4">4 per list</option>
+                  <option value="5" selected>5 per list</option>
+                  <option value="6">6 per list</option>
+                  <option value="7">7 per list</option>
+                  <option value="8">8 per list</option>
+                  <option value="9">9 per list</option>
+                  <option value="10">10 per list</option>
+               </select>
+            </div>
          </div>
          <!-- Custom Date Range Inputs -->
-         <div id="custom-date-range-wrapper" style="display: none;">
-            <div class="form-control">
+         <div id="custom-date-range-wrapper" class="stats-custom-range" style="display: none;">
+            <div class="stats-filter-field">
                <label for="start-date">Start Date:</label>
                <input type="date" id="start-date">
             </div>
-            <div class="form-control">
+            <div class="stats-filter-field">
                <label for="end-date">End Date:</label>
                <input type="date" id="end-date">
             </div>
