@@ -14,6 +14,9 @@ let currentSortable = null;
 let currentAlertDiscrepancies = [];
 let currentAlertMissingSubmissions = [];
 let currentInspectionAlerts = [];
+let currentWeekYardChecks = [];
+let currentYardCheckRange = { start: null, end: null };
+let currentWeekPrintMatrix = null;
 
 /* -------------------------
    2. HELPER FUNCTIONS
@@ -51,6 +54,13 @@ function formatDateForDisplay(isoDateStr) {
   return `${mm}/${dd}/${yyyy}`;
 }
 
+function formatWeekRangeLabel(startDate, endDate) {
+  if (!startDate || !endDate) return '';
+  const startDisplay = formatDateForDisplay(startDate);
+  const endDisplay = formatDateForDisplay(endDate);
+  return `Week: ${startDisplay} Thru ${endDisplay}`;
+}
+
 /**
  * Return array of date strings from start->end inclusive, 'YYYY-MM-DD'.
  */
@@ -63,6 +73,190 @@ function getDatesInRange(startStr, endStr) {
     start.setDate(start.getDate() + 1);
   }
   return dates;
+}
+
+function createWeekPrintButton(isDisabled) {
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = 'print-week-btn';
+  button.disabled = Boolean(isDisabled);
+  button.innerHTML = `<span class="print-icon" aria-hidden="true">&#128424;</span><span>Print This Week</span>`;
+  button.addEventListener('click', printCurrentWeekYardChecks);
+  return button;
+}
+
+function mapEquipmentStatusToCode(statusValue) {
+  const normalized = String(statusValue || '').trim().toLowerCase();
+  if (!normalized) return '--';
+  if (normalized === 'rented') return 'R';
+  if (normalized === 'available') return 'A';
+  if (normalized === 'out of service' || normalized === 'out_of_service' || normalized === 'out-of-service') {
+    return 'OS';
+  }
+  return normalized.charAt(0).toUpperCase();
+}
+
+function buildWeekEquipmentMatrix(yardChecks, startDate, endDate) {
+  if (!Array.isArray(yardChecks) || !startDate || !endDate) {
+    return null;
+  }
+
+  const dates = getDatesInRange(startDate, endDate);
+  if (!dates.length) return null;
+  const dateSet = new Set(dates);
+  const rowsMap = new Map();
+
+  yardChecks.forEach((check) => {
+    const dateKey = check.date;
+    if (!dateSet.has(dateKey)) return;
+    const checkTime = (check.check_time || '').toUpperCase();
+    if (checkTime !== 'AM' && checkTime !== 'PM') return;
+    const statuses = Array.isArray(check.equipment_statuses) ? check.equipment_statuses : [];
+
+    statuses.forEach((status) => {
+      const equipmentKey = status.equipment_id || status.unit_id || status.equipment_name;
+      if (!equipmentKey) return;
+
+      if (!rowsMap.has(equipmentKey)) {
+        rowsMap.set(equipmentKey, {
+          equipmentId: status.unit_id || status.equipment_id || '',
+          equipmentName: status.equipment_name || '',
+          days: {}
+        });
+      }
+
+      const row = rowsMap.get(equipmentKey);
+      if (!row.days[dateKey]) {
+        row.days[dateKey] = { AM: '--', PM: '--' };
+      }
+      row.days[dateKey][checkTime] = mapEquipmentStatusToCode(status.equipment_status);
+    });
+  });
+
+  const rows = Array.from(rowsMap.values()).map((row) => {
+    dates.forEach((date) => {
+      if (!row.days[date]) {
+        row.days[date] = { AM: '--', PM: '--' };
+      } else {
+        row.days[date].AM = row.days[date].AM || '--';
+        row.days[date].PM = row.days[date].PM || '--';
+      }
+    });
+    return row;
+  });
+
+  return { dates, rows };
+}
+
+function generateWeekPrintHtml(matrix, startDate, endDate) {
+  if (!matrix || !matrix.rows || !matrix.rows.length) return '';
+
+  const startDisplay = formatDateForDisplay(startDate);
+  const endDisplay = formatDateForDisplay(endDate);
+  const dayHeaders = matrix.dates.map((dateStr) => {
+    const dateObj = new Date(`${dateStr}T00:00:00`);
+    const dayName = dateObj.toLocaleDateString('en-US', { weekday: 'short' });
+    const formatted = dateObj.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit' });
+    return `<th colspan="2">${dayName}<br>${formatted}</th>`;
+  }).join('');
+
+  const statusHeaders = matrix.dates.map(() => '<th>AM</th><th>PM</th>').join('');
+
+  const bodyRows = matrix.rows.map((row) => {
+    const infoLines = [];
+    if (row.equipmentId) infoLines.push(`ID: ${row.equipmentId}`);
+    if (row.equipmentName) infoLines.push(row.equipmentName);
+    const infoHtml = infoLines.join('<br>');
+    const cells = matrix.dates.map((date) => {
+      const entry = row.days[date] || { AM: '--', PM: '--' };
+      const am = entry.AM || '--';
+      const pm = entry.PM || '--';
+      return `<td>${am}</td><td>${pm}</td>`;
+    }).join('');
+    return `<tr><td class="equip-cell">${infoHtml}</td>${cells}</tr>`;
+  }).join('');
+
+  return `<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Yard Check ${startDisplay} - ${endDisplay}</title>
+    <style>
+      body { font-family: 'Segoe UI', Arial, sans-serif; color: #222; margin: 0; padding: 24px; }
+      .print-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
+      .print-header h1 { margin: 0 0 6px 0; font-size: 24px; }
+      .print-week-range { font-size: 16px; font-weight: 600; margin: 0; }
+      .print-legend { font-size: 14px; }
+      .print-legend span { margin-left: 15px; }
+      .print-week-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+      .print-week-table th, .print-week-table td { border: 1px solid #d0d0d0; padding: 8px 6px; text-align: center; }
+      .print-week-table th { background: #f4f4f4; font-weight: 600; }
+      .print-week-table .equip-cell { text-align: left; font-weight: 600; background: #fafafa; min-width: 200px; }
+      .legend-wrapper { font-size: 13px; margin-top: 4px; }
+      .legend-wrapper span { margin-right: 15px; }
+    </style>
+  </head>
+  <body>
+    <div class="print-header">
+      <div>
+        <h1>Yard Check</h1>
+        <p class="print-week-range">Week: ${startDisplay} - ${endDisplay}</p>
+      </div>
+      <div class="print-legend">
+        <strong>Legend:</strong>
+        <span>Rented = R</span>
+        <span>Available = A</span>
+        <span>Out of Service = OS</span>
+      </div>
+    </div>
+    <table class="print-week-table">
+      <thead>
+        <tr>
+          <th rowspan="2">Equipment ID and Description<br/>Status</th>
+          ${dayHeaders}
+        </tr>
+        <tr>
+          ${statusHeaders}
+        </tr>
+      </thead>
+      <tbody>
+        ${bodyRows}
+      </tbody>
+    </table>
+  </body>
+</html>`;
+}
+
+function printCurrentWeekYardChecks() {
+  const { start, end } = currentYardCheckRange;
+  if (!start || !end) {
+    alert('Please select or load a week to print.');
+    return;
+  }
+
+  const matrix = currentWeekPrintMatrix || buildWeekEquipmentMatrix(currentWeekYardChecks, start, end);
+  if (!matrix || !matrix.rows.length) {
+    alert('No yard check data available to print for this range.');
+    return;
+  }
+
+  const html = generateWeekPrintHtml(matrix, start, end);
+  if (!html) {
+    alert('Unable to generate the print view.');
+    return;
+  }
+
+  const printWindow = window.open('', '_blank');
+  if (!printWindow) {
+    alert('Please allow pop-ups to print this report.');
+    return;
+  }
+
+  printWindow.document.open();
+  printWindow.document.write(html);
+  printWindow.document.close();
+  printWindow.focus();
+  printWindow.print();
 }
 
 /* -------------------
@@ -500,8 +694,19 @@ function showSubmittedYardChecks() {
  */
 function loadSubmittedYardChecks(startDate, endDate) {
   let url = 'get_submitted_yard_checks.php';
-  if (startDate && endDate) {
+  const hasRange = Boolean(startDate && endDate);
+  if (hasRange) {
     url += `?start_date=${startDate}&end_date=${endDate}`;
+    currentYardCheckRange = { start: startDate, end: endDate };
+  } else {
+    currentYardCheckRange = { start: null, end: null };
+  }
+
+  const rangeLabelEl = document.getElementById('yard-checks-week-range');
+  if (rangeLabelEl) {
+    rangeLabelEl.textContent = hasRange
+      ? formatWeekRangeLabel(startDate, endDate)
+      : '';
   }
 
   fetch(url)
@@ -511,11 +716,21 @@ function loadSubmittedYardChecks(startDate, endDate) {
       yardChecksListDiv.innerHTML = '';
 
       // Get the yard checks array from the response
-      const data = response.yardChecks;
+      const data = Array.isArray(response.yardChecks) ? response.yardChecks : [];
+      currentWeekYardChecks = data;
+      currentWeekPrintMatrix = hasRange
+        ? buildWeekEquipmentMatrix(data, startDate, endDate)
+        : null;
+      const hasData = data.length > 0;
+      const topPrintWrapper = document.getElementById('week-range-print-wrapper');
+      if (topPrintWrapper) {
+        topPrintWrapper.innerHTML = '';
+        topPrintWrapper.appendChild(createWeekPrintButton(!hasRange || !hasData));
+      }
 
-      if (!data || data.length === 0) {
-        const displayStart = formatDateForDisplay(startDate);
-        const displayEnd   = formatDateForDisplay(endDate);
+      if (!hasData) {
+        const displayStart = startDate ? formatDateForDisplay(startDate) : 'N/A';
+        const displayEnd   = endDate ? formatDateForDisplay(endDate) : 'N/A';
 
         const noDataCard = document.createElement('div');
         noDataCard.classList.add('yard-check-card');
@@ -524,6 +739,11 @@ function loadSubmittedYardChecks(startDate, endDate) {
           (${displayStart} thru ${displayEnd}).</h3>
         `;
         yardChecksListDiv.appendChild(noDataCard);
+
+        const bottomWrapper = document.createElement('div');
+        bottomWrapper.className = 'week-print-actions week-print-actions--spaced';
+        bottomWrapper.appendChild(createWeekPrintButton(true));
+        yardChecksListDiv.appendChild(bottomWrapper);
         return;
       }
 
@@ -637,6 +857,11 @@ function loadSubmittedYardChecks(startDate, endDate) {
         cardDiv.appendChild(cardContentDiv);
         yardChecksListDiv.appendChild(cardDiv);
       });
+
+      const bottomWrapper = document.createElement('div');
+      bottomWrapper.className = 'week-print-actions week-print-actions--spaced';
+      bottomWrapper.appendChild(createWeekPrintButton(!hasRange));
+      yardChecksListDiv.appendChild(bottomWrapper);
     })
     .catch(err => console.error('Error fetching yard checks:', err));
 }

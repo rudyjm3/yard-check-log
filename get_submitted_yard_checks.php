@@ -100,6 +100,7 @@ try {
         $yardCheck['equipment_out_of_service'] = $outOfService;
         $yardCheck['estimated_profit'] = $estimatedProfit;
         $yardCheck['profit_loss'] = $profitLoss;
+        $yardCheck['equipment_statuses'] = $equipmentStatuses;
 
         $result[] = $yardCheck;
     }
