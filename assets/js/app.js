@@ -702,11 +702,18 @@ function showSubmittedYardChecks() {
 function loadSubmittedYardChecks(startDate, endDate) {
   let url = 'get_submitted_yard_checks.php';
   const hasRange = Boolean(startDate && endDate);
+  const params = new URLSearchParams();
   if (hasRange) {
-    url += `?start_date=${startDate}&end_date=${endDate}`;
+    params.set('start_date', startDate);
+    params.set('end_date', endDate);
     currentYardCheckRange = { start: startDate, end: endDate };
   } else {
     currentYardCheckRange = { start: null, end: null };
+  }
+  params.set('cb', Date.now().toString());
+  const query = params.toString();
+  if (query) {
+    url += `?${query}`;
   }
 
   const rangeLabelEl = document.getElementById('yard-checks-week-range');
@@ -716,7 +723,12 @@ function loadSubmittedYardChecks(startDate, endDate) {
       : '';
   }
 
-  fetch(url)
+  const yardChecksListDiv = document.getElementById('yard-checks-list');
+  if (yardChecksListDiv) {
+    yardChecksListDiv.innerHTML = "<p class='yard-checks-loading'>Loading submitted yard checks...</p>";
+  }
+
+  fetch(url, { cache: 'no-store' })
     .then(resp => resp.json())
     .then(response => {
       const yardChecksListDiv = document.getElementById('yard-checks-list');
@@ -1085,10 +1097,10 @@ document.getElementById('lg-equipment-yard-check-form').addEventListener('submit
         if (yardCheckIdInput) {
           yardCheckIdInput.value = '';
         }
+        showSubmittedYardChecks();
       }
     })
     .catch(error => console.error('Error:', error));
-    showSubmittedYardChecks();
 });
 
 function showDuplicateSubmissionMessage(existingYardCheck) {
