@@ -61,6 +61,21 @@ function formatWeekRangeLabel(startDate, endDate) {
   return `Week: ${startDisplay} Thru ${endDisplay}`;
 }
 
+function getCurrentWeekRange() {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0); // Normalize to midnight
+  const dayOfWeek = today.getDay(); // 0 = Sunday, 6 = Saturday
+  const offset = (dayOfWeek + 6) % 7; // Offset to previous Monday
+  const first = new Date(today);
+  first.setDate(today.getDate() - offset); // Monday of current week
+  const last = new Date(first);
+  last.setDate(first.getDate() + 6); // Sunday of current week
+  return {
+    startDate: first.toISOString().slice(0, 10),
+    endDate: last.toISOString().slice(0, 10)
+  };
+}
+
 /**
  * Return array of date strings from start->end inclusive, 'YYYY-MM-DD'.
  */
@@ -486,7 +501,8 @@ function displayDiscrepancyAlerts(
 // New loader for just the alerts
 function loadYardCheckAlerts(startDate, endDate) {
   console.log(`Fetching alerts for ${startDate} to ${endDate} at ${new Date().toLocaleString('en-US', { timeZone: 'America/New_York' })}`);
-  fetch(`get_submitted_yard_checks.php?start=${startDate}&end=${endDate}`)
+  const cacheBuster = Date.now();
+  fetch(`get_submitted_yard_checks.php?start=${startDate}&end=${endDate}&cb=${cacheBuster}`, { cache: 'no-store' })
     .then(res => {
       if (!res.ok) {
         throw new Error(`HTTP error! Status: ${res.status}`);
@@ -525,16 +541,7 @@ document.addEventListener('DOMContentLoaded', () => {
   console.log('DOMContentLoaded triggered at', new Date().toLocaleString('en-US', { timeZone: 'America/New_York' }));
   displayCurrentDateTime();
   showDashboard();
-  const today = new Date();
-  today.setHours(0,0,0,0); // Normalize to midnight
-  const dayOfWeek = today.getDay(); // 0 = Sunday, 6 = Saturday
-  const offset = (dayOfWeek + 6) % 7; // Offset to previous Monday
-  const first = new Date(today);
-  first.setDate(today.getDate() - offset); // Monday of current week
-  const last = new Date(first);
-  last.setDate(first.getDate() + 6); // Sunday of current week
-  const startDate = first.toISOString().slice(0, 10);
-  const endDate = last.toISOString().slice(0, 10);
+  const { startDate, endDate } = getCurrentWeekRange();
   console.log('Loading alerts for week:', startDate, 'to', endDate);
   loadYardCheckAlerts(startDate, endDate);
 });
@@ -1382,6 +1389,8 @@ async function submitInspectionForm(form) {
     closeActiveInspectionModal({ resetForm: true });
     showInspectionSuccess(isEdit ? 'Inspection updated successfully.' : 'Inspection submitted successfully.');
     await fetchTruckInspectionHistory();
+    const { startDate, endDate } = getCurrentWeekRange();
+    loadYardCheckAlerts(startDate, endDate);
   } catch (error) {
     console.error(error);
     alert('Network or server error while saving.');
@@ -1672,22 +1681,22 @@ function updateInspectionOverdueAlerts(summary = null) {
   }
 
   if (summary && Array.isArray(summary.missing_form_types)) {
-    const periodLabel = (() => {
-      if (summary.period_label) {
-        return summary.period_label;
-      }
-      const summaryYear = typeof summary.current_year === 'number'
-        ? summary.current_year
-        : today.getFullYear();
-      const summaryMonthRaw = typeof summary.current_month === 'number'
-        ? summary.current_month
-        : today.getMonth() + 1; // convert to 1-based
-      const normalizedMonthIndex = Math.min(12, Math.max(1, parseInt(summaryMonthRaw, 10) || (today.getMonth() + 1))) - 1;
-      const periodDate = new Date(summaryYear, normalizedMonthIndex, 1);
-      return periodDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-    })();
+    const summaryYear = typeof summary.current_year === 'number'
+      ? summary.current_year
+      : today.getFullYear();
+    const summaryMonthRaw = typeof summary.current_month === 'number'
+      ? summary.current_month
+      : today.getMonth() + 1; // convert to 1-based
+    const normalizedMonthIndex = Math.min(12, Math.max(1, parseInt(summaryMonthRaw, 10) || (today.getMonth() + 1))) - 1;
+    const periodLabel = summary.period_label
+      ? summary.period_label
+      : new Date(summaryYear, normalizedMonthIndex, 1).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
 
-    currentInspectionAlerts = buildInspectionAlertsFromMissing(summary.missing_form_types, periodLabel);
+    const reconciledMissing = summary.missing_form_types.filter((type) => {
+      return !findInspectionSubmissionForMonth(type, summaryYear, normalizedMonthIndex);
+    });
+
+    currentInspectionAlerts = buildInspectionAlertsFromMissing(reconciledMissing, periodLabel);
     displayDiscrepancyAlerts();
     return;
   }

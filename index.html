@@ -4,13 +4,16 @@
   <meta charset="UTF-8">
   <title>Equip Flow</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
 
   <!-- Stylesheet -->
-  <link rel="stylesheet" href="assets/css/style.css?v=1.3">
+  <link rel="stylesheet" href="assets/css/style.css?v=1.4">
   <!-- Font Awesome 6.5.2 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-  <script src="assets/js/app.js" defer></script>
+  <script src="assets/js/app.js?v=1.4" defer></script>
   <!-- CDN for SortableJS -->
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 
@@ -89,14 +92,14 @@
                </div> 
             </section>
 
-            <section id="dashboard-weather-container" class="glassmorphism-black">
+            <!-- <section id="dashboard-weather-container" class="glassmorphism-black">
                <div id="weather-header-wrapper">
                   <p class="weather-title">Current Weather - <span class="current-weather-date-txt">April, Monday 21st, 2025</span></p>
-               </div>
+               </div> -->
 
-               <div class="weather-days-container">
+               <!-- <div class="weather-days-container"> -->
                   <!-- Current Weather Card -->
-                  <div class="current-weather-card glassmorphism-white">
+                  <!-- <div class="current-weather-card glassmorphism-white">
                      <p class="current-day">Today</p>
                      <div class="weather-info-wrapper">
                         <div class="weather-icon-wrapper">
@@ -112,43 +115,15 @@
                         </div>
                         <p class="weather-summary"></p>
                      </div>
-                  </div>
+                  </div> -->
                   <!-- Upcoming Weather Days -->
-                  <div class="weather-days-wrapper">
+                  <!-- <div class="weather-days-wrapper"> -->
                      <!-- JavaScript will dynamically populate these -->
-                  </div>
-               </div>
-            </section>
+                  <!-- </div>
+               </div> 
+            </section> -->
 
-            <section id="alerts-container" class="glassmorphism-black">
-               <div class="alerts-header-wrapper">
-                  <h3>Alerts</h3> 
-               </div>
-               <div class="alerts-card-wrapper">
-                  <div class="alert-card">
-                     <p class="alert-title">Penske Hiker</p>
-                     <p class="alert-description">There are <span>3</span> Penske hiker submissions to confirm.</p>
-                  </div>
-                  <div class="alert-card">
-                     <p class="alert-title">Maintenance Alert</p>
-                     <p class="alert-description">Monthly Pickup Maintenance Inspection Due</p>
-                  </div>
-                  <div class="alert-card">
-                     <p class="alert-title">Rental Markdown</p>
-                     <p class="alert-description">There are <span>5</span> markdown submissions to review.</p>
-                  </div>
-                  <div class="alert-card">
-                     <p class="alert-title">Yard Checks</p>
-                     <p class="alert-description">There are <span>2</span> missing yard check submissions.</p> 
-                     <div class="alert-button-wrapper">
-                        <button class="alert-btn-yardcheck" onclick="showSubmittedYardChecks()">View submitted yardchecks</button>
-                     </div>
-                  </div>
-
-               </div>
-
-            </section>
-
+            
             <section id="main-dashboard-content-container" class="glassmorphism-black">
                <div class="dashboard-col-1-wrapper">
                   <div class="btn-wrapper">
@@ -162,8 +137,8 @@
                   </div>     
                </div>
 
-               <!-- <div class="dashboard-col-2-wrapper">
-                  <h3>Popular LE This Week</h3>
+               <div class="dashboard-col-2-wrapper">
+                  <p class="popular-le-title">Popular LE This Week</p>
                   <div class="popular-le-card-wrapper">
                      <div class="popular-le-card">
                         <div class="le-img-wrapper">
@@ -193,8 +168,37 @@
                         </div>
                      </div>
                   </div>
-               </div> -->
+               </div>
             </section>
+            <section id="alerts-container" class="glassmorphism-black">
+               <div class="alerts-header-wrapper">
+                  <h3>Alerts</h3> 
+               </div>
+               <div class="alerts-card-wrapper">
+                  <div class="alert-card">
+                     <p class="alert-title">Penske Hiker</p>
+                     <p class="alert-description">There are <span>3</span> Penske hiker submissions to confirm.</p>
+                  </div>
+                  <div class="alert-card">
+                     <p class="alert-title">Maintenance Alert</p>
+                     <p class="alert-description">Monthly Pickup Maintenance Inspection Due</p>
+                  </div>
+                  <div class="alert-card">
+                     <p class="alert-title">Rental Markdown</p>
+                     <p class="alert-description">There are <span>5</span> markdown submissions to review.</p>
+                  </div>
+                  <div class="alert-card">
+                     <p class="alert-title">Yard Checks</p>
+                     <p class="alert-description">There are <span>2</span> missing yard check submissions.</p> 
+                     <div class="alert-button-wrapper">
+                        <button class="alert-btn-yardcheck" onclick="showSubmittedYardChecks()">View submitted yardchecks</button>
+                     </div>
+                  </div>
+
+               </div>
+
+            </section>
+
             <!-- End Main Dashboard Section -->     
          </div>   
          <!-- End Dashboard Section -->
